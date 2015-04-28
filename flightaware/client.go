@@ -25,7 +25,7 @@ func NewClient(rc config.Config) (Client, error) {
 	cl := Client{rc, 0, 0}
 
 	str := rc.Site + ":" + rc.Port
-	fmt.Printf("Connecting to %v\n", str)
+	fmt.Printf("Connecting to %v with TLS\n", str)
 
 	conn, err := tls.Dial("tcp", str, &tls.Config{
 		RootCAs: nil,
@@ -34,6 +34,10 @@ func NewClient(rc config.Config) (Client, error) {
 		panic("failed to connect: " + err.Error())
 	}
 
+	fmt.Println("TLS negociation done.")
+
+	conf := fmt.Sprintf("live version 4.0 username %s password %s events \"position\"\n", rc.User, rc.Password)
+	conn.Write(conf)
 	conn.Close()
 	return cl, err
 }
