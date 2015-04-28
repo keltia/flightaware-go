@@ -6,7 +6,6 @@ package flightaware
 
 import (
 	"crypto/tls"
-	"crypto/x509"
 	"fmt"
 
 	"../config"
@@ -28,10 +27,8 @@ func NewClient(rc config.Config) (Client, error) {
 	str := rc.Site + ":" + rc.Port
 	fmt.Printf("Connecting to %v\n", str)
 
-	roots := x509.NewCertPool()
 	conn, err := tls.Dial("tcp", str, &tls.Config{
-		RootCAs: roots,
-		InsecureSkipVerify: true,	// XXX FIXME
+		RootCAs: nil,
 	})
 	if err != nil {
 		panic("failed to connect: " + err.Error())
