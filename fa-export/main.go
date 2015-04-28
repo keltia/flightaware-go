@@ -34,4 +34,7 @@ func main() {
 	}
 	fmt.Println(c.Dests)
 	fmt.Println(c.Default, c.Dests[c.Default])
+
+	client, err := flightaware.NewClient(c)
+	fmt.Printf("Bytes=%v\n", client.Bytes)
 }
