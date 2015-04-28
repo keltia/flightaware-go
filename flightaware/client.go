@@ -36,8 +36,14 @@ func NewClient(rc config.Config) (Client, error) {
 
 	fmt.Println("TLS negociation done.")
 
-	conf := fmt.Sprintf("live version 4.0 username %s password %s events \"position\"\n", rc.User, rc.Password)
-	conn.Write(conf)
+	conf := fmt.Sprintf("live version 4.0 username %s password %s events \"position\"", rc.User, rc.Password)
+	bconf := []byte(conf)
+	conn.Write(bconf)
+
+	fmt.Println("Flightaware init done.")
+
+	// Insert here the io.Reader code
+
 	conn.Close()
 	return cl, err
 }
