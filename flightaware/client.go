@@ -30,8 +30,9 @@ func NewClient(rc config.Config) (Client, error) {
 
 	roots := x509.NewCertPool()
 	conn, err := tls.Dial("tcp", str, &tls.Config{
-			RootCAs: roots,
-		})
+		RootCAs: roots,
+		InsecureSkipVerify: true,	// XXX FIXME
+	})
 	if err != nil {
 		panic("failed to connect: " + err.Error())
 	}
