@@ -2,18 +2,43 @@
 //
 // My homemade configuration class
 
+package config
+
 import (
-	"github.com/go-yaml/yaml"
+	"fmt"
+	"io/ioutil"
+
+	"gopkg.in/yaml.v2"
 )
 
-type Config struct{
-	user string
-	password string
-	site string
-	port int
-	dests map[]
+type Dest struct {
+	Broker string
+	Name   string
 }
 
-func LoadConfig(file string) map[string]interface{} {
+type Config struct {
+	User     string
+	Password string
+	Site     string
+	Port     int
+	Dests    map[string]Dest
+	Default  string
+	Feed_one func([]byte)
+}
 
+func LoadConfig(file string) (Config, error) {
+	buf, err := ioutil.ReadFile(file)
+	if err != nil {
+		return Config{}, err
+	}
+
+	c := new(Config)
+	err = yaml.Unmarshal(buf, &c)
+	if err != nil {
+		fmt.Println("Error parsing yaml")
+	}
+
+	c.Default = "mine"
+	c.Feed_one = func(buf []byte) { fmt.Println(buf)}
+	return *c, err
 }
