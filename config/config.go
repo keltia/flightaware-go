@@ -20,7 +20,7 @@ type Config struct {
 	User     string
 	Password string
 	Site     string
-	Port     int
+	Port     string
 	Dests    map[string]Dest
 	Default  string
 	Feed_one func([]byte)

@@ -25,7 +25,7 @@ func HelloWorld() {
 func NewClient(rc config.Config) (Client, error) {
 	cl := Client{rc, 0, 0}
 
-	str := fmt.Sprintf("%v:%v\n", rc.Site, rc.Port)
+	str := rc.Site + ":" + rc.Port
 	fmt.Printf("Connecting to %v\n", str)
 
 	roots := x509.NewCertPool()
