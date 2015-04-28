@@ -26,6 +26,10 @@ type Config struct {
 	Feed_one func([]byte)
 }
 
+func (dest Dest) String() string {
+	return fmt.Sprintf("%v: %v", dest.Broker, dest.Name)
+}
+
 func LoadConfig(file string) (Config, error) {
 	buf, err := ioutil.ReadFile(file)
 	if err != nil {
