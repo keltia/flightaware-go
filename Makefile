@@ -1,6 +1,11 @@
-SRCS=config/config.go flightaware/client.go fa-export/main.go
+SRCS=config/config.go flightaware/client.go fa-export/fa-export.go
 
-all: main
+.PATH: bin
 
-main: ${SRCS}
-	go build -v fa-export/main.go
+all: bin/fa-export
+
+clean:
+	rm -f bin/fa-export
+
+bin/fa-export: ${SRCS}
+	go build -v -o bin/fa-export fa-export/fa-export.go
