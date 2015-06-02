@@ -7,25 +7,36 @@ package main
 import (
 	"../flightaware"
 	"../config"
+	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
-
-	"github.com/codegangsta/cli"
+	"os/signal"
+	"log"
 )
 
 var (
 	RcFile = filepath.Join(os.Getenv("HOME"), ".flightaware", "config.yml")
 )
 
+// Starts here.
 func main() {
-	app := cli.NewApp()
-	app.Name = "fa-export"
-	app.Author = "Ollivier Robert"
-	app.Version = "0.0.1"
-	app.Usage = "fa-export"
+	// Handle SIGINT
+	go func() {
+	    sigint := make(chan os.Signal, 3)
+	    signal.Notify(sigint, os.Interrupt)
+	    <-sigint
+	    log.Println("Program killed !")
 
-	fmt.Println("Hello world\n", app.Name)
+		//doShutdown()
+
+	    os.Exit(0)
+	}()
+
+
+	flag.Parse()
+
+	fmt.Println("Hello world\n")
 	flightaware.HelloWorld()
 
 	c, err := config.LoadConfig(RcFile)
