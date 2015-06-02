@@ -1,6 +1,19 @@
-SRCS=config/config.go flightaware/client.go fa-export/main.go
+# Main Makefile for surv-export
 
-all: main
+VPATH=	fa-export:flightaware:config
+DEST=	bin
 
-main: ${SRCS}
-	go build -v fa-export/main.go
+SRCS=	config.go client.go main.go
+
+all:	${DEST}/fa-export
+
+clean:
+	rm -f ${DEST}/fa-export
+
+${DEST}/fa-export:    ${SRCS}
+	go build -v -o $@ fa-export/main.go
+
+push:
+	git push --all
+	git push --all backup
+	git push --all bitbucket
