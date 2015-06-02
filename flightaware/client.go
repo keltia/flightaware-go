@@ -17,12 +17,9 @@ type Client struct {
 	Pkts	int32
 }
 
-func HelloWorld() {
-	fmt.Println("Hello package")
-}
-
-func NewClient(rc config.Config) (Client, error) {
-	cl := Client{rc, 0, 0}
+func NewClient(rc config.Config) (*Client, error) {
+	cl := new(Client)
+	cl.Host = rc
 
 	str := rc.Site + ":" + rc.Port
 	fmt.Printf("Connecting to %v with TLS\n", str)

@@ -37,7 +37,6 @@ func main() {
 	flag.Parse()
 
 	fmt.Println("Hello world\n")
-	flightaware.HelloWorld()
 
 	c, err := config.LoadConfig(RcFile)
 	if err != nil {
