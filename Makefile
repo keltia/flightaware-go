@@ -1,4 +1,4 @@
-# Main Makefile for surv-export
+# Main Makefile for fa-export
 
 VPATH=	fa-export:flightaware:config
 DEST=	bin
