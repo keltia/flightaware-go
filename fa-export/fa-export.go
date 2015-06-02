@@ -8,7 +8,6 @@ import (
 	"../flightaware"
 	"../config"
 	"flag"
-	"fmt"
 	"os"
 	"path/filepath"
 	"os/signal"
@@ -36,15 +35,17 @@ func main() {
 
 	flag.Parse()
 
-	fmt.Println("Hello world\n")
+	log.Println("Hello world\n")
 
 	c, err := config.LoadConfig(RcFile)
 	if err != nil {
-		fmt.Println("Error loading")
+		log.Fatal("Error loading")
 	}
-	fmt.Println(c.Dests)
-	fmt.Println(c.Default, c.Dests[c.Default])
+	log.Println(c.Dests)
+	log.Println(c.Default, c.Dests[c.Default])
 
-	client, err := flightaware.NewClient(c)
-	fmt.Printf("Bytes=%v\n", client.Bytes)
+
+	if client, err := flightaware.NewClient(c); err != nil {
+		log.Printf("Bytes=%v\n", client.Bytes)
+	}
 }
