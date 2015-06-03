@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 
 	"gopkg.in/yaml.v2"
+	"log"
 )
 
 type Dest struct {
@@ -39,7 +40,8 @@ func LoadConfig(file string) (Config, error) {
 	c := new(Config)
 	err = yaml.Unmarshal(buf, &c)
 	if err != nil {
-		fmt.Println("Error parsing yaml")
+		log.Println("Error parsing yaml")
+		return Config{}, err
 	}
 
 	c.Default = "mine"

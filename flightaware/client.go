@@ -6,6 +6,7 @@ package flightaware
 
 import (
 	"crypto/tls"
+	"log"
 	"fmt"
 
 	"../config"
@@ -22,7 +23,7 @@ func NewClient(rc config.Config) (*Client, error) {
 	cl.Host = rc
 
 	str := rc.Site + ":" + rc.Port
-	fmt.Printf("Connecting to %v with TLS\n", str)
+	log.Printf("Connecting to %v with TLS\n", str)
 
 	conn, err := tls.Dial("tcp", str, &tls.Config{
 		RootCAs: nil,
@@ -31,12 +32,12 @@ func NewClient(rc config.Config) (*Client, error) {
 		panic("failed to connect: " + err.Error())
 	}
 
-	fmt.Println("TLS negociation done.")
+	log.Println("TLS negociation done.")
 
 	conf := fmt.Sprintf("live version 4.0 username %s password %s events \"position\"", rc.User, rc.Password)
 	conn.Write([]byte(conf))
 
-	fmt.Println("Flightaware init done.")
+	log.Println("Flightaware init done.")
 
 	// Insert here the io.Reader code
 
