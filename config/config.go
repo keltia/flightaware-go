@@ -26,7 +26,7 @@ type Config struct {
 	Feed_one func([]byte)
 }
 
-func (dest Dest) String() string {
+func (dest *Dest) String() string {
 	return fmt.Sprintf("%v: %v", dest.Broker, dest.Name)
 }
 
