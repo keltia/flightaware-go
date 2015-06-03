@@ -16,6 +16,7 @@ import (
 
 var (
 	RcFile = filepath.Join(os.Getenv("HOME"), ".flightaware", "config.yml")
+	Client *flightaware.FAClient
 )
 
 // Starts here.
@@ -27,7 +28,9 @@ func main() {
 	    <-sigint
 	    log.Println("Program killed !")
 
-		//doShutdown()
+		log.Printf("FA client stopped:")
+		log.Printf("  %d pkts %ld bytes", Client.Pkts, Client.Bytes)
+		Client.Close()
 
 	    os.Exit(0)
 	}()
@@ -44,8 +47,10 @@ func main() {
 	log.Println(c.Dests)
 	log.Println(c.Default, c.Dests[c.Default])
 
+	Client = flightaware.NewClient(c)
 
-	if client, err := flightaware.NewClient(c); err != nil {
-		log.Printf("Bytes=%v\n", client.Bytes)
+	// Get the flow running
+	if err := Client.Start(); err != nil {
+		log.Fatalln("Error: unable to connect:", err)
 	}
 }
