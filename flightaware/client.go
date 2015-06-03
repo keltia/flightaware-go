@@ -8,18 +8,17 @@ import (
 	"crypto/tls"
 	"log"
 	"fmt"
-
 	"../config"
 )
 
-type Client struct {
+type FAClient struct {
 	Host	config.Config
 	Bytes	int64
 	Pkts	int32
 }
 
-func NewClient(rc config.Config) (*Client, error) {
-	cl := new(Client)
+func NewClient(rc config.Config) (*FAClient, error) {
+	cl := new(FAClient)
 	cl.Host = rc
 
 	str := rc.Site + ":" + rc.Port
