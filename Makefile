@@ -8,6 +8,7 @@ SRCS=	config.go client.go fa-export.go
 all:	${DEST}/fa-export
 
 clean:
+	go clean -v
 	rm -f ${DEST}/fa-export
 
 ${DEST}/fa-export:    ${SRCS}
