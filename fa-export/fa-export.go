@@ -1,5 +1,8 @@
 // fa-export.go
 //
+// Small FlightAware Go client
+//
+// Copyright 2015 © by Ollivier Robert for the EEC
 //
 
 package main
