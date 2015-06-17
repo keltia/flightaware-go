@@ -33,6 +33,8 @@ func (cl *FAClient) WriteData() (int, error) {
 	}
 	// Do something
 
+	cl.Bytes += len(buf)
+	cl.Pkts++
 	return len(buf), nil
 }
 

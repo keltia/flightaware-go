@@ -29,13 +29,15 @@ func main() {
 	    sigint := make(chan os.Signal, 3)
 	    signal.Notify(sigint, os.Interrupt)
 	    <-sigint
-	    log.Println("Program killed !")
 
 		log.Printf("FA client stopped:")
 		log.Printf("  %d pkts %ld bytes", Client.Pkts, Client.Bytes)
-		Client.Close()
-
-	    os.Exit(0)
+		if err := Client.Close(); err != nil {
+			log.Println("Error closing connection:", err)
+			os.Exit(1)
+		} else {
+			os.Exit(0)
+		}
 	}()
 
 	flag.Parse()
