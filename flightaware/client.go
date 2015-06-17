@@ -9,6 +9,7 @@ import (
 	"log"
 	"fmt"
 	"../config"
+	"bufio"
 )
 
 type FAClient struct {
@@ -29,11 +30,13 @@ func NewClient(rc config.Config) *FAClient {
 func (cl *FAClient) WriteData() (int, error) {
 	buf, ok := <-cl.ch
 	if !ok {
-
+		log.Fatalf("Error: reading data: %s: %v", string(buf), ok)
 	}
 	// Do something
+	log.Printf("Read %d bytes\n", len(buf))
+	fmt.Println(string(buf))
 
-	cl.Bytes += len(buf)
+	cl.Bytes += int64(len(buf))
 	cl.Pkts++
 	return len(buf), nil
 }
@@ -46,6 +49,7 @@ func (cl *FAClient) Start() error {
 
 	conn, err := tls.Dial("tcp", str, &tls.Config{
 		RootCAs: nil,
+		InsecureSkipVerify: true,
 	})
 	if err != nil {
 		log.Println("failed to connect: " + err.Error())
@@ -67,6 +71,14 @@ func (cl *FAClient) Start() error {
 
 	// Starting here everything is flowing from that connection
 	go cl.WriteData()
+
+	// Loop over chunks of data
+	scanner := bufio.NewScanner(cl.Conn)
+	for scanner.Scan() {
+		buf := scanner.Text()
+		log.Printf("Sending %d bytes\n", len(buf))
+		cl.ch <- []byte(buf)
+	}
 	return nil
 }
 
