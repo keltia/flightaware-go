@@ -38,7 +38,6 @@ func main() {
 	    os.Exit(0)
 	}()
 
-
 	flag.Parse()
 
 	c, err := config.LoadConfig(RcFile)
