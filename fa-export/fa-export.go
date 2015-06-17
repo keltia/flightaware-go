@@ -41,14 +41,14 @@ func main() {
 
 	flag.Parse()
 
-	log.Println("Hello world\n")
-
 	c, err := config.LoadConfig(RcFile)
 	if err != nil {
-		log.Fatal("Error loading")
+		log.Fatalf("Error loading configuration %f: %v\n", RcFile, err)
 	}
-	log.Println(c.Dests)
-	log.Println(c.Default, c.Dests[c.Default])
+	if fVerbose {
+		log.Println(c.Dests)
+		log.Println(c.Default, c.Dests[c.Default])
+	}
 
 	Client = flightaware.NewClient(c)
 
