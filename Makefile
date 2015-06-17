@@ -11,7 +11,7 @@ clean:
 	rm -f ${DEST}/fa-export
 
 ${DEST}/fa-export:    ${SRCS}
-	go build -v -o $@ fa-export/fa-export.go
+	go build -v -o $@ fa-export/fa-export.go fa-export/cli.go
 
 push:
 	git push --all
