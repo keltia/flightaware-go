@@ -31,7 +31,7 @@ func main() {
 	    <-sigint
 
 		log.Printf("FA client stopped:")
-		log.Printf("  %d pkts %ld bytes", Client.Pkts, Client.Bytes)
+		log.Printf("  %d pkts %d bytes", Client.Pkts, Client.Bytes)
 		if err := Client.Close(); err != nil {
 			log.Println("Error closing connection:", err)
 			os.Exit(1)
