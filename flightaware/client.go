@@ -27,18 +27,24 @@ func NewClient(rc config.Config) *FAClient {
 	return cl
 }
 
-func (cl *FAClient) WriteData() (int, error) {
-	buf, ok := <-cl.ch
-	if !ok {
-		log.Fatalf("Error: reading data: %s: %v", string(buf), ok)
-	}
-	// Do something
-	log.Printf("Read %d bytes\n", len(buf))
-	fmt.Println(string(buf))
+func (cl *FAClient) StartWriter() (chan []byte, error) {
+	log.Println("Waiting for data…")
+	ch := make(chan []byte, 1000)
+	go func() {
+		for {
+			buf, ok := <-ch
+			if !ok {
+				log.Fatalf("Error: reading data: %s: %v", string(buf), ok)
+			}
+			// Do something
+			log.Printf("Read %d bytes\n", len(buf))
+			fmt.Println(string(buf))
 
-	cl.Bytes += int64(len(buf))
-	cl.Pkts++
-	return len(buf), nil
+			cl.Bytes += int64(len(buf))
+			cl.Pkts++
+		}
+	}()
+	return ch, nil
 }
 
 func (cl *FAClient) Start() error {
@@ -70,15 +76,36 @@ func (cl *FAClient) Start() error {
 	cl.Conn = conn
 
 	// Starting here everything is flowing from that connection
-	go cl.WriteData()
+	ch, err := cl.StartWriter()
 
-	// Loop over chunks of data
-	scanner := bufio.NewScanner(cl.Conn)
-	for scanner.Scan() {
-		buf := scanner.Text()
-		log.Printf("Sending %d bytes\n", len(buf))
-		cl.ch <- []byte(buf)
+	//var	buf []byte
+
+	log.Println("Loop")
+	b := bufio.NewReader(cl.Conn)
+	buf := make([]byte, 100)
+	for {
+		nb, err := b.Read(buf)
+		if err != nil {
+			log.Fatalf("error reading socket %v", nb)
+		}
+		ch <- buf
 	}
+	/*
+	// Loop over chunks of data
+	sc := bufio.NewScanner(cl.Conn)
+	for {
+		log.Println("Now waiting for data")
+		for sc.Scan() {
+			log.Println("in Scan()")
+			buf := sc.Text()
+			nb := len(buf)
+			if err == nil && nb != 0 {
+				log.Printf("Sending %d bytes\n", nb)
+				ch <- []byte(buf)
+			}
+		}
+	}
+	*/
 	return nil
 }
 
