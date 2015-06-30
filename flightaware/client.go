@@ -77,6 +77,10 @@ func (cl *FAClient) Start() error {
 
 	// Starting here everything is flowing from that connection
 	ch, err := cl.StartWriter()
+	if err != nil {
+		log.Println("Error: starting writer - %v", err)
+		return err
+	}
 
 	//var	buf []byte
 
