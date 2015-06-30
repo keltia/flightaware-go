@@ -13,10 +13,11 @@ import (
 )
 
 type FAClient struct {
-	Host	config.Config
-	Bytes	int64
-	Pkts	int32
-	Conn	*tls.Conn
+	Host		config.Config
+	Bytes		int64
+	Pkts		int32
+	Conn		*tls.Conn
+	Feed_one	func([]byte)
 }
 
 // Create new instance of the client
