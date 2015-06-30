@@ -24,8 +24,17 @@ type FAClient struct {
 func NewClient(rc config.Config) *FAClient {
 	cl := new(FAClient)
 	cl.Host = rc
+	cl.Feed_one = defaultFeed
 
 	return cl
+}
+
+// Default callback
+func defaultFeed(buf []byte) { fmt.Println(string(buf)) }
+
+// Change default callback
+func (cl *FAClient) AddHandler(fn func([]byte)) {
+	cl.Feed_one = fn
 }
 
 // consumer part of the FA client
@@ -40,7 +49,7 @@ func (cl *FAClient) StartWriter() (chan []byte, error) {
 			}
 			// Do something
 			log.Printf("Read %d bytes\n", len(buf))
-			fmt.Println(string(buf))
+			(cl.Feed_one)(buf)
 
 			cl.Bytes += int64(len(buf))
 			cl.Pkts++

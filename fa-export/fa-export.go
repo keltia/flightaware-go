@@ -19,8 +19,16 @@ import (
 
 var (
 	RcFile = filepath.Join(os.Getenv("HOME"), ".flightaware", "config.yml")
-	Client *flightaware.FAClient
+	Client 		*flightaware.FAClient
+	fOutputFH	*os.File
 )
+
+// fOutput callback
+func fileOutput(buf []byte) {
+	if nb, err := fOutputFH.Write(buf); err != nil {
+		log.Fatalf("Error writing %d bytes: %v", nb, err)
+	}
+}
 
 // Starts here.
 func main() {
@@ -52,6 +60,21 @@ func main() {
 	}
 
 	Client = flightaware.NewClient(c)
+
+	// Open output file
+	if (fOutput != "") {
+		if (fVerbose) {
+			log.Printf("Output file is %s\n", fOutput)
+		}
+
+		if fOutputFH, err = os.Create(fOutput); err != nil {
+			log.Printf("Error creating %s\n", fOutput)
+			panic(err)
+		}
+
+		Client.AddHandler(fileOutput)
+	}
+
 
 	// Get the flow running
 	if err := Client.Start(); err != nil {
