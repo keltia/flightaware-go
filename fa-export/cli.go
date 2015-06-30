@@ -28,8 +28,8 @@ Usage: %s [-o FILE] [-v]
 
 // Redefine Usage
 var Usage = func() {
-        fmt.Fprintf(os.Stderr, cliUsage, os.Args[0])
-        flag.PrintDefaults()
+	fmt.Fprintf(os.Stderr, cliUsage, os.Args[0])
+	flag.PrintDefaults()
 }
 
 // called by flag.Parse()
