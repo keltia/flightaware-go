@@ -15,6 +15,7 @@ import (
 	"path/filepath"
 	"os/signal"
 	"log"
+	"fmt"
 )
 
 var (
@@ -25,7 +26,8 @@ var (
 
 // fOutput callback
 func fileOutput(buf []byte) {
-	if nb, err := fOutputFH.Write(buf); err != nil {
+	nb, err := fmt.Fprintln(fOutputFH, string(buf));
+	if err != nil {
 		log.Fatalf("Error writing %d bytes: %v", nb, err)
 	}
 }
