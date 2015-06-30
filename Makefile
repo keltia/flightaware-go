@@ -2,10 +2,14 @@
 
 VPATH=	fa-export:flightaware:config
 DEST=	bin
+GOBIN=	${GOPATH}/bin
 
 SRCS=	config.go client.go fa-export.go
 
 all:	${DEST}/fa-export
+
+install:
+	go install fa-export/fa-export.go fa-export/cli.go
 
 clean:
 	go clean -v
