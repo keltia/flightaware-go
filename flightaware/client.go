@@ -20,6 +20,7 @@ type FAClient struct {
 	ch		chan []byte
 }
 
+// Create new instance of the client
 func NewClient(rc config.Config) *FAClient {
 	cl := new(FAClient)
 	cl.Host = rc
@@ -27,6 +28,7 @@ func NewClient(rc config.Config) *FAClient {
 	return cl
 }
 
+// consumer part of the FA client
 func (cl *FAClient) StartWriter() (chan []byte, error) {
 	log.Println("Waiting for data…")
 	ch := make(chan []byte, 1000)
