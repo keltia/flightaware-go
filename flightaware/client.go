@@ -49,6 +49,20 @@ func (cl *FAClient) StartWriter() (chan []byte, error) {
 	return ch, nil
 }
 
+// Send banner to FA
+func authClient(conn *tls.Conn, rc config.Config) error {
+	conf := fmt.Sprintf("live version 4.0 username %s password %s events \"position\"\n", rc.User, rc.Password)
+	_, err := conn.Write([]byte(conf))
+	if err != nil {
+		log.Println("Error configuring feed", err.Error())
+		return err
+	}
+	return nil
+}
+
+// This is the main function here:
+// - starts the consumer in the background
+// - reads data from FA and send it to the consumer
 func (cl *FAClient) Start() error {
 	var rc	config.Config = cl.Host
 
@@ -66,11 +80,9 @@ func (cl *FAClient) Start() error {
 
 	log.Println("TLS negociation done.")
 
-	cl.ch = make(chan []byte, 100)
-	conf := fmt.Sprintf("live version 4.0 username %s password %s events \"position\"", rc.User, rc.Password)
-	_, err = conn.Write([]byte(conf))
-	if err != nil {
-		log.Println("Error configuring feed", err.Error())
+	cl.ch = make(chan []byte, 1000)
+	if err := authClient(conn, rc); err != nil {
+		log.Printf("Error: auth error for %s\n", rc.User)
 		return err
 	}
 
@@ -84,34 +96,20 @@ func (cl *FAClient) Start() error {
 		return err
 	}
 
-	//var	buf []byte
-
-	log.Println("Loop")
-	b := bufio.NewReader(cl.Conn)
-	buf := make([]byte, 100)
-	for {
-		nb, err := b.Read(buf)
-		if err != nil {
-			log.Fatalf("error reading socket %v", nb)
-		}
-		ch <- buf
-	}
-	/*
 	// Loop over chunks of data
 	sc := bufio.NewScanner(cl.Conn)
 	for {
 		log.Println("Now waiting for data")
 		for sc.Scan() {
-			log.Println("in Scan()")
 			buf := sc.Text()
-			nb := len(buf)
-			if err == nil && nb != 0 {
+
+			if nb := len(buf); nb != 0 {
 				log.Printf("Sending %d bytes\n", nb)
 				ch <- []byte(buf)
 			}
 		}
 	}
-	*/
+
 	return nil
 }
 
