@@ -35,6 +35,6 @@ var Usage = func() {
 // called by flag.Parse()
 func init() {
 	// cli
-	flag.BoolVar(&fVerbose, "v", false, "Set verbose flag.")
 	flag.StringVar(&fOutput, "o", "", "Specify output FILE.")
+	flag.BoolVar(&fVerbose, "v", false, "Set verbose flag.")
 }
