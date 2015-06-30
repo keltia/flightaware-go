@@ -17,12 +17,13 @@ var (
 	// cli
 	fVerbose	bool
 	fOutput		string
+	fEventType	string
 )
 
 // my usage string
 const (
 	cliUsage	= `
-Usage: %s [-o FILE] [-v]
+Usage: %s [-o FILE] [-t live|pitr|range] [-v]
 `
 )
 
@@ -36,5 +37,6 @@ var Usage = func() {
 func init() {
 	// cli
 	flag.StringVar(&fOutput, "o", "", "Specify output FILE.")
+	flag.StringVar(&fEventType, "t", "live", "Specify which events we want (default live)")
 	flag.BoolVar(&fVerbose, "v", false, "Set verbose flag.")
 }
