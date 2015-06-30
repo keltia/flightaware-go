@@ -17,7 +17,6 @@ type FAClient struct {
 	Bytes	int64
 	Pkts	int32
 	Conn	*tls.Conn
-	ch		chan []byte
 }
 
 // Create new instance of the client
@@ -80,7 +79,6 @@ func (cl *FAClient) Start() error {
 
 	log.Println("TLS negociation done.")
 
-	cl.ch = make(chan []byte, 1000)
 	if err := authClient(conn, rc); err != nil {
 		log.Printf("Error: auth error for %s\n", rc.User)
 		return err
