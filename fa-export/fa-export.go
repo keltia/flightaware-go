@@ -54,7 +54,7 @@ func stopEverything() {
 
 // Check for specific modifiers, returns seconds
 func checkTimeout(value string) int64 {
-	mod := 1
+	mod := int64(1)
 	re := regexp.MustCompile(`(?P<time>\d+)(?P<mod>(s|mn|h|d)*)`)
 	match := re.FindStringSubmatch(value)
 	if match == nil {
