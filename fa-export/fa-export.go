@@ -52,14 +52,17 @@ func main() {
 	    signal.Notify(sigint, os.Interrupt)
 	    <-sigint
 
-		log.Printf("FA client stopped:")
-		log.Printf("  %d pkts %d bytes", Client.Pkts, Client.Bytes)
-		if err := Client.Close(); err != nil {
-			log.Println("Error closing connection:", err)
-			os.Exit(1)
-		} else {
-			os.Exit(0)
-		}
+		stopEverything()
+	}()
+
+	// Handle SIGALRM
+	go func() {
+		sigalrm := make(chan os.Signal, 14)
+  		signal.Notify(sigalrm, os.Interrupt)
+  		<-sigalrm
+
+		log.Println("Timeout reached.")
+		stopEverything()
 	}()
 
 	flag.Parse()
