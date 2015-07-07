@@ -18,12 +18,14 @@ var (
 	fVerbose	bool
 	fOutput		string
 	fEventType	string
+	fTimeout	int64
+	fsTimeout	string
 )
 
 // my usage string
 const (
 	cliUsage	= `
-Usage: %s [-o FILE] [-t live|pitr|range] [-v]
+Usage: %s [-o FILE] [-i N(s|mn|h|d)] [-t live|pitr|range] [-v]
 `
 )
 
@@ -38,5 +40,6 @@ func init() {
 	// cli
 	flag.StringVar(&fOutput, "o", "", "Specify output FILE.")
 	flag.StringVar(&fEventType, "t", "live", "Specify which events we want (default live)")
+	flag.StringVar(&fsTimeout, "i", "60s", "Stop after N s/mn/h/days")
 	flag.BoolVar(&fVerbose, "v", false, "Set verbose flag.")
 }
