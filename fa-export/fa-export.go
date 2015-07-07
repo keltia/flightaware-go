@@ -18,6 +18,12 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
+	"time"
+	"syscall"
+)
+
+const (
+	SigALRM = 14
 )
 
 var (
@@ -92,7 +98,7 @@ func main() {
 
 	// Handle SIGALRM
 	go func() {
-		sigalrm := make(chan os.Signal, 14)
+		sigalrm := make(chan os.Signal, SigALRM)
   		signal.Notify(sigalrm, os.Interrupt)
   		<-sigalrm
 
@@ -110,6 +116,12 @@ func main() {
 	// Check if we did specify a timeout with -i
 	if fsTimeout != "" {
 		fTimeout = checkTimeout(fsTimeout)
+
+		// Sleep for fTimeout seconds then sends SIGALRM
+		go func() {
+			time.Sleep(fTimeout)
+			syscall.Kill(syscall.Getpid(), SigALRM)
+		}()
 	}
 
 	Client = flightaware.NewClient(c)
