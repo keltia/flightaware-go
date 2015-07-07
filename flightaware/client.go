@@ -121,6 +121,7 @@ func (cl *FAClient) Start() error {
 	return nil
 }
 
+// Properly close the TLS connection
 func (cl *FAClient) Close() error {
 	var err error
 
