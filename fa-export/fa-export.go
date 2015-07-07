@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
+	"time"
 )
 
 var (
@@ -105,10 +106,6 @@ func main() {
 	c, err := config.LoadConfig(RcFile)
 	if err != nil {
 		log.Fatalf("Error loading configuration %f: %v\n", RcFile, err)
-	}
-	if fVerbose {
-		log.Println(c.Dests)
-		log.Println(c.Default, c.Dests[c.Default])
 	}
 
 	// Check if we did specify a timeout with -i
