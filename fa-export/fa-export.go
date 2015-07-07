@@ -32,6 +32,18 @@ func fileOutput(buf []byte) {
 	}
 }
 
+// Proper shutdown
+func stopEverything() {
+	log.Printf("FA client stopped:")
+	log.Printf("  %d pkts %d bytes", Client.Pkts, Client.Bytes)
+	if err := Client.Close(); err != nil {
+		log.Println("Error closing connection:", err)
+		os.Exit(1)
+	} else {
+		os.Exit(0)
+	}
+}
+
 // Starts here.
 func main() {
 	// Handle SIGINT
