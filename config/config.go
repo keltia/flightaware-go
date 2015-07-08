@@ -45,6 +45,6 @@ func LoadConfig(file string) (Config, error) {
 	}
 
 	c.Default = "mine"
-	c.Feed_one = func(buf []byte) { fmt.Println(buf)}
+	c.Feed_one = func(buf []byte) { fmt.Println(buf) }
 	return *c, err
 }

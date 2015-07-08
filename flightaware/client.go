@@ -5,22 +5,22 @@
 package flightaware
 
 import (
-	"crypto/tls"
-	"log"
-	"fmt"
 	"../config"
 	"bufio"
-	"time"
+	"crypto/tls"
+	"fmt"
+	"log"
 	"os"
+	"time"
 )
 
 type FAClient struct {
-	Host		config.Config
-	Bytes		int64
-	Pkts		int32
-	Conn		*tls.Conn
-	Feed_one	func([]byte)
-	Verbose		bool
+	Host     config.Config
+	Bytes    int64
+	Pkts     int32
+	Conn     *tls.Conn
+	Feed_one func([]byte)
+	Verbose  bool
 }
 
 // Create new instance of the client
@@ -42,15 +42,15 @@ func (cl *FAClient) AddHandler(fn func([]byte)) {
 
 // Allow run of specified duration
 func (cl *FAClient) SetTimer(timer int64) {
-		// Sleep for fTimeout seconds then sends Interrupt
-		go func() {
-			time.Sleep(time.Duration(timer) * time.Second)
-			if cl.Verbose {
-				log.Println("Timer off, time to kill")
-			}
-			myself, _ := os.FindProcess(os.Getpid())
-			myself.Signal(os.Interrupt)
-		}()
+	// Sleep for fTimeout seconds then sends Interrupt
+	go func() {
+		time.Sleep(time.Duration(timer) * time.Second)
+		if cl.Verbose {
+			log.Println("Timer off, time to kill")
+		}
+		myself, _ := os.FindProcess(os.Getpid())
+		myself.Signal(os.Interrupt)
+	}()
 }
 
 // consumer part of the FA client
@@ -93,7 +93,7 @@ func authClient(conn *tls.Conn, rc config.Config) error {
 // - starts the consumer in the background
 // - reads data from FA and send it to the consumer
 func (cl *FAClient) Start() error {
-	var rc	config.Config = cl.Host
+	var rc config.Config = cl.Host
 
 	str := rc.Site + ":" + rc.Port
 	if cl.Verbose {
@@ -101,7 +101,7 @@ func (cl *FAClient) Start() error {
 	}
 
 	conn, err := tls.Dial("tcp", str, &tls.Config{
-		RootCAs: nil,
+		RootCAs:            nil,
 		InsecureSkipVerify: true,
 	})
 	if err != nil {
@@ -154,7 +154,7 @@ func (cl *FAClient) Close() error {
 	var err error
 
 	if err := cl.Conn.Close(); err != nil {
-		log.Println("Error closing connection "+err.Error())
+		log.Println("Error closing connection " + err.Error())
 	}
 	if cl.Verbose {
 		log.Println("Flightaware client shutdown.")

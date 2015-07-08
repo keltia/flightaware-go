@@ -15,16 +15,16 @@ import (
 
 var (
 	// cli
-	fVerbose	bool
-	fOutput		string
-	fEventType	string
-	fTimeout	int64
-	fsTimeout	string
+	fVerbose   bool
+	fOutput    string
+	fEventType string
+	fTimeout   int64
+	fsTimeout  string
 )
 
 // my usage string
 const (
-	cliUsage	= `
+	cliUsage = `
 Usage: %s [-o FILE] [-i N(s|mn|h|d)] [-t live|pitr|range] [-v]
 `
 )
