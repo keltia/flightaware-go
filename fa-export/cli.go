@@ -5,6 +5,7 @@
 // Copyright 2015 © by Ollivier Robert for the EEC
 //
 
+// Command-line Interface for fa-export
 package main
 
 import (

@@ -1,7 +1,7 @@
 // client.go
 //
-// Flightaware client package
 
+// Flightaware client package
 package flightaware
 
 import (

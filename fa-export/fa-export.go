@@ -3,8 +3,8 @@
 // Small FlightAware Go client
 //
 // Copyright 2015 © by Ollivier Robert for the EEC
-//
 
+// Implement the fa-export client.
 package main
 
 import (

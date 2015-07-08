@@ -1,7 +1,9 @@
 // config.go
 //
-// My homemade configuration class
+// Copyright 2015 © by Ollivier Robert <roberto@keltia.net>
+//
 
+// My homemade configuration class
 package config
 
 import (
