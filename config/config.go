@@ -28,10 +28,12 @@ type Config struct {
 	Default  string
 }
 
+// Basic Stringer for Dest
 func (dest *Dest) String() string {
 	return fmt.Sprintf("%v: %v", dest.Broker, dest.Name)
 }
 
+// Load a file as a YAML document and return the structure
 func LoadConfig(file string) (Config, error) {
 	buf, err := ioutil.ReadFile(file)
 	if err != nil {
