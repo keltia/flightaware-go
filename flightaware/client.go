@@ -18,6 +18,7 @@ type FAClient struct {
 	Pkts		int32
 	Conn		*tls.Conn
 	Feed_one	func([]byte)
+	Verbose		bool
 }
 
 // Create new instance of the client
@@ -39,7 +40,9 @@ func (cl *FAClient) AddHandler(fn func([]byte)) {
 
 // consumer part of the FA client
 func (cl *FAClient) StartWriter() (chan []byte, error) {
-	log.Println("Waiting for data…")
+	if cl.Verbose {
+		log.Println("Waiting for data…")
+	}
 	ch := make(chan []byte, 1000)
 	go func() {
 		for {
@@ -48,7 +51,9 @@ func (cl *FAClient) StartWriter() (chan []byte, error) {
 				log.Fatalf("Error: reading data: %s: %v", string(buf), ok)
 			}
 			// Do something
-			log.Printf("Read %d bytes\n", len(buf))
+			if cl.Verbose {
+				log.Printf("Read %d bytes\n", len(buf))
+			}
 			(cl.Feed_one)(buf)
 
 			cl.Bytes += int64(len(buf))
@@ -76,7 +81,9 @@ func (cl *FAClient) Start() error {
 	var rc	config.Config = cl.Host
 
 	str := rc.Site + ":" + rc.Port
-	log.Printf("Connecting to %v with TLS\n", str)
+	if cl.Verbose {
+		log.Printf("Connecting to %v with TLS\n", str)
+	}
 
 	conn, err := tls.Dial("tcp", str, &tls.Config{
 		RootCAs: nil,
@@ -87,14 +94,18 @@ func (cl *FAClient) Start() error {
 		return err
 	}
 
-	log.Println("TLS negociation done.")
+	if cl.Verbose {
+		log.Println("TLS negociation done.")
+	}
 
 	if err := authClient(conn, rc); err != nil {
 		log.Printf("Error: auth error for %s\n", rc.User)
 		return err
 	}
 
-	log.Println("Flightaware init done.")
+	if cl.Verbose {
+		log.Println("Flightaware init done.")
+	}
 	cl.Conn = conn
 
 	// Starting here everything is flowing from that connection
@@ -107,12 +118,16 @@ func (cl *FAClient) Start() error {
 	// Loop over chunks of data
 	sc := bufio.NewScanner(cl.Conn)
 	for {
-		log.Println("Now waiting for data")
+		if cl.Verbose {
+			log.Println("Now waiting for data")
+		}
 		for sc.Scan() {
 			buf := sc.Text()
 
 			if nb := len(buf); nb != 0 {
-				log.Printf("Sending %d bytes\n", nb)
+				if cl.Verbose {
+					log.Printf("Sending %d bytes\n", nb)
+				}
 				ch <- []byte(buf)
 			}
 		}
@@ -126,6 +141,9 @@ func (cl *FAClient) Close() error {
 	var err error
 
 	if err := cl.Conn.Close(); err != nil {
+		log.Println("Error closing connection "+err.Error())
+	}
+	if cl.Verbose {
 		log.Println("Flightaware client shutdown.")
 	}
 	return err
