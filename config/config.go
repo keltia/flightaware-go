@@ -26,7 +26,6 @@ type Config struct {
 	Port     string
 	Dests    map[string]Dest
 	Default  string
-	Feed_one func([]byte)
 }
 
 func (dest *Dest) String() string {
@@ -47,6 +46,5 @@ func LoadConfig(file string) (Config, error) {
 	}
 
 	c.Default = "mine"
-	c.Feed_one = func(buf []byte) { fmt.Println(buf) }
 	return *c, err
 }
