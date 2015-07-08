@@ -28,7 +28,7 @@ const (
 
 var (
 	RcFile = filepath.Join(os.Getenv("HOME"), ".flightaware", "config.yml")
-	Client 		*flightaware.FAClient
+	client        *flightaware.FAClient
 	fOutputFH	*os.File
 
 	timeMods	= map[string]int64{
@@ -49,8 +49,8 @@ func fileOutput(buf []byte) {
 // Proper shutdown
 func stopEverything() {
 	log.Printf("FA client stopped:")
-	log.Printf("  %d pkts %d bytes", Client.Pkts, Client.Bytes)
-	if err := Client.Close(); err != nil {
+	log.Printf("  %d pkts %d bytes", client.Pkts, client.Bytes)
+	if err := client.Close(); err != nil {
 		log.Println("Error closing connection:", err)
 		os.Exit(1)
 	} else {
@@ -113,18 +113,12 @@ func main() {
 		log.Fatalf("Error loading configuration %f: %v\n", RcFile, err)
 	}
 
-	// Check if we did specify a timeout with -i
-	if fsTimeout != "" {
-		fTimeout = checkTimeout(fsTimeout)
+	client = flightaware.NewClient(c)
 
-		// Sleep for fTimeout seconds then sends SIGALRM
-		go func() {
-			time.Sleep(fTimeout)
-			syscall.Kill(syscall.Getpid(), SigALRM)
-		}()
+	// Propagate this to the Client struct
+	if fVerbose {
+		client.Verbose = true
 	}
-
-	Client = flightaware.NewClient(c)
 
 	// Open output file
 	if (fOutput != "") {
@@ -137,12 +131,12 @@ func main() {
 			panic(err)
 		}
 
-		Client.AddHandler(fileOutput)
+		client.AddHandler(fileOutput)
 	}
 
 
 	// Get the flow running
-	if err := Client.Start(); err != nil {
+	if err := client.Start(); err != nil {
 		log.Fatalln("Error: unable to connect:", err)
 	}
 }
