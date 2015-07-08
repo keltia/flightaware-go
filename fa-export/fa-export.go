@@ -42,8 +42,10 @@ func fileOutput(buf []byte) {
 
 // Proper shutdown
 func stopEverything() {
-	log.Printf("FA client stopped:")
-	log.Printf("  %d pkts %d bytes", client.Pkts, client.Bytes)
+	if (fVerbose) {
+		log.Printf("FA client stopped:")
+		log.Printf("  %d pkts %d bytes", client.Pkts, client.Bytes)
+	}
 	if err := client.Close(); err != nil {
 		log.Println("Error closing connection:", err)
 		os.Exit(1)
@@ -94,7 +96,7 @@ func main() {
 
 	c, err := config.LoadConfig(RcFile)
 	if err != nil {
-		log.Fatalf("Error loading configuration %f: %v\n", RcFile, err)
+		log.Fatalf("Error loading configuration %s: %s\n", RcFile, err.Error())
 	}
 
 	client = flightaware.NewClient(c)
