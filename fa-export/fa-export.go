@@ -19,11 +19,6 @@ import (
 	"regexp"
 	"strconv"
 	"time"
-	"syscall"
-)
-
-const (
-	SigALRM = 14
 )
 
 var (
@@ -96,16 +91,6 @@ func main() {
 		stopEverything()
 	}()
 
-	// Handle SIGALRM
-	go func() {
-		sigalrm := make(chan os.Signal, SigALRM)
-  		signal.Notify(sigalrm, os.Interrupt)
-  		<-sigalrm
-
-		log.Println("Timeout reached.")
-		stopEverything()
-	}()
-
 	flag.Parse()
 
 	c, err := config.LoadConfig(RcFile)
@@ -142,7 +127,11 @@ func main() {
 		// Sleep for fTimeout seconds then sends SIGALRM
 		go func() {
 			time.Sleep(time.Duration(fTimeout) * time.Second)
-			syscall.Kill(syscall.Getpid(), SigALRM)
+			if fVerbose {
+				log.Println("Timer off, time to kill")
+			}
+			myself, _ := os.FindProcess(os.Getpid())
+			myself.Signal(os.Interrupt)
 		}()
 	}
 
