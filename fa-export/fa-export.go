@@ -120,6 +120,11 @@ func main() {
 		}
 
 		client.AddHandler(fileOutput)
+	} else {
+		if fAutoRotate {
+			log.Println("Warning: -A needs -O to work, ignoring")
+			fAutoRotate = false
+		}
 	}
 
 	// Check if we did specify a timeout with -i
