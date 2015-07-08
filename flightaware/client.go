@@ -147,8 +147,6 @@ func (cl *FAClient) Start() error {
 			}
 		}
 	}
-
-	return nil
 }
 
 // Properly close the TLS connection
