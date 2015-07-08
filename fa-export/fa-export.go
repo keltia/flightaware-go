@@ -8,33 +8,33 @@
 package main
 
 import (
-	"../flightaware"
 	"../config"
+	"../flightaware"
 	"flag"
-	"os"
-	"path/filepath"
-	"os/signal"
-	"log"
 	"fmt"
+	"log"
+	"os"
+	"os/signal"
+	"path/filepath"
 	"regexp"
 	"strconv"
 )
 
 var (
-	RcFile = filepath.Join(os.Getenv("HOME"), ".flightaware", "config.yml")
-	client        *flightaware.FAClient
-	fOutputFH	*os.File
+	RcFile    = filepath.Join(os.Getenv("HOME"), ".flightaware", "config.yml")
+	client    *flightaware.FAClient
+	fOutputFH *os.File
 
-	timeMods	= map[string]int64{
+	timeMods = map[string]int64{
 		"mn": 60,
-		"h": 3600,
-		"d": 3600*24,
+		"h":  3600,
+		"d":  3600 * 24,
 	}
 )
 
 // fOutput callback
 func fileOutput(buf []byte) {
-	nb, err := fmt.Fprintln(fOutputFH, string(buf));
+	nb, err := fmt.Fprintln(fOutputFH, string(buf))
 	if err != nil {
 		log.Fatalf("Error writing %d bytes: %v", nb, err)
 	}
@@ -42,7 +42,7 @@ func fileOutput(buf []byte) {
 
 // Proper shutdown
 func stopEverything() {
-	if (fVerbose) {
+	if fVerbose {
 		log.Printf("FA client stopped:")
 		log.Printf("  %d pkts %d bytes", client.Pkts, client.Bytes)
 	}
@@ -55,6 +55,8 @@ func stopEverything() {
 }
 
 // Check for specific modifiers, returns seconds
+//
+//XXX could use time.ParseDuration except it does not support days.
 func checkTimeout(value string) int64 {
 	mod := int64(1)
 	re := regexp.MustCompile(`(?P<time>\d+)(?P<mod>(s|mn|h|d)*)`)
@@ -85,9 +87,9 @@ func checkTimeout(value string) int64 {
 func main() {
 	// Handle SIGINT
 	go func() {
-	    sigint := make(chan os.Signal, 3)
-	    signal.Notify(sigint, os.Interrupt)
-	    <-sigint
+		sigint := make(chan os.Signal, 3)
+		signal.Notify(sigint, os.Interrupt)
+		<-sigint
 
 		stopEverything()
 	}()
@@ -107,8 +109,8 @@ func main() {
 	}
 
 	// Open output file
-	if (fOutput != "") {
-		if (fVerbose) {
+	if fOutput != "" {
+		if fVerbose {
 			log.Printf("Output file is %s\n", fOutput)
 		}
 
@@ -124,7 +126,7 @@ func main() {
 	if fsTimeout != "" {
 		fTimeout = checkTimeout(fsTimeout)
 
-		if (fVerbose) {
+		if fVerbose {
 			log.Printf("Run for %ds\n", fTimeout)
 		}
 		client.SetTimer(fTimeout)
