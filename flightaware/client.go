@@ -10,6 +10,8 @@ import (
 	"fmt"
 	"../config"
 	"bufio"
+	"time"
+	"os"
 )
 
 type FAClient struct {
@@ -36,6 +38,18 @@ func defaultFeed(buf []byte) { fmt.Println(string(buf)) }
 // Change default callback
 func (cl *FAClient) AddHandler(fn func([]byte)) {
 	cl.Feed_one = fn
+}
+
+func (cl *FAClient) SetTimer(timer int64) {
+		// Sleep for fTimeout seconds then sends Interrupt
+		go func() {
+			time.Sleep(time.Duration(timer) * time.Second)
+			if cl.Verbose {
+				log.Println("Timer off, time to kill")
+			}
+			myself, _ := os.FindProcess(os.Getpid())
+			myself.Signal(os.Interrupt)
+		}()
 }
 
 // consumer part of the FA client

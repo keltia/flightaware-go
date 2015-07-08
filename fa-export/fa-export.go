@@ -18,7 +18,6 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
-	"time"
 )
 
 var (
@@ -123,16 +122,10 @@ func main() {
 	if fsTimeout != "" {
 		fTimeout = checkTimeout(fsTimeout)
 
-		log.Printf("Run for %ds\n", fTimeout)
-		// Sleep for fTimeout seconds then sends SIGALRM
-		go func() {
-			time.Sleep(time.Duration(fTimeout) * time.Second)
-			if fVerbose {
-				log.Println("Timer off, time to kill")
-			}
-			myself, _ := os.FindProcess(os.Getpid())
-			myself.Signal(os.Interrupt)
-		}()
+		if (fVerbose) {
+			log.Printf("Run for %ds\n", fTimeout)
+		}
+		client.SetTimer(fTimeout)
 	}
 
 	// Get the flow running
