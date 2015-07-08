@@ -40,6 +40,7 @@ func (cl *FAClient) AddHandler(fn func([]byte)) {
 	cl.Feed_one = fn
 }
 
+// Allow run of specified duration
 func (cl *FAClient) SetTimer(timer int64) {
 		// Sleep for fTimeout seconds then sends Interrupt
 		go func() {
