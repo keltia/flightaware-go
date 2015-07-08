@@ -134,6 +134,17 @@ func main() {
 		client.AddHandler(fileOutput)
 	}
 
+	// Check if we did specify a timeout with -i
+	if fsTimeout != "" {
+		fTimeout = checkTimeout(fsTimeout)
+
+		log.Printf("Run for %ds\n", fTimeout)
+		// Sleep for fTimeout seconds then sends SIGALRM
+		go func() {
+			time.Sleep(time.Duration(fTimeout) * time.Second)
+			syscall.Kill(syscall.Getpid(), SigALRM)
+		}()
+	}
 
 	// Get the flow running
 	if err := client.Start(); err != nil {
