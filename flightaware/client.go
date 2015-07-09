@@ -14,6 +14,10 @@ import (
 	"time"
 )
 
+const (
+	AUTHSTR = "%s version 4.0 username %s password %s events \"position\"\n"
+)
+
 type FAClient struct {
 	Host     config.Config
 	Bytes    int64
@@ -82,7 +86,7 @@ func (cl *FAClient) StartWriter() (chan []byte, error) {
 // Send banner to FA
 func authClient(conn *tls.Conn, cl *FAClient) error {
 	rc := cl.Host
-	conf := fmt.Sprintf("%s version 4.0 username %s password %s events \"position\"\n", cl.EventType, rc.User, rc.Password)
+	conf := fmt.Sprintf(AUTHSTR, cl.EventType, rc.User, rc.Password)
 	_, err := conn.Write([]byte(conf))
 	if err != nil {
 		log.Println("Error configuring feed", err.Error())
