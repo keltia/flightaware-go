@@ -84,7 +84,7 @@ func (cl *FAClient) StartWriter() (chan []byte, error) {
 }
 
 // Send banner to FA
-func authClient(conn *tls.Conn, cl *FAClient) error {
+func (cl *FAClient) authClient(conn *tls.Conn) error {
 	rc := cl.Host
 	conf := fmt.Sprintf(AUTHSTR, cl.EventType, rc.User, rc.Password)
 	_, err := conn.Write([]byte(conf))
@@ -119,7 +119,7 @@ func (cl *FAClient) Start() error {
 		log.Println("TLS negociation done.")
 	}
 
-	if err := authClient(conn, cl); err != nil {
+	if err := cl.authClient(conn); err != nil {
 		log.Printf("Error: auth error for %s\n", rc.User)
 		return err
 	}
