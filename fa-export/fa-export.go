@@ -102,6 +102,7 @@ func main() {
 	}
 
 	client = flightaware.NewClient(c)
+	client.EventType = fEventType
 
 	// Propagate this to the Client struct
 	if fVerbose {

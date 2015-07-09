@@ -21,6 +21,7 @@ type FAClient struct {
 	Conn     *tls.Conn
 	Feed_one func([]byte)
 	Verbose  bool
+	EventType string
 }
 
 // Create new instance of the client
@@ -79,8 +80,9 @@ func (cl *FAClient) StartWriter() (chan []byte, error) {
 }
 
 // Send banner to FA
-func authClient(conn *tls.Conn, rc config.Config) error {
-	conf := fmt.Sprintf("live version 4.0 username %s password %s events \"position\"\n", rc.User, rc.Password)
+func authClient(conn *tls.Conn, cl *FAClient) error {
+	rc := cl.Host
+	conf := fmt.Sprintf("%s version 4.0 username %s password %s events \"position\"\n", cl.EventType, rc.User, rc.Password)
 	_, err := conn.Write([]byte(conf))
 	if err != nil {
 		log.Println("Error configuring feed", err.Error())
@@ -113,7 +115,7 @@ func (cl *FAClient) Start() error {
 		log.Println("TLS negociation done.")
 	}
 
-	if err := authClient(conn, rc); err != nil {
+	if err := authClient(conn, cl); err != nil {
 		log.Printf("Error: auth error for %s\n", rc.User)
 		return err
 	}
