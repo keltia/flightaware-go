@@ -102,7 +102,7 @@ func main() {
 	}
 
 	client = flightaware.NewClient(c)
-	client.EventType = fEventType
+	client.FeedType = fFeedType
 
 	// Propagate this to the Client struct
 	if fVerbose {
@@ -130,8 +130,8 @@ func main() {
 	}
 
 	// Check if we want a live stream or a more specialized one
-	if fEventType != "" {
-		if err := client.CheckEvents(fEventType, fRestart); err != nil {
+	if fFeedType != "" {
+		if err := client.CheckEvents(fFeedType, fFeedTimings); err != nil {
 			log.Printf("%s", err.Error())
 		}
 	}

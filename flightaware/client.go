@@ -28,7 +28,7 @@ type FAClient struct {
 	Conn     *tls.Conn
 	Feed_one func([]byte)
 	Verbose  bool
-	EventType string
+	FeedType string
 	// For range event type
 	RangeT   []int64
 }
@@ -69,20 +69,20 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 	var authStr string = ""
 
 	rc := cl.Host
-	switch cl.EventType {
+	switch cl.FeedType {
 		case "live":
-			authStr = cl.EventType
+			authStr = cl.FeedType
 			if cl.Verbose {
 				log.Println("Live traffic feed")
 			}
 		case "pitr":
-			authStr = fmt.Sprintf("%s %d", cl.EventType, cl.RangeT[0])
+			authStr = fmt.Sprintf("%s %d", cl.FeedType, cl.RangeT[0])
 			if cl.Verbose {
 				log.Println("Live traffic replay starting at %v",
 					time.Unix(cl.RangeT[0], 0))
 			}
 		case "range":
-			authStr = fmt.Sprintf("%s %d %d", cl.EventType, cl.RangeT[0], cl.RangeT[1])
+			authStr = fmt.Sprintf("%s %d %d", cl.FeedType, cl.RangeT[0], cl.RangeT[1])
 			if cl.Verbose {
 				log.Printf("Replay traffic from %v to %v\n",
 					time.Unix(cl.RangeT[0], 0),
@@ -90,7 +90,7 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 			}
 	}
 
-	conf := fmt.Sprintf(AUTHSTR, authStr, cl.EventType, rc.User, rc.Password)
+	conf := fmt.Sprintf(AUTHSTR, authStr, cl.FeedType, rc.User, rc.Password)
 	_, err := conn.Write([]byte(conf))
 	if err != nil {
 		log.Println("Error configuring feed", err.Error())

@@ -22,7 +22,7 @@ var (
 	fTimeout   int64
 	fsTimeout  string
 	fAutoRotate bool
-	fRestart	string
+	fFeedTimings string
 )
 
 // my usage string
@@ -43,7 +43,7 @@ func init() {
 	// cli
 	flag.StringVar(&fOutput, "o", "", "Specify output FILE.")
 	flag.StringVar(&fFeedType, "f", "live", "Specify which feed we want (default live)")
-	flag.StringVar(&fRestart, "F", "", "Parameters for -f pitr|range")
+	flag.StringVar(&fFeedTimings, "F", "", "Parameters for -f pitr|range")
 	flag.StringVar(&fsTimeout, "i", "60s", "Stop after N s/mn/h/days")
 	flag.BoolVar(&fAutoRotate, "A", false, "Autorotate output file")
 	flag.BoolVar(&fVerbose, "v", false, "Set verbose flag.")
