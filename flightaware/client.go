@@ -78,7 +78,7 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 		case "pitr":
 			authStr = fmt.Sprintf("%s %d", cl.FeedType, cl.RangeT[0])
 			if cl.Verbose {
-				log.Println("Live traffic replay starting at %v",
+				log.Printf("Live traffic replay starting at %v",
 					time.Unix(cl.RangeT[0], 0))
 			}
 		case "range":
