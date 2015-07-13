@@ -130,25 +130,25 @@ func (cl *FAClient) SetTimer(timer int64) {
 
 // Check if parameters for the event type are consistent
 // Check that -t has also -T and the right parameters
-func (client *FAClient) CheckEvents(fEventType, fRestart string) error {
+func (client *FAClient) CheckEvents(feedType, feedTimings string) error {
 	// -t live and -T are mutually exclusive
-	if fEventType == "live" && fRestart != "" {
+	if feedType == "live" && feedTimings != "" {
 		return errors.New("Error: can't use -t live and -T")
 	}
 
 	// Check when -t pitr that -T is single valued
-	if fEventType == "pitr" {
-		if fRestart == "" {
+	if feedType == "pitr" {
+		if feedTimings == "" {
 			return errors.New("Error: you must specify a value with -T")
 		}
 
 		// Allow only one value to -T for -t pitr
-		if strings.Index(fRestart, ":") != -1 {
+		if strings.Index(feedTimings, ":") != -1 {
 			return errors.New("Error: only one value for -t pitr and -T")
 		}
 
 		// Check value
-		restart, err := strconv.ParseInt(fRestart, 10, 64)
+		restart, err := strconv.ParseInt(feedTimings, 10, 64)
 		if err != nil {
 			return err
 		}
@@ -159,10 +159,10 @@ func (client *FAClient) CheckEvents(fEventType, fRestart string) error {
 		client.RangeT[0] = restart
 	}
 
-	if fEventType == "range" {
-		rangeT, err := stringtoRange(fRestart)
+	if feedType == "range" {
+		rangeT, err := stringtoRange(feedTimings)
 		if err != nil {
-			return errors.New(fmt.Sprintf("Bad range specified in %s\n", fRestart))
+			return errors.New(fmt.Sprintf("Bad range specified in %s\n", feedTimings))
 		}
 		// Store out final values
 		client.RangeT = rangeT
