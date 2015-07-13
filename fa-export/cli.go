@@ -44,7 +44,7 @@ func init() {
 	flag.StringVar(&fOutput, "o", "", "Specify output FILE.")
 	flag.StringVar(&fFeedType, "f", "live", "Specify which feed we want (default live)")
 	flag.StringVar(&fFeedTimings, "F", "", "Parameters for -f pitr|range")
-	flag.StringVar(&fsTimeout, "i", "60s", "Stop after N s/mn/h/days")
+	flag.StringVar(&fsTimeout, "i", "", "Stop after N s/mn/h/days")
 	flag.BoolVar(&fAutoRotate, "A", false, "Autorotate output file")
 	flag.BoolVar(&fVerbose, "v", false, "Set verbose flag.")
 }
