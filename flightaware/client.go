@@ -106,6 +106,7 @@ func NewClient(rc config.Config) *FAClient {
 	cl := new(FAClient)
 	cl.Host = rc
 	cl.Feed_one = defaultFeed
+	cl.RangeT = make([]int64, 2)
 
 	return cl
 }
