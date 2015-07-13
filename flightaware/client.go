@@ -37,48 +37,6 @@ type FAClient struct {
 // Default callback
 func defaultFeed(buf []byte) { fmt.Println(string(buf)) }
 
-// Check if parameters for the event type are consistent
-// Check that -t has also -T and the right parameters
-func (client *FAClient) CheckEvents(fEventType, fRestart string) error {
-	// -t live and -T are mutually exclusive
-	if fEventType == "live" && fRestart != "" {
-		return errors.New("Error: can't use -t live and -T")
-	}
-
-	// Check when -t pitr that -T is single valued
-	if fEventType == "pitr" {
-		if fRestart == "" {
-			return errors.New("Error: you must specify a value with -T")
-		}
-
-		// Allow only one value to -T for -t pitr
-		if strings.Index(fRestart, ":") != -1 {
-			return errors.New("Error: only one value for -t pitr and -T")
-		}
-
-		// Check value
-		restart, err := strconv.ParseInt(fRestart, 10, 64)
-		if err != nil {
-			return err
-		}
-		if restart >= time.Now().Unix() {
-			return errors.New(fmt.Sprintf("Error: -T %d is in the future", restart))
-		}
-		// Store out final value
-		client.RangeT[0] = restart
-	}
-
-	if fEventType == "range" {
-		rangeT, err := stringtoRange(fRestart)
-		if err != nil {
-			return errors.New(fmt.Sprintf("Bad range specified in %s\n", fRestart))
-		}
-		// Store out final values
-		client.RangeT = rangeT
-	}
-	return nil
-}
-
 // Transform N:M into a array
 func stringtoRange(s string) ([]int64, error) {
 	begEnd := strings.Split(s, ":")
@@ -156,6 +114,48 @@ func (cl *FAClient) SetTimer(timer int64) {
 		myself, _ := os.FindProcess(os.Getpid())
 		myself.Signal(os.Interrupt)
 	}()
+}
+
+// Check if parameters for the event type are consistent
+// Check that -t has also -T and the right parameters
+func (client *FAClient) CheckEvents(fEventType, fRestart string) error {
+	// -t live and -T are mutually exclusive
+	if fEventType == "live" && fRestart != "" {
+		return errors.New("Error: can't use -t live and -T")
+	}
+
+	// Check when -t pitr that -T is single valued
+	if fEventType == "pitr" {
+		if fRestart == "" {
+			return errors.New("Error: you must specify a value with -T")
+		}
+
+		// Allow only one value to -T for -t pitr
+		if strings.Index(fRestart, ":") != -1 {
+			return errors.New("Error: only one value for -t pitr and -T")
+		}
+
+		// Check value
+		restart, err := strconv.ParseInt(fRestart, 10, 64)
+		if err != nil {
+			return err
+		}
+		if restart >= time.Now().Unix() {
+			return errors.New(fmt.Sprintf("Error: -T %d is in the future", restart))
+		}
+		// Store out final value
+		client.RangeT[0] = restart
+	}
+
+	if fEventType == "range" {
+		rangeT, err := stringtoRange(fRestart)
+		if err != nil {
+			return errors.New(fmt.Sprintf("Bad range specified in %s\n", fRestart))
+		}
+		// Store out final values
+		client.RangeT = rangeT
+	}
+	return nil
 }
 
 // consumer part of the FA client
