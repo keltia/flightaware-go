@@ -90,7 +90,7 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 			}
 	}
 
-	conf := fmt.Sprintf(AUTHSTR, authStr, cl.FeedType, rc.User, rc.Password)
+	conf := fmt.Sprintf(AUTHSTR, authStr, rc.User, rc.Password)
 	_, err := conn.Write([]byte(conf))
 	if err != nil {
 		log.Println("Error configuring feed", err.Error())
