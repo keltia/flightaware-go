@@ -18,7 +18,8 @@ import (
 )
 
 const (
-	AUTHSTR = "%s version 4.0 username %s password %s events \"position\"\n"
+	FA_AUTHSTR = "%s username %s password %s events \"position\"\n"
+	FA_VERSION = "version 4.0"
 )
 
 type FAClient struct {
@@ -71,7 +72,7 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 	rc := cl.Host
 	switch cl.FeedType {
 		case "live":
-			authStr = cl.FeedType
+			authStr = fmt.Sprintf("%s %s", cl.FeedType, FA_VERSION)
 			if cl.Verbose {
 				log.Println("Live traffic feed")
 			}
