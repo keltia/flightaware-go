@@ -72,10 +72,22 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 	switch cl.EventType {
 		case "live":
 			authStr = cl.EventType
+			if cl.Verbose {
+				log.Println("Live traffic feed")
+			}
 		case "pitr":
 			authStr = fmt.Sprintf("%s %d", cl.EventType, cl.RangeT[0])
+			if cl.Verbose {
+				log.Println("Live traffic replay starting at %v",
+					time.Unix(cl.RangeT[0], 0))
+			}
 		case "range":
 			authStr = fmt.Sprintf("%s %d %d", cl.EventType, cl.RangeT[0], cl.RangeT[1])
+			if cl.Verbose {
+				log.Printf("Replay traffic from %v to %v\n",
+					time.Unix(cl.RangeT[0], 0),
+					time.Unix(cl.RangeT[1], 0))
+			}
 	}
 
 	conf := fmt.Sprintf(AUTHSTR, authStr, cl.EventType, rc.User, rc.Password)
