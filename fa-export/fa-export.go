@@ -121,6 +121,7 @@ func main() {
 		}
 
 		client.AddHandler(fileOutput)
+		// XXX FIXME Handle fAutoRotate
 	} else {
 		if fAutoRotate {
 			log.Println("Warning: -A needs -O to work, ignoring")
