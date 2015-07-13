@@ -240,9 +240,6 @@ func (cl *FAClient) Start() error {
 	// Loop over chunks of data
 	sc := bufio.NewScanner(cl.Conn)
 	for {
-		if cl.Verbose {
-			log.Println("Now waiting for data")
-		}
 		for sc.Scan() {
 			buf := sc.Text()
 
