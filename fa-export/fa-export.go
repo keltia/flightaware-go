@@ -128,6 +128,13 @@ func main() {
 		}
 	}
 
+	// Check if we want a live stream or a more specialized one
+	if fEventType != "" {
+		if err := client.CheckEvents(fEventType, fRestart); err != nil {
+			log.Printf("%s", err.Error())
+		}
+	}
+
 	// Check if we did specify a timeout with -i
 	if fsTimeout != "" {
 		fTimeout = checkTimeout(fsTimeout)
