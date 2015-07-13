@@ -130,7 +130,7 @@ func (cl *FAClient) SetTimer(timer int64) {
 
 // Check if parameters for the event type are consistent
 // Check that -t has also -T and the right parameters
-func (client *FAClient) CheckEvents(feedType, feedTimings string) error {
+func (client *FAClient) SetFeed(feedType, feedTimings string) error {
 	// -t live and -T are mutually exclusive
 	if feedType == "live" && feedTimings != "" {
 		return errors.New("Error: can't use -t live and -T")
