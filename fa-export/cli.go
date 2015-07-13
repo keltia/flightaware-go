@@ -22,12 +22,13 @@ var (
 	fTimeout   int64
 	fsTimeout  string
 	fAutoRotate bool
+	fRestart	string
 )
 
 // my usage string
 const (
 	cliUsage = `
-Usage: %s [-o FILE] [-A] [-i N(s|mn|h|d)] [-t live|pitr|range] [-v]
+Usage: %s [-o FILE] [-A] [-i N(s|mn|h|d)] [-t live|pitr|range -T p1[:p2]] [-v]
 `
 )
 
@@ -42,6 +43,7 @@ func init() {
 	// cli
 	flag.StringVar(&fOutput, "o", "", "Specify output FILE.")
 	flag.StringVar(&fEventType, "t", "live", "Specify which events we want (default live)")
+	flag.StringVar(&fRestart, "T", "", "Parameters for -t pitr|range")
 	flag.StringVar(&fsTimeout, "i", "60s", "Stop after N s/mn/h/days")
 	flag.BoolVar(&fAutoRotate, "A", false, "Autorotate output file")
 	flag.BoolVar(&fVerbose, "v", false, "Set verbose flag.")
