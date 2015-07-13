@@ -18,7 +18,7 @@ var (
 	// cli
 	fVerbose   bool
 	fOutput    string
-	fEventType string
+	fFeedType string
 	fTimeout   int64
 	fsTimeout  string
 	fAutoRotate bool
@@ -28,7 +28,7 @@ var (
 // my usage string
 const (
 	cliUsage = `
-Usage: %s [-o FILE] [-A] [-i N(s|mn|h|d)] [-t live|pitr|range -T p1[:p2]] [-v]
+Usage: %s [-o FILE] [-A] [-i N(s|mn|h|d)] [-f live|pitr|range -F p1[:p2]] [-v]
 `
 )
 
@@ -42,8 +42,8 @@ var Usage = func() {
 func init() {
 	// cli
 	flag.StringVar(&fOutput, "o", "", "Specify output FILE.")
-	flag.StringVar(&fEventType, "t", "live", "Specify which events we want (default live)")
-	flag.StringVar(&fRestart, "T", "", "Parameters for -t pitr|range")
+	flag.StringVar(&fFeedType, "f", "live", "Specify which feed we want (default live)")
+	flag.StringVar(&fRestart, "F", "", "Parameters for -f pitr|range")
 	flag.StringVar(&fsTimeout, "i", "60s", "Stop after N s/mn/h/days")
 	flag.BoolVar(&fAutoRotate, "A", false, "Autorotate output file")
 	flag.BoolVar(&fVerbose, "v", false, "Set verbose flag.")
