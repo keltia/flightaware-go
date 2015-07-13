@@ -33,35 +33,9 @@ type FAClient struct {
 	RangeT   []int64
 }
 
-// Create new instance of the client
-func NewClient(rc config.Config) *FAClient {
-	cl := new(FAClient)
-	cl.Host = rc
-	cl.Feed_one = defaultFeed
-
-	return cl
-}
-
+// Private functions
 // Default callback
 func defaultFeed(buf []byte) { fmt.Println(string(buf)) }
-
-// Change default callback
-func (cl *FAClient) AddHandler(fn func([]byte)) {
-	cl.Feed_one = fn
-}
-
-// Allow run of specified duration
-func (cl *FAClient) SetTimer(timer int64) {
-	// Sleep for fTimeout seconds then sends Interrupt
-	go func() {
-		time.Sleep(time.Duration(timer) * time.Second)
-		if cl.Verbose {
-			log.Println("Timer off, time to kill")
-		}
-		myself, _ := os.FindProcess(os.Getpid())
-		myself.Signal(os.Interrupt)
-	}()
-}
 
 // Check if parameters for the event type are consistent
 // Check that -t has also -T and the right parameters
@@ -132,6 +106,58 @@ func stringtoRange(s string) ([]int64, error) {
 	return []int64{beginT, endT}, nil
 }
 
+// Send banner to FA
+func (cl *FAClient) authClient(conn *tls.Conn) error {
+	var authStr string = ""
+
+	rc := cl.Host
+	switch cl.EventType {
+		case "live":
+			authStr = cl.EventType
+		case "pitr":
+			authStr = fmt.Sprintf("%s %d", cl.EventType, cl.RangeT[0])
+		case "range":
+			authStr = fmt.Sprintf("%s %d %d", cl.EventType, cl.RangeT[0], cl.RangeT[1])
+	}
+
+	conf := fmt.Sprintf(AUTHSTR, authStr, cl.EventType, rc.User, rc.Password)
+	_, err := conn.Write([]byte(conf))
+	if err != nil {
+		log.Println("Error configuring feed", err.Error())
+		return err
+	}
+	return nil
+}
+
+// Public functions
+
+// Create new instance of the client
+func NewClient(rc config.Config) *FAClient {
+	cl := new(FAClient)
+	cl.Host = rc
+	cl.Feed_one = defaultFeed
+
+	return cl
+}
+
+// Change default callback
+func (cl *FAClient) AddHandler(fn func([]byte)) {
+	cl.Feed_one = fn
+}
+
+// Allow run of specified duration
+func (cl *FAClient) SetTimer(timer int64) {
+	// Sleep for fTimeout seconds then sends Interrupt
+	go func() {
+		time.Sleep(time.Duration(timer) * time.Second)
+		if cl.Verbose {
+			log.Println("Timer off, time to kill")
+		}
+		myself, _ := os.FindProcess(os.Getpid())
+		myself.Signal(os.Interrupt)
+	}()
+}
+
 // consumer part of the FA client
 func (cl *FAClient) StartWriter() (chan []byte, error) {
 	if cl.Verbose {
@@ -155,18 +181,6 @@ func (cl *FAClient) StartWriter() (chan []byte, error) {
 		}
 	}()
 	return ch, nil
-}
-
-// Send banner to FA
-func (cl *FAClient) authClient(conn *tls.Conn) error {
-	rc := cl.Host
-	conf := fmt.Sprintf(AUTHSTR, cl.EventType, rc.User, rc.Password)
-	_, err := conn.Write([]byte(conf))
-	if err != nil {
-		log.Println("Error configuring feed", err.Error())
-		return err
-	}
-	return nil
 }
 
 // This is the main function here:
