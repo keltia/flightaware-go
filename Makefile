@@ -9,14 +9,14 @@ SRCS=	config.go client.go fa-export.go
 all:	${DEST}/fa-export
 
 install:
-	go install fa-export/fa-export.go fa-export/cli.go
+	go install fa-export/fa-export.go fa-export/cli.go fa-export/utils.go
 
 clean:
 	go clean -v
 	rm -f ${DEST}/fa-export
 
 ${DEST}/fa-export:    ${SRCS}
-	go build -v -o $@ fa-export/fa-export.go fa-export/cli.go
+	go build -v -o $@ fa-export/fa-export.go fa-export/cli.go fa-export/utils.go
 
 push:
 	git push --all
