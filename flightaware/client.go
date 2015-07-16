@@ -200,15 +200,19 @@ func (cl *FAClient) StartWriter() (chan []byte, error) {
 	return ch, nil
 }
 
-// This is the main function here:
-// - starts the consumer in the background
-// - reads data from FA and send it to the consumer
-func (cl *FAClient) Start() error {
+// Connection handling, manage both initial and reconnections
+func (cl *FAClient) ConnectFA(initial bool) (*tls.Conn, error) {
 	var rc config.Config = cl.Host
 
 	str := rc.Site + ":" + rc.Port
-	if cl.Verbose {
-		log.Printf("Connecting to %v with TLS\n", str)
+	if initial {
+		if cl.Verbose {
+			log.Printf("Connecting to %s with TLS\n", str)
+		}
+	} else {
+		if cl.Verbose {
+			log.Printf("Reconnecting to %s...\n", str)
+		}
 	}
 
 	conn, err := tls.Dial("tcp", str, &tls.Config{
@@ -217,7 +221,7 @@ func (cl *FAClient) Start() error {
 	})
 	if err != nil {
 		log.Println("failed to connect: " + err.Error())
-		return err
+		return &tls.Conn{}, err
 	}
 
 	if cl.Verbose {
@@ -226,13 +230,28 @@ func (cl *FAClient) Start() error {
 
 	if err := cl.authClient(conn); err != nil {
 		log.Printf("Error: auth error for %s\n", rc.User)
-		return err
+		return &tls.Conn{}, err
 	}
 
 	if cl.Verbose {
 		log.Println("Flightaware init done.")
 	}
+	return conn, nil
+}
+
+// This is the main function here:
+// - starts the consumer in the background
+// - reads data from FA and send it to the consumer
+func (cl *FAClient) Start() error {
+	var rc config.Config = cl.Host
+
+	conn, err := cl.ConnectFA(true)
 	cl.Conn = conn
+
+	str := rc.Site + ":" + rc.Port
+	if cl.Verbose {
+		log.Printf("Connecting to %v with TLS\n", str)
+	}
 
 	// Starting here everything is flowing from that connection
 	ch, err := cl.StartWriter()
@@ -253,6 +272,13 @@ func (cl *FAClient) Start() error {
 				}
 				ch <- []byte(buf)
 			}
+		}
+		if err := sc.Err(); err != nil {
+			log.Println("Error reading:", err)
+
+			// Reconnect
+			conn, err = cl.ConnectFA(false)
+			sc = bufio.NewScanner(cl.Conn)
 		}
 	}
 }
