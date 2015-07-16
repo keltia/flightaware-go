@@ -28,6 +28,7 @@ type FAClient struct {
 	Pkts     int32
 	Conn     *tls.Conn
 	Feed_one func([]byte)
+	Filter   func([]byte) bool
 	Verbose  bool
 	FeedType string
 	// For range event type
@@ -113,6 +114,7 @@ func NewClient(rc config.Config) *FAClient {
 	cl := new(FAClient)
 	cl.Host = rc
 	cl.Feed_one = defaultFeed
+	cl.Filter = defaultFilter
 	cl.RangeT = make([]int64, 2)
 
 	return cl
@@ -194,7 +196,11 @@ func (cl *FAClient) StartWriter() (chan []byte, error) {
 			if cl.Verbose {
 				log.Printf("Read %d bytes\n", len(buf))
 			}
-			(cl.Feed_one)(buf)
+
+			// Insert filter call
+			if ok = (cl.Filter)(buf); ok {
+				(cl.Feed_one)(buf)
+			}
 
 			cl.Bytes += int64(len(buf))
 			cl.Pkts++
