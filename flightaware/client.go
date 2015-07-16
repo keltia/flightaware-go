@@ -39,7 +39,7 @@ type FAClient struct {
 func defaultFeed(buf []byte) { fmt.Println(string(buf)) }
 
 // Default filter
-func defaultFilter(buf []byte) { return true }
+func defaultFilter(buf []byte) bool { return true }
 
 // Transform N:M into a array
 func stringtoRange(s string) ([]int64, error) {
