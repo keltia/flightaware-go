@@ -38,6 +38,9 @@ type FAClient struct {
 // Default callback
 func defaultFeed(buf []byte) { fmt.Println(string(buf)) }
 
+// Default filter
+func defaultFilter(buf []byte) { return true }
+
 // Transform N:M into a array
 func stringtoRange(s string) ([]int64, error) {
 	begEnd := strings.Split(s, ":")
