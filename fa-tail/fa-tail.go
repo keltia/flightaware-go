@@ -11,10 +11,10 @@ import (
 	"bufio"
 	"encoding/json"
 	"flag"
-	"log"
 	"os"
 	"time"
 	"strconv"
+	"fmt"
 )
 
 type FArecord struct {
@@ -39,7 +39,8 @@ func main() {
 	fh, err := os.Open(flag.Arg(0))
 	scanner := bufio.NewScanner(fh)
 	if err != nil {
-		log.Fatalf("Unable to read %s", flag.Arg(0))
+		fmt.Printf("Unable to read %s\n", flag.Arg(0))
+		os.Exit(1)
 	}
 
 	var (
@@ -55,8 +56,9 @@ func main() {
 	var lastFA FArecord
 
 	if err := json.Unmarshal([]byte(lastRecord), &lastFA); err != nil {
-		log.Fatalf("Unable to decode %v", lastRecord)
+		fmt.Printf("Unable to decode %v\n", lastRecord)
+		os.Exit(1)
 	}
 	iClock, err := strconv.ParseInt(lastFA.Clock, 10, 64)
-	log.Printf("# records: %d - Last record: %v\n", nbRecords, time.Unix(iClock, 0))
+	fmt.Printf("# records: %d - Last record: %v\n", nbRecords, time.Unix(iClock, 0))
 }
