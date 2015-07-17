@@ -56,11 +56,11 @@ func stringtoRange(s string) ([]int64, error) {
 	)
 
 	if beginT, err = strconv.ParseInt(begEnd[0], 10, 64); err != nil {
-		return []int64{}, err
+		return []int64{}, errors.New("Can't parse beginT")
 	}
 
 	if endT, err = strconv.ParseInt(begEnd[1], 10, 64); err != nil {
-		return []int64{}, err
+		return []int64{}, errors.New("Can't parse endT")
 	}
 
 	if beginT >= endT {
@@ -172,7 +172,7 @@ func (client *FAClient) SetFeed(feedType, feedTimings string) error {
 	if feedType == "range" {
 		rangeT, err := stringtoRange(feedTimings)
 		if err != nil {
-			return errors.New(fmt.Sprintf("Bad range specified in %s\n", feedTimings))
+			return errors.New(fmt.Sprintf("Bad range specified in %s - %v\n", feedTimings, err))
 		}
 		// Store out final values
 		client.RangeT = rangeT
