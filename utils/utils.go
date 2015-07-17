@@ -13,11 +13,14 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 )
 
 const (
 	RT_HOUR = 1
 	RT_DAY  = 2
+
+	TIMEFMT = "2006-01-02 15:04:05"
 )
 
 type Rotation struct {
@@ -69,3 +72,11 @@ func StringtoRange(s string) ([]int64, error) {
 	return []int64{beginT, endT}, nil
 }
 
+// Parse date into UNIX epoch-style int64
+func ParseDate(date string) (time.Time, error) {
+	tDate, err := time.Parse(TIMEFMT, date)
+	if err != nil {
+		return time.Time{}, err
+	}
+	return tDate, nil
+}
