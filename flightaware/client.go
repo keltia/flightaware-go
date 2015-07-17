@@ -16,6 +16,7 @@ import (
 	"strconv"
 	"strings"
 	"io"
+	"../utils"
 )
 
 const (
@@ -42,33 +43,6 @@ func defaultFeed(buf []byte) { fmt.Println(string(buf)) }
 
 // Default filter
 func defaultFilter(buf []byte) bool { return true }
-
-// Transform N:M into a array
-func stringtoRange(s string) ([]int64, error) {
-	begEnd := strings.Split(s, ":")
-
-	if len(begEnd) != 2 {
-		return []int64{}, errors.New("only one value")
-	}
-	var (
-		beginT int64
-		endT   int64
-		err    error
-	)
-
-	if beginT, err = strconv.ParseInt(begEnd[0], 10, 64); err != nil {
-		return []int64{}, errors.New("Can't parse beginT")
-	}
-
-	if endT, err = strconv.ParseInt(begEnd[1], 10, 64); err != nil {
-		return []int64{}, errors.New("Can't parse endT")
-	}
-
-	if beginT >= endT {
-		return []int64{}, errors.New("begin > end")
-	}
-	return []int64{beginT, endT}, nil
-}
 
 // Send banner to FA
 func (cl *FAClient) authClient(conn *tls.Conn) error {
@@ -171,7 +145,7 @@ func (client *FAClient) SetFeed(feedType, feedTimings string) error {
 	}
 
 	if feedType == "range" {
-		rangeT, err := stringtoRange(feedTimings)
+		rangeT, err := utils.StringtoRange(feedTimings)
 		if err != nil {
 			return errors.New(fmt.Sprintf("Bad range specified in %s - %v\n", feedTimings, err))
 		}
@@ -295,6 +269,7 @@ func (cl *FAClient) Start() error {
 			}
 		}
 	}
+	return nil
 }
 
 // Properly close the TLS connection

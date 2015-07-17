@@ -6,11 +6,13 @@
 //
 
 // Misc. utility functions
-package main
+package utils
 
 import (
 	"errors"
 	"fmt"
+	"strconv"
+	"strings"
 )
 
 const (
@@ -39,3 +41,31 @@ func AnalyzeFormat(sFmt string) (Rotation, error) {
 			return Rotation{}, errors.New(fmt.Sprintf("Unknown modifier %s\n", string(format[1])))
 	}
 }
+
+// Transform N:M into a array
+func StringtoRange(s string) ([]int64, error) {
+	begEnd := strings.Split(s, ":")
+
+	if len(begEnd) != 2 {
+		return []int64{}, errors.New("only one value")
+	}
+	var (
+		beginT int64
+		endT   int64
+		err    error
+	)
+
+	if beginT, err = strconv.ParseInt(begEnd[0], 10, 64); err != nil {
+		return []int64{}, errors.New("Can't parse beginT")
+	}
+
+	if endT, err = strconv.ParseInt(begEnd[1], 10, 64); err != nil {
+		return []int64{}, errors.New("Can't parse endT")
+	}
+
+	if beginT >= endT {
+		return []int64{}, errors.New("begin > end")
+	}
+	return []int64{beginT, endT}, nil
+}
+
