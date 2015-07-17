@@ -16,14 +16,14 @@ import (
 
 var (
 	// cli
-	fVerbose   bool
-	fOutput    string
-	fFeedType string
-	fTimeout   int64
-	fsTimeout  string
-	fAutoRotate bool
-	fFeedBegin	string
-	fFeedEnd	string
+	fVerbose     bool
+	fOutput      string
+	fFeedType    string
+	fTimeout     int64
+	fsTimeout    string
+	fAutoRotate  bool
+	fFeedBegin   string
+	fFeedEnd     string
 	fFeedTimings string
 )
 
