@@ -1,6 +1,6 @@
 # Main Makefile for fa-export
 
-VPATH=	fa-export:flightaware:config
+VPATH=	fa-export:fa-tail:flightaware:config
 DEST=	bin
 GOBIN=	${GOPATH}/bin
 
@@ -10,6 +10,7 @@ all:	${DEST}/fa-export
 
 install:
 	go install fa-export/fa-export.go fa-export/cli.go fa-export/utils.go
+	go install fa-tail/fa-tail.go
 
 clean:
 	go clean -v
@@ -17,6 +18,9 @@ clean:
 
 ${DEST}/fa-export:    ${SRCS}
 	go build -v -o $@ fa-export/fa-export.go fa-export/cli.go fa-export/utils.go
+
+${DEST}/fa-tail:   fa-tail/fa-tail.go
+	go build -v -o $@ fa-tail/fa-tail.go
 
 push:
 	git push --all
