@@ -6,7 +6,7 @@ GOBIN=	${GOPATH}/bin
 
 SRCS=	config.go client.go fa-export.go utils.go
 
-all:	${DEST}/fa-export
+all:	${DEST}/fa-export ${DEST}/fa-tail
 
 install:
 	go install fa-export/fa-export.go fa-export/cli.go
