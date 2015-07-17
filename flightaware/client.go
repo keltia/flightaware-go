@@ -15,6 +15,7 @@ import (
 	"errors"
 	"strconv"
 	"strings"
+	"io"
 )
 
 const (
@@ -283,11 +284,15 @@ func (cl *FAClient) Start() error {
 			}
 		}
 		if err := sc.Err(); err != nil {
-			log.Println("Error reading:", err)
+			if err != io.EOF {
+				log.Println("Error reading:", err)
 
-			// Reconnect
-			conn, err = cl.ConnectFA(false)
-			sc = bufio.NewScanner(cl.Conn)
+				// Reconnect
+				conn, err = cl.ConnectFA(false)
+				sc = bufio.NewScanner(cl.Conn)
+			} else {
+				break
+			}
 		}
 	}
 }
