@@ -13,10 +13,7 @@ import (
 	"os"
 	"time"
 	"errors"
-	"strconv"
-	"strings"
 	"io"
-	"../utils"
 )
 
 const (
@@ -115,42 +112,22 @@ func (cl *FAClient) SetTimer(timer int64) {
 
 // Check if parameters for the event type are consistent
 // Check that -t has also -T and the right parameters
-func (client *FAClient) SetFeed(feedType, feedTimings string) error {
-	// -t live and -T are mutually exclusive
-	if feedType == "live" && feedTimings != "" {
-		return errors.New("Error: can't use -t live and -T")
-	}
-
+func (client *FAClient) SetFeed(feedType string, RangeT []time.Time) error {
 	// Check when -t pitr that -T is single valued
 	if feedType == "pitr" {
-		if feedTimings == "" {
-			return errors.New("Error: you must specify a value with -T")
-		}
-
-		// Allow only one value to -T for -t pitr
-		if strings.Index(feedTimings, ":") != -1 {
-			return errors.New("Error: only one value for -t pitr and -T")
-		}
-
 		// Check value
-		restart, err := strconv.ParseInt(feedTimings, 10, 64)
-		if err != nil {
-			return err
-		}
-		if restart >= time.Now().Unix() {
-			return errors.New(fmt.Sprintf("Error: -T %d is in the future", restart))
+		restart := RangeT[0]
+		if restart.After(time.Now()) {
+			return errors.New(fmt.Sprintf("Error: -B %d is in the future", restart))
 		}
 		// Store out final value
-		client.RangeT[0] = restart
+		client.RangeT[0] = restart.Unix()
 	}
 
 	if feedType == "range" {
-		rangeT, err := utils.StringtoRange(feedTimings)
-		if err != nil {
-			return errors.New(fmt.Sprintf("Bad range specified in %s - %v\n", feedTimings, err))
-		}
-		// Store out final values
-		client.RangeT = rangeT
+		// Store out final values in UNIX epoch format
+		client.RangeT[0] = RangeT[0].Unix()
+		client.RangeT[1] = RangeT[1].Unix()
 	}
 	return nil
 }

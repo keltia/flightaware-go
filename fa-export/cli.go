@@ -12,6 +12,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"../utils"
+	"time"
 )
 
 var (
@@ -24,7 +26,8 @@ var (
 	fAutoRotate  bool
 	fFeedBegin   string
 	fFeedEnd     string
-	fFeedTimings string
+
+	RangeT       []time.Time
 )
 
 // my usage string
@@ -50,4 +53,53 @@ func init() {
 	flag.StringVar(&fsTimeout, "i", "", "Stop after N s/mn/h/days")
 	flag.BoolVar(&fAutoRotate, "A", false, "Autorotate output file")
 	flag.BoolVar(&fVerbose, "v", false, "Set verbose flag.")
+
+	// Default is "live", incompatible with -B/-E
+	if fFeedType == "live" && (fFeedBegin != "" || fFeedEnd != "") {
+		fmt.Printf("Error: -B & -E are incompatible with -f live (the default)\n")
+		os.Exit(1)
+	}
+
+	// When using -f pitr, we need -B starttime
+	if fFeedType == "pitr" && fFeedBegin == "" {
+		fmt.Printf("Error: you MUST use -B to specify starting time with -f pitr\n")
+		os.Exit(1)
+	}
+
+	// When using -f range, we need -B starttime & -E endtime
+	if fFeedType == "range" && (fFeedBegin == "" || fFeedEnd == "") {
+		fmt.Printf("Error: you MUST use both -B & -E to specify times with -f range\n")
+		os.Exit(1)
+	}
+
+	// Now parse them
+	var (
+		tFeedBegin, tFeedEnd time.Time
+		err                  error
+	)
+
+	if fFeedBegin != "" {
+		tFeedBegin, err = utils.ParseDate(fFeedBegin)
+		if err != nil {
+			fmt.Printf("Error: bad date format %v\n", fFeedBegin)
+			os.Exit(1)
+		}
+	}
+
+	if fFeedEnd != "" {
+		tFeedEnd, err = utils.ParseDate(fFeedEnd)
+		if err != nil {
+			fmt.Printf("Error: bad date format %v\n", fFeedEnd)
+			os.Exit(1)
+		}
+	} else {
+		tFeedEnd = time.Time{}
+	}
+
+	if tFeedEnd.Before(tFeedBegin) {
+		fmt.Printf("Warning: reversed date range, inverting.")
+		tFeedBegin, tFeedEnd = tFeedEnd, tFeedBegin
+	}
+	RangeT[0] = tFeedBegin
+	RangeT[1] = tFeedEnd
 }

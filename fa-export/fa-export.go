@@ -131,7 +131,7 @@ func main() {
 
 	// Check if we want a live stream or a more specialized one
 	if fFeedType != "" {
-		if err := client.SetFeed(fFeedType, fFeedTimings); err != nil {
+		if err := client.SetFeed(fFeedType, RangeT); err != nil {
 			log.Printf("%s", err.Error())
 		}
 	}
