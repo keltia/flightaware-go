@@ -25,8 +25,6 @@ var (
 	fAutoRotate  bool
 	fFeedBegin   string
 	fFeedEnd     string
-
-	RangeT       []time.Time
 )
 
 // my usage string

@@ -32,6 +32,8 @@ var (
 		"h":  3600,
 		"d":  3600 * 24,
 	}
+
+	RangeT       []time.Time
 )
 
 // fOutput callback
