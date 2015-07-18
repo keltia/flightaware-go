@@ -113,7 +113,6 @@ func main() {
 		client.Verbose = true
 	}
 
-
 	// Default is "live", incompatible with -B/-E
 	if fFeedType == "live" && (fFeedBegin != "" || fFeedEnd != "") {
 		fmt.Printf("Error: -B & -E are incompatible with -f live (the default)\n")
