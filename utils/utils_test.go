@@ -2,6 +2,7 @@ package utils
 
 import (
 	"testing"
+	"errors"
 )
 
 
@@ -29,5 +30,15 @@ func TestAnalyzeFormat(t *testing.T) {
 		t.Errorf("Error: %s", err.Error())
 	} else {
 		t.Log("AnalyzeFormat passed")
+	}
+}
+
+func TestParseDate(t *testing.T) {
+	tm, err := ParseDate("2015-06-09 00:00:00")
+	if err != nil {
+		t.Errorf("Error: bad parsing for 2015-06-09 00:00:00: %v", err.Error())
+	}
+	if tm != 1433800800 {
+		t.Errorf("Error: bad parsing for 2015-06-09 00:00:00: %v", errors.New("bad value"))
 	}
 }
