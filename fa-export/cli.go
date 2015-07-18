@@ -103,4 +103,7 @@ func init() {
 	}
 	RangeT[0] = tFeedBegin
 	RangeT[1] = tFeedEnd
+	if fVerbose {
+		fmt.Printf("tFeedBegin: %v - tFeedEnd: %v\n", tFeedBegin, tFeedEnd)
+	}
 }
