@@ -5,7 +5,7 @@
 package flightaware
 
 import (
-	"../config"
+	"flightaware-go/config"
 	"bufio"
 	"crypto/tls"
 	"fmt"

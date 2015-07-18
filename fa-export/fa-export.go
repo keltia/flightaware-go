@@ -8,8 +8,6 @@
 package main
 
 import (
-	"../config"
-	"../flightaware"
 	"flag"
 	"fmt"
 	"log"
@@ -18,6 +16,10 @@ import (
 	"path/filepath"
 	"regexp"
 	"strconv"
+	"time"
+	"flightaware-go/config"
+	"flightaware-go/flightaware"
+	"flightaware-go/utils"
 )
 
 var (
