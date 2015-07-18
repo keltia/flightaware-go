@@ -87,27 +87,8 @@ func checkTimeout(value string) int64 {
 	}
 }
 
-// Starts here.
-func main() {
-	// Handle SIGINT
-	go func() {
-		sigint := make(chan os.Signal, 3)
-		signal.Notify(sigint, os.Interrupt)
-		<-sigint
-
-		stopEverything()
-	}()
-
-	flag.Parse()
-
-	c, err := config.LoadConfig(RcFile)
-	if err != nil {
-		log.Fatalf("Error loading configuration %s: %s\n", RcFile, err.Error())
-	}
-
-	client = flightaware.NewClient(c)
-	client.FeedType = fFeedType
-
+// Check various parameters
+func checkCommandLine() {
 	// Propagate this to the Client struct
 	if fVerbose {
 		client.Verbose = true
@@ -134,6 +115,7 @@ func main() {
 	// Now parse them
 	var (
 		tFeedBegin, tFeedEnd time.Time
+		err                  error
 	)
 
 	RangeT = make([]time.Time, 2)
@@ -162,8 +144,32 @@ func main() {
 	RangeT[0] = tFeedBegin
 	RangeT[1] = tFeedEnd
 	if fVerbose {
-		fmt.Printf("tFeedBegin: %v - tFeedEnd: %v\n", tFeedBegin, tFeedEnd)
+		log.Printf("tFeedBegin: %v - tFeedEnd: %v\n", tFeedBegin, tFeedEnd)
 	}
+}
+
+// Starts here.
+func main() {
+	// Handle SIGINT
+	go func() {
+		sigint := make(chan os.Signal, 3)
+		signal.Notify(sigint, os.Interrupt)
+		<-sigint
+
+		stopEverything()
+	}()
+
+	flag.Parse()
+
+	c, err := config.LoadConfig(RcFile)
+	if err != nil {
+		log.Fatalf("Error loading configuration %s: %s\n", RcFile, err.Error())
+	}
+
+	client = flightaware.NewClient(c)
+	client.FeedType = fFeedType
+
+	checkCommandLine()
 
 	// Open output file
 	if fOutput != "" {
