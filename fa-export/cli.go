@@ -78,6 +78,7 @@ func init() {
 		err                  error
 	)
 
+	RangeT = make([]time.Time, 2)
 	if fFeedBegin != "" {
 		tFeedBegin, err = utils.ParseDate(fFeedBegin)
 		if err != nil {
