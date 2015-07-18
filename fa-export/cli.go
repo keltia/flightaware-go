@@ -12,7 +12,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"../utils"
 	"time"
 )
 
