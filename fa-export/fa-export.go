@@ -115,19 +115,19 @@ func main() {
 
 	// Default is "live", incompatible with -B/-E
 	if fFeedType == "live" && (fFeedBegin != "" || fFeedEnd != "") {
-		fmt.Printf("Error: -B & -E are incompatible with -f live (the default)\n")
+		log.Printf("Error: -B & -E are incompatible with -f live (the default)\n")
 		os.Exit(1)
 	}
 
 	// When using -f pitr, we need -B starttime
 	if fFeedType == "pitr" && fFeedBegin == "" {
-		fmt.Printf("Error: you MUST use -B to specify starting time with -f pitr\n")
+		log.Printf("Error: you MUST use -B to specify starting time with -f pitr\n")
 		os.Exit(1)
 	}
 
 	// When using -f range, we need -B starttime & -E endtime
 	if fFeedType == "range" && (fFeedBegin == "" || fFeedEnd == "") {
-		fmt.Printf("Error: you MUST use both -B & -E to specify times with -f range\n")
+		log.Printf("Error: you MUST use both -B & -E to specify times with -f range\n")
 		os.Exit(1)
 	}
 
@@ -140,7 +140,7 @@ func main() {
 	if fFeedBegin != "" {
 		tFeedBegin, err = utils.ParseDate(fFeedBegin)
 		if err != nil {
-			fmt.Printf("Error: bad date format %v\n", fFeedBegin)
+			log.Printf("Error: bad date format %v\n", fFeedBegin)
 			os.Exit(1)
 		}
 	}
@@ -148,7 +148,7 @@ func main() {
 	if fFeedEnd != "" {
 		tFeedEnd, err = utils.ParseDate(fFeedEnd)
 		if err != nil {
-			fmt.Printf("Error: bad date format %v\n", fFeedEnd)
+			log.Printf("Error: bad date format %v\n", fFeedEnd)
 			os.Exit(1)
 		}
 	} else {
@@ -156,7 +156,7 @@ func main() {
 	}
 
 	if tFeedEnd.Before(tFeedBegin) {
-		fmt.Printf("Warning: reversed date range, inverting.")
+		log.Printf("Warning: reversed date range, inverting.")
 		tFeedBegin, tFeedEnd = tFeedEnd, tFeedBegin
 	}
 	RangeT[0] = tFeedBegin
