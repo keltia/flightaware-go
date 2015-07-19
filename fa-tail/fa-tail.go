@@ -36,10 +36,11 @@ type FArecord struct {
 
 func main() {
 	flag.Parse()
-	fh, err := os.Open(flag.Arg(0))
+	fn := flag.Arg(0)
+	fh, err := os.Open(fn)
 	scanner := bufio.NewScanner(fh)
 	if err != nil {
-		fmt.Printf("Unable to read %s\n", flag.Arg(0))
+		fmt.Printf("Unable to read %s\n", fn)
 		os.Exit(1)
 	}
 
@@ -60,5 +61,10 @@ func main() {
 		os.Exit(1)
 	}
 	iClock, err := strconv.ParseInt(lastFA.Clock, 10, 64)
+	fileStat, err := os.Stat(fn)
+	if err != nil {
+		fmt.Printf("Error stat(2) on %s: %v\n", fn, err.Error())
+	}
+	fmt.Printf("%s: size %d bytes\n", fn, fileStat.Size())
 	fmt.Printf("# records: %d - Last record: %v\n", nbRecords, time.Unix(iClock, 0))
 }
