@@ -13,7 +13,6 @@ import (
 	"os"
 	"time"
 	"errors"
-	"io"
 )
 
 const (
