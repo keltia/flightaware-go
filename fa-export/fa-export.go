@@ -212,4 +212,9 @@ func main() {
 	if err := client.Start(); err != nil {
 		log.Fatalln("Error: unable to connect:", err)
 	}
+
+	// Got an EOF from Scan(), finish gracefully
+	log.Printf("Stream finished, good bye\n")
+	stopEverything()
+	// NOTREACHED
 }

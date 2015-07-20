@@ -235,21 +235,15 @@ func (cl *FAClient) Start() error {
 				}
 				ch <- []byte(buf)
 			}
-			if err := sc.Err(); err != nil {
-				if err != io.EOF {
-					log.Println("Error reading:", err)
-
-					// Reconnect
-					conn, err = cl.ConnectFA(false)
-					sc = bufio.NewScanner(cl.Conn)
-				} else {
-					// Break out of the outer loop
-					stopped = true
-					break
-				}
-			}
 		}
-		if stopped {
+		if err := sc.Err(); err != nil {
+			log.Println("Error reading:", err)
+
+			// Reconnect
+			conn, err = cl.ConnectFA(false)
+			sc = bufio.NewScanner(cl.Conn)
+		} else {
+			// Got EOF
 			break
 		}
 	}
