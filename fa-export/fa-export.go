@@ -4,7 +4,9 @@
 //
 // Copyright 2015 © by Ollivier Robert for the EEC
 
-// Implement the fa-export client.
+/*
+ Package main implements the fa-export client.
+ */
 package main
 
 import (
