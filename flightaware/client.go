@@ -220,8 +220,6 @@ func (cl *FAClient) Start() error {
 		return err
 	}
 
-	var stopped bool = false
-
 	// Loop over chunks of data
 	sc := bufio.NewScanner(cl.Conn)
 	for {
