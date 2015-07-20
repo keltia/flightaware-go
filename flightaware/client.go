@@ -111,6 +111,75 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 	return nil
 }
 
+// consumer part of the FA client
+func (cl *FAClient) startWriter() (chan []byte, error) {
+	if cl.Verbose {
+		log.Println("Waiting for data…")
+	}
+	ch := make(chan []byte, 1000)
+	go func() {
+		for {
+			buf, ok := <-ch
+			if !ok {
+				log.Fatalf("Error: reading data: %s: %v", string(buf), ok)
+			}
+			// Do something
+			if cl.Verbose {
+				log.Printf("Read %d bytes\n", len(buf))
+			}
+
+			// Insert filter call
+			if ok = (cl.Filter)(buf); ok {
+				(cl.Feed_one)(buf)
+			}
+
+			cl.Bytes += int64(len(buf))
+			cl.Pkts++
+		}
+	}()
+	return ch, nil
+}
+
+// Connection handling, manage both initial and reconnections
+func (cl *FAClient) connectFA(initial bool) (*tls.Conn, error) {
+	var rc config.Config = cl.Host
+
+	str := rc.Site + ":" + rc.Port
+	if initial {
+		if cl.Verbose {
+			log.Printf("Connecting to %s with TLS\n", str)
+		}
+	} else {
+		if cl.Verbose {
+			log.Printf("Reconnecting to %s...\n", str)
+		}
+	}
+
+	conn, err := tls.Dial("tcp", str, &tls.Config{
+		RootCAs:            nil,
+		InsecureSkipVerify: true,
+	})
+	if err != nil {
+		log.Println("failed to connect: " + err.Error())
+		return &tls.Conn{}, err
+	}
+
+	if cl.Verbose {
+		log.Println("TLS negociation done.")
+	}
+
+	if err := cl.authClient(conn); err != nil {
+		log.Printf("Error: auth error for %s\n", rc.User)
+		return &tls.Conn{}, err
+	}
+
+	if cl.Verbose {
+		log.Println("Flightaware init done.")
+	}
+	return conn, nil
+}
+
+
 // Public functions
 
 // Create new instance of the client
@@ -164,81 +233,13 @@ func (client *FAClient) SetFeed(feedType string, RangeT []time.Time) error {
 	return nil
 }
 
-// consumer part of the FA client
-func (cl *FAClient) StartWriter() (chan []byte, error) {
-	if cl.Verbose {
-		log.Println("Waiting for data…")
-	}
-	ch := make(chan []byte, 1000)
-	go func() {
-		for {
-			buf, ok := <-ch
-			if !ok {
-				log.Fatalf("Error: reading data: %s: %v", string(buf), ok)
-			}
-			// Do something
-			if cl.Verbose {
-				log.Printf("Read %d bytes\n", len(buf))
-			}
-
-			// Insert filter call
-			if ok = (cl.Filter)(buf); ok {
-				(cl.Feed_one)(buf)
-			}
-
-			cl.Bytes += int64(len(buf))
-			cl.Pkts++
-		}
-	}()
-	return ch, nil
-}
-
-// Connection handling, manage both initial and reconnections
-func (cl *FAClient) ConnectFA(initial bool) (*tls.Conn, error) {
-	var rc config.Config = cl.Host
-
-	str := rc.Site + ":" + rc.Port
-	if initial {
-		if cl.Verbose {
-			log.Printf("Connecting to %s with TLS\n", str)
-		}
-	} else {
-		if cl.Verbose {
-			log.Printf("Reconnecting to %s...\n", str)
-		}
-	}
-
-	conn, err := tls.Dial("tcp", str, &tls.Config{
-		RootCAs:            nil,
-		InsecureSkipVerify: true,
-	})
-	if err != nil {
-		log.Println("failed to connect: " + err.Error())
-		return &tls.Conn{}, err
-	}
-
-	if cl.Verbose {
-		log.Println("TLS negociation done.")
-	}
-
-	if err := cl.authClient(conn); err != nil {
-		log.Printf("Error: auth error for %s\n", rc.User)
-		return &tls.Conn{}, err
-	}
-
-	if cl.Verbose {
-		log.Println("Flightaware init done.")
-	}
-	return conn, nil
-}
-
 // This is the main function here:
 // - starts the consumer in the background
 // - reads data from FA and send it to the consumer
 func (cl *FAClient) Start() error {
 	var rc config.Config = cl.Host
 
-	conn, err := cl.ConnectFA(true)
+	conn, err := cl.connectFA(true)
 	cl.Conn = conn
 
 	str := rc.Site + ":" + rc.Port
@@ -247,7 +248,7 @@ func (cl *FAClient) Start() error {
 	}
 
 	// Starting here everything is flowing from that connection
-	ch, err := cl.StartWriter()
+	ch, err := cl.startWriter()
 	if err != nil {
 		log.Printf("Error: starting writer - %s\n", err.Error())
 		return err
@@ -270,7 +271,7 @@ func (cl *FAClient) Start() error {
 			log.Println("Error reading:", err)
 
 			// Reconnect
-			conn, err = cl.ConnectFA(false)
+			conn, err = cl.connectFA(false)
 			sc = bufio.NewScanner(cl.Conn)
 		} else {
 			// Got EOF
