@@ -3,7 +3,18 @@
 // Copyright 2015 © by Ollivier Robert <roberto@keltia.net>
 //
 
-// My homemade configuration class
+/*
+ Package implement my homemade configuration class
+
+ Looks into a YAML file for configuration options and returns a config.Config
+ struct.
+
+ 	import "config"
+
+ 	rc := config.LoadConfig("foo.yml")
+
+ rc will be serialized from YAML.
+ */
 package config
 
 import (

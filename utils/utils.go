@@ -5,7 +5,9 @@
 // Copyright 2015 © by Ollivier Robert for the EEC
 //
 
-// Misc. utility functions
+/*
+ Package utils implements misc. utility functions
+*/
 package utils
 
 import (
