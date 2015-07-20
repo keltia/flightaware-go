@@ -219,7 +219,7 @@ func (client *FAClient) SetFeed(feedType string, RangeT []time.Time) error {
 		// Check value
 		restart := RangeT[0]
 		if restart.After(time.Now()) {
-			return errors.New(fmt.Sprintf("Error: -B %d is in the future", restart))
+			return errors.New(fmt.Sprintf("Error: -B %v is in the future", restart))
 		}
 		// Store out final value
 		client.RangeT[0] = restart.Unix()
