@@ -120,33 +120,35 @@ func checkCommandLine() {
 		err                  error
 	)
 
-	RangeT = make([]time.Time, 2)
-	if fFeedBegin != "" {
-		tFeedBegin, err = utils.ParseDate(fFeedBegin)
-		if err != nil {
-			log.Printf("Error: bad date format %v\n", fFeedBegin)
-			os.Exit(1)
+	if fFeedType != "live" {
+		RangeT = make([]time.Time, 2)
+		if fFeedBegin != "" {
+			tFeedBegin, err = utils.ParseDate(fFeedBegin)
+			if err != nil {
+				log.Printf("Error: bad date format %v\n", fFeedBegin)
+				os.Exit(1)
+			}
 		}
-	}
 
-	if fFeedEnd != "" {
-		tFeedEnd, err = utils.ParseDate(fFeedEnd)
-		if err != nil {
-			log.Printf("Error: bad date format %v\n", fFeedEnd)
-			os.Exit(1)
+		if fFeedEnd != "" {
+			tFeedEnd, err = utils.ParseDate(fFeedEnd)
+			if err != nil {
+				log.Printf("Error: bad date format %v\n", fFeedEnd)
+				os.Exit(1)
+			}
+		} else {
+			tFeedEnd = time.Time{}
 		}
-	} else {
-		tFeedEnd = time.Time{}
-	}
 
-	if tFeedEnd.Before(tFeedBegin) {
-		log.Printf("Warning: reversed date range, inverting.")
-		tFeedBegin, tFeedEnd = tFeedEnd, tFeedBegin
-	}
-	RangeT[0] = tFeedBegin
-	RangeT[1] = tFeedEnd
-	if fVerbose {
-		log.Printf("tFeedBegin: %v - tFeedEnd: %v\n", tFeedBegin, tFeedEnd)
+		if tFeedEnd.Before(tFeedBegin) {
+			log.Printf("Warning: reversed date range, inverting.")
+			tFeedBegin, tFeedEnd = tFeedEnd, tFeedBegin
+		}
+		RangeT[0] = tFeedBegin
+		RangeT[1] = tFeedEnd
+		if fVerbose {
+			log.Printf("tFeedBegin: %v - tFeedEnd: %v\n", tFeedBegin, tFeedEnd)
+		}
 	}
 }
 
