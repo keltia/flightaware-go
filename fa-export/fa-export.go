@@ -48,16 +48,17 @@ func fileOutput(buf []byte) {
 
 // Proper shutdown
 func stopEverything() {
-	if fVerbose {
-		log.Printf("FA client stopped:")
-		log.Printf("  %d pkts %d bytes", client.Pkts, client.Bytes)
+	if client.Started {
+		if fVerbose {
+			log.Printf("FA client stopped:")
+			log.Printf("  %d pkts %d bytes", client.Pkts, client.Bytes)
+		}
+		if err := client.Close(); err != nil {
+			log.Println("Error closing connection:", err)
+			os.Exit(1)
+		}
 	}
-	if err := client.Close(); err != nil {
-		log.Println("Error closing connection:", err)
-		os.Exit(1)
-	} else {
-		os.Exit(0)
-	}
+	os.Exit(0)
 }
 
 // Check for specific modifiers, returns seconds

@@ -54,6 +54,7 @@ const (
 )
 
 type FAClient struct {
+	Started  bool
 	Host     config.Config
 	Bytes    int64
 	Pkts     int32
@@ -189,6 +190,7 @@ func NewClient(rc config.Config) *FAClient {
 	cl.Feed_one = defaultFeed
 	cl.Filter = defaultFilter
 	cl.RangeT = make([]int64, 2)
+	cl.Started = false
 
 	return cl
 }
@@ -254,6 +256,7 @@ func (cl *FAClient) Start() error {
 		return err
 	}
 
+	cl.Started = true
 	// Loop over chunks of data
 	sc := bufio.NewScanner(cl.Conn)
 	for {
