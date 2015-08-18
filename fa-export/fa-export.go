@@ -15,7 +15,6 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	"path/filepath"
 	"regexp"
 	"strconv"
 	"time"
