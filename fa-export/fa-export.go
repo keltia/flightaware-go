@@ -175,7 +175,7 @@ func main() {
 
 	c, err := config.LoadConfig(RcFile)
 	if err != nil {
-		log.Fatalf("Error loading configuration %s: %s\n", RcFile, err.Error())
+		log.Fatalf("Error loading %s: %s\n", RcFile, err.Error())
 	}
 
 	client = flightaware.NewClient(c)
