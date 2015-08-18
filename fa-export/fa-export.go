@@ -114,6 +114,14 @@ func checkCommandLine() {
 		os.Exit(1)
 	}
 
+	// Replace defaults by anything on the CLI
+	if fUserName != "" {
+		client.Host.DefUser = fUserName
+	}
+	if fDest != "" {
+		client.Host.DefDest = fDest
+	}
+
 	// Now parse them
 	var (
 		tFeedBegin, tFeedEnd time.Time
