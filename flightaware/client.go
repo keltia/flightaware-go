@@ -101,9 +101,10 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 	}
 
 	if cl.Verbose {
+		log.Printf("Using username %s", rc.DefUser)
 		log.Printf("Using %s as prefix.", authStr)
 	}
-	conf := fmt.Sprintf(FA_AUTHSTR, authStr, rc.User, rc.Password)
+	conf := fmt.Sprintf(FA_AUTHSTR, authStr, rc.Users[rc.DefUser].User, rc.Users[rc.DefUser].Password)
 	_, err := conn.Write([]byte(conf))
 	if err != nil {
 		log.Println("Error configuring feed", err.Error())
@@ -170,7 +171,7 @@ func (cl *FAClient) connectFA(initial bool) (*tls.Conn, error) {
 	}
 
 	if err := cl.authClient(conn); err != nil {
-		log.Printf("Error: auth error for %s\n", rc.User)
+		log.Printf("Error: auth error for %s\n", rc.Users[rc.DefUser].User)
 		return &tls.Conn{}, err
 	}
 
