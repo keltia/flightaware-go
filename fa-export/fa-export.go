@@ -15,7 +15,6 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	"path/filepath"
 	"regexp"
 	"strconv"
 	"time"
@@ -25,7 +24,7 @@ import (
 )
 
 var (
-	RcFile    = filepath.Join(os.Getenv("HOME"), ".flightaware", "config.yml")
+	RcFile    = "flightaware"
 	client    *flightaware.FAClient
 	fOutputFH *os.File
 
@@ -115,6 +114,14 @@ func checkCommandLine() {
 		os.Exit(1)
 	}
 
+	// Replace defaults by anything on the CLI
+	if fUserName != "" {
+		client.Host.DefUser = fUserName
+	}
+	if fDest != "" {
+		client.Host.DefDest = fDest
+	}
+
 	// Now parse them
 	var (
 		tFeedBegin, tFeedEnd time.Time
@@ -168,10 +175,10 @@ func main() {
 
 	c, err := config.LoadConfig(RcFile)
 	if err != nil {
-		log.Fatalf("Error loading configuration %s: %s\n", RcFile, err.Error())
+		log.Fatalf("Error loading %s: %s\n", RcFile, err.Error())
 	}
 
-	client = flightaware.NewClient(c)
+	client = flightaware.NewClient(*c)
 	client.FeedType = fFeedType
 
 	checkCommandLine()

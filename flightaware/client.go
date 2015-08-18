@@ -101,9 +101,10 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 	}
 
 	if cl.Verbose {
+		log.Printf("Using username %s", rc.DefUser)
 		log.Printf("Using %s as prefix.", authStr)
 	}
-	conf := fmt.Sprintf(FA_AUTHSTR, authStr, rc.User, rc.Password)
+	conf := fmt.Sprintf(FA_AUTHSTR, authStr, rc.Users[rc.DefUser].User, rc.Users[rc.DefUser].Password)
 	_, err := conn.Write([]byte(conf))
 	if err != nil {
 		log.Println("Error configuring feed", err.Error())
@@ -142,10 +143,9 @@ func (cl *FAClient) startWriter() (chan []byte, error) {
 }
 
 // Connection handling, manage both initial and reconnections
-func (cl *FAClient) connectFA(initial bool) (*tls.Conn, error) {
+func (cl *FAClient) connectFA(str string, initial bool) (*tls.Conn, error) {
 	var rc config.Config = cl.Host
 
-	str := rc.Site + ":" + rc.Port
 	if initial {
 		if cl.Verbose {
 			log.Printf("Connecting to %s with TLS\n", str)
@@ -170,7 +170,7 @@ func (cl *FAClient) connectFA(initial bool) (*tls.Conn, error) {
 	}
 
 	if err := cl.authClient(conn); err != nil {
-		log.Printf("Error: auth error for %s\n", rc.User)
+		log.Printf("Error: auth error for %s\n", rc.Users[rc.DefUser].User)
 		return &tls.Conn{}, err
 	}
 
@@ -241,13 +241,15 @@ func (client *FAClient) SetFeed(feedType string, RangeT []time.Time) error {
 func (cl *FAClient) Start() error {
 	var rc config.Config = cl.Host
 
-	conn, err := cl.connectFA(true)
-	cl.Conn = conn
+	// Build the connection string
+	str := rc.Site + ":" + fmt.Sprintf("%d", rc.Port)
 
-	str := rc.Site + ":" + rc.Port
-	if cl.Verbose {
-		log.Printf("Connecting to %v with TLS\n", str)
+	// Do the actual connection
+	conn, err := cl.connectFA(str, true)
+	if err != nil {
+		log.Fatalf("Error: can not connect with %s: %v", str, err)
 	}
+	cl.Conn = conn
 
 	// Starting here everything is flowing from that connection
 	ch, err := cl.startWriter()
@@ -274,7 +276,7 @@ func (cl *FAClient) Start() error {
 			log.Println("Error reading:", err)
 
 			// Reconnect
-			conn, err = cl.connectFA(false)
+			conn, err = cl.connectFA(str, false)
 			sc = bufio.NewScanner(cl.Conn)
 		} else {
 			// Got EOF

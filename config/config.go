@@ -18,25 +18,34 @@
 package config
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
+	"os"
+	"path/filepath"
+	"strings"
 
-	"gopkg.in/yaml.v2"
-	"log"
+	"github.com/naoina/toml"
 )
 
 type Dest struct {
 	Broker string
 	Name   string
+	Type   string
+}
+
+type User struct {
+	User     string
+	Password string
 }
 
 type Config struct {
-	User     string
-	Password string
 	Site     string
-	Port     string
+	Port     int
+	DefUser  string
+	DefDest  string
+	Users    map[string]User
 	Dests    map[string]Dest
-	Default  string
 }
 
 // Basic Stringer for Dest
@@ -45,19 +54,29 @@ func (dest *Dest) String() string {
 }
 
 // Load a file as a YAML document and return the structure
-func LoadConfig(file string) (Config, error) {
-	buf, err := ioutil.ReadFile(file)
-	if err != nil {
-		return Config{}, err
+func LoadConfig(file string) (*Config, error) {
+	var sFile string
+
+	// Check for tag
+	if !strings.HasSuffix(file, ".toml") {
+		// file must be a tag so add a "."
+		sFile = filepath.Join(os.Getenv("HOME"),
+			fmt.Sprintf(".%s", file),
+			"config.toml")
+	} else {
+		sFile = file
 	}
 
 	c := new(Config)
-	err = yaml.Unmarshal(buf, &c)
+	buf, err := ioutil.ReadFile(sFile)
 	if err != nil {
-		log.Println("Error parsing yaml")
-		return Config{}, err
+		return c, errors.New(fmt.Sprintf("Can not read %s file.", sFile))
 	}
 
-	c.Default = "mine"
-	return *c, err
+	err = toml.Unmarshal(buf, &c)
+	if err != nil {
+		return c, errors.New(fmt.Sprintf("Can not parse %s: %v", sFile, err))
+	}
+
+	return c, err
 }
