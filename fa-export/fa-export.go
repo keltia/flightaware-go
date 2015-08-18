@@ -24,7 +24,7 @@ import (
 )
 
 var (
-	RcFile    = filepath.Join(os.Getenv("HOME"), ".flightaware", "config.yml")
+	RcFile    = "flightaware"
 	client    *flightaware.FAClient
 	fOutputFH *os.File
 
