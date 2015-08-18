@@ -24,12 +24,14 @@ var (
 	fAutoRotate  bool
 	fFeedBegin   string
 	fFeedEnd     string
+	fUserName    string
+	fDest        string
 )
 
 // my usage string
 const (
 	cliUsage = `
-Usage: %s [-o FILE] [-A] [-i N(s|mn|h|d)] [-f live|pitr|range [-B date [-E date]] [-v]
+Usage: %s [-o FILE] [-A] [-i N(s|mn|h|d)] [-f live|pitr|range [-B date [-E date]] [-v] [-u user]
 `
 )
 
@@ -48,5 +50,7 @@ func init() {
 	flag.StringVar(&fFeedEnd, "E", "", "End time for -f range")
 	flag.StringVar(&fsTimeout, "i", "", "Stop after N s/mn/h/days")
 	flag.BoolVar(&fAutoRotate, "A", false, "Autorotate output file")
+	flag.StringVar(&fDest, "d", "", "Default destination (NOT IMPL)")
+	flag.StringVar(&fUserName, "u", "", "Username to connect with")
 	flag.BoolVar(&fVerbose, "v", false, "Set verbose flag.")
 }
