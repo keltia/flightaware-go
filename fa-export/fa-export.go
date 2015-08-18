@@ -178,7 +178,7 @@ func main() {
 		log.Fatalf("Error loading %s: %s\n", RcFile, err.Error())
 	}
 
-	client = flightaware.NewClient(c)
+	client = flightaware.NewClient(*c)
 	client.FeedType = fFeedType
 
 	checkCommandLine()
