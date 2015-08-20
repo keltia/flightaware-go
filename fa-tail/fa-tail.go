@@ -11,27 +11,27 @@ import (
 	"bufio"
 	"encoding/json"
 	"flag"
-	"os"
-	"time"
-	"strconv"
 	"fmt"
+	"os"
+	"strconv"
+	"time"
 )
 
 type FArecord struct {
-	Type		string
-	AirGround	string
-	AltChange	string
-	Clock		string
-	Gs			string
-	Heading		string
-	Hexid		string
-	Id			string
-	Ident		string
-	Lat			string
-	Lon			string
-	Reg			string
-	Squawk		string
-	UpdateType	string
+	Type       string
+	AirGround  string
+	AltChange  string
+	Clock      string
+	Gs         string
+	Heading    string
+	Hexid      string
+	Id         string
+	Ident      string
+	Lat        string
+	Lon        string
+	Reg        string
+	Squawk     string
+	UpdateType string
 }
 
 func main() {
@@ -46,7 +46,7 @@ func main() {
 
 	var (
 		lastRecord string
-		nbRecords	int64
+		nbRecords  int64
 	)
 
 	for scanner.Scan() {
