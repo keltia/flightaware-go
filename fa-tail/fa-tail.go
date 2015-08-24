@@ -1,10 +1,10 @@
 // fa-tail.go
 //
-// tail(1)-like tuility that gets the last record and display the clock element
+// tail(1)-like utility that gets the last record and display the clock element
 //
 // Copyright 2015 © by Ollivier Robert for the EEC
 
-// Implement the fa-export client.
+// Implement the fa-tail application, a FA-aware tail(1) clone.
 package main
 
 import (
