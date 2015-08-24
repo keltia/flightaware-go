@@ -40,6 +40,10 @@ type FArecord struct {
 
 func main() {
 	flag.Parse()
+
+	if len(flag.Args()) == 0 {
+		fmt.Fprintf(os.Stderr, "Error: You must specify a file!\n")
+	}
 	fn := flag.Arg(0)
 
 	// Get the size to seek near the end
