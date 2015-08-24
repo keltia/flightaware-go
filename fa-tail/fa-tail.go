@@ -49,7 +49,7 @@ func main() {
 	// Get the size to seek near the end
 	fileStat, err := os.Stat(fn)
 	if err != nil {
-		fmt.Printf("Error stat(2) on %s: %v\n", fn, err.Error())
+		fmt.Fprintf(os.Stderr, "Error stat(2) on %s: %v\n", fn, err.Error())
 	}
 
 	//Seek and read
@@ -61,13 +61,13 @@ func main() {
 
 	_, err = fh.Seek(fileStat.Size() - BSIZE, 2)
 	if err != nil {
-		fmt.Printf("Unable to seek into the file %s\n", fn)
+		fmt.Fprintf(os.Stderr, "Unable to seek into the file %s\n", fn)
 		os.Exit(1)
 	}
 
 	scanner := bufio.NewScanner(fh)
 	if err != nil {
-		fmt.Printf("Unable to read %s\n", fn)
+		fmt.Fprintf(os.Stderr, "Unable to read %s\n", fn)
 		os.Exit(1)
 	}
 
