@@ -17,6 +17,10 @@ import (
 	"time"
 )
 
+const (
+	BSIZE = 1024
+)
+
 type FArecord struct {
 	Type       string
 	AirGround  string
@@ -48,6 +52,12 @@ func main() {
 	fh, err := os.Open(fn)
 	if err != nil {
 		fmt.Printf("Unable to open %s\n", fn)
+		os.Exit(1)
+	}
+
+	_, err = fh.Seek(fileStat.Size() - BSIZE, 2)
+	if err != nil {
+		fmt.Printf("Unable to seek into the file %s\n", fn)
 		os.Exit(1)
 	}
 
