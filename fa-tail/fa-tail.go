@@ -38,7 +38,13 @@ type FArecord struct {
 	UpdateType string
 }
 
+var (
+	fVerbose bool
+	fileStat os.FileInfo
+)
+
 func main() {
+	flag.BoolVar(&fVerbose, "v", false, "Be verbose")
 	flag.Parse()
 
 	if len(flag.Args()) == 0 {
@@ -78,6 +84,11 @@ func main() {
 
 	for scanner.Scan() {
 		lastRecord = scanner.Text()
+
+		// In verbose mode we display the last few records read
+		if fVerbose {
+			fmt.Printf("%d: %s\n", nbRecords, lastRecord)
+		}
 		nbRecords++
 	}
 
