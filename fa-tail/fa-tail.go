@@ -65,12 +65,14 @@ func main() {
 		os.Exit(1)
 	}
 
-	_, err = fh.Seek(fileStat.Size() - BSIZE, 2)
+	// Go forward fast
+	_, err = fh.Seek(fileStat.Size() - BSIZE, 0)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to seek into the file %s\n", fn)
+		fmt.Fprintf(os.Stderr, "Unable to seek into the file %s at %d\n", fn, fileStat.Size() - BSIZE)
 		os.Exit(1)
 	}
 
+	// Then we go with the usual scanning thingy
 	scanner := bufio.NewScanner(fh)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to read %s\n", fn)
@@ -91,11 +93,19 @@ func main() {
 		}
 		nbRecords++
 	}
+	if err := scanner.Err(); err != nil {
+		fmt.Fprintf(os.Stderr, "Error reading: %v", err)
+	} else {
+		// EOF
+		if fVerbose {
+			fmt.Printf("Last record: %s\n", lastRecord)
+		}
+	}
 
 	var lastFA FArecord
 
 	if err := json.Unmarshal([]byte(lastRecord), &lastFA); err != nil {
-		fmt.Printf("Unable to decode %v\n", lastRecord)
+		fmt.Printf("Unable to decode %v: %v\n", lastRecord, err)
 		os.Exit(1)
 	}
 	iClock, err := strconv.ParseInt(lastFA.Clock, 10, 64)
