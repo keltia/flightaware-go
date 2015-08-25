@@ -19,6 +19,7 @@ import (
 
 const (
 	BSIZE = 2048
+	VERSION = "1.0"
 )
 
 type FArecord struct {
