@@ -110,5 +110,5 @@ func main() {
 	}
 	iClock, err := strconv.ParseInt(lastFA.Clock, 10, 64)
 	fmt.Printf("%s: size %d bytes\n", fn, fileStat.Size())
-	fmt.Printf("# records: %d - Last record: %v\n", nbRecords, time.Unix(iClock, 0))
+	fmt.Printf("Last record: %v\n", time.Unix(iClock, 0))
 }
