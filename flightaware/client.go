@@ -17,6 +17,12 @@
 
  	client.SetTimeout(int64)
 
+ You can ask for different events:
+
+    client.SetEvents(string)
+
+ Only one kind is supported for the moment.
+
  The default handler is to display all packets.  You can change the default handler
  with
 
