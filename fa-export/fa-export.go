@@ -114,12 +114,6 @@ func checkCommandLine() {
 		os.Exit(1)
 	}
 
-	// Check that -e if present has a known and correct value
-	if fEventType != "position" && fEventType != "flightplan" {
-		log.Printf("Error: only 'position' and 'flightplan' currently supported with -e\n")
-		os.Exit(1)
-	}
-
 	// Replace defaults by anything on the CLI
 	if fUserName != "" {
 		client.Host.DefUser = fUserName
