@@ -62,6 +62,7 @@ type FAClient struct {
 	Feed_one func([]byte)
 	Filter   func([]byte) bool
 	Verbose  bool
+	EventType string
 	FeedType string
 	// For range event type
 	RangeT   []int64
