@@ -210,6 +210,9 @@ func main() {
 		}
 	}
 
+	// Ensure the correct EventType is set
+	client.SetEvents(fEventType)
+
 	// Check if we did specify a timeout with -i
 	if fsTimeout != "" {
 		fTimeout = checkTimeout(fsTimeout)
