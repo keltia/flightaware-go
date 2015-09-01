@@ -17,6 +17,12 @@
 
  	client.SetTimeout(int64)
 
+ You can ask for different events:
+
+    client.SetEvents(string)
+
+ Only one kind is supported for the moment.
+
  The default handler is to display all packets.  You can change the default handler
  with
 
@@ -49,7 +55,7 @@ import (
 )
 
 const (
-	FA_AUTHSTR = "%s username %s password %s events \"position\"\n"
+	FA_AUTHSTR = "%s username %s password %s events \"%s\"\n"
 	FA_VERSION = "version 4.0"
 )
 
@@ -62,6 +68,7 @@ type FAClient struct {
 	Feed_one func([]byte)
 	Filter   func([]byte) bool
 	Verbose  bool
+	EventType string
 	FeedType string
 	// For range event type
 	RangeT   []int64
@@ -104,7 +111,8 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 		log.Printf("Using username %s", rc.DefUser)
 		log.Printf("Using %s as prefix.", authStr)
 	}
-	conf := fmt.Sprintf(FA_AUTHSTR, authStr, rc.Users[rc.DefUser].User, rc.Users[rc.DefUser].Password)
+	conf := fmt.Sprintf(FA_AUTHSTR, authStr,
+		rc.Users[rc.DefUser].User, rc.Users[rc.DefUser].Password, cl.EventType)
 	_, err := conn.Write([]byte(conf))
 	if err != nil {
 		log.Println("Error configuring feed", err.Error())
@@ -211,6 +219,11 @@ func (cl *FAClient) SetTimer(timer int64) {
 		myself, _ := os.FindProcess(os.Getpid())
 		myself.Signal(os.Interrupt)
 	}()
+}
+
+// Specify the type of events we want
+func (cl *FAClient) SetEvents(EvenType string) {
+	cl.EventType = EvenType
 }
 
 // Check if parameters for the event type are consistent
