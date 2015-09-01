@@ -22,6 +22,7 @@ var (
 	fTimeout     int64
 	fsTimeout    string
 	fAutoRotate  bool
+	fEventType   string
 	fFeedBegin   string
 	fFeedEnd     string
 	fUserName    string
@@ -31,7 +32,7 @@ var (
 // my usage string
 const (
 	cliUsage = `
-Usage: %s [-o FILE] [-A] [-i N(s|mn|h|d)] [-f live|pitr|range [-B date [-E date]] [-v] [-u user]
+Usage: %s [-o FILE] [-A] [-i N(s|mn|h|d)] [-e type] [-f live|pitr|range [-B date [-E date]] [-v] [-u user]
 `
 )
 
@@ -45,6 +46,7 @@ var Usage = func() {
 func init() {
 	// cli
 	flag.StringVar(&fOutput, "o", "", "Specify output FILE.")
+	flag.StringVar(&fEventType, "e", "position", "Specify event type (default position)")
 	flag.StringVar(&fFeedType, "f", "live", "Specify which feed we want (default live)")
 	flag.StringVar(&fFeedBegin, "B", "", "Begin time for -f pitr|range")
 	flag.StringVar(&fFeedEnd, "E", "", "End time for -f range")
