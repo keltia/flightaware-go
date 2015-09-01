@@ -49,7 +49,7 @@ import (
 )
 
 const (
-	FA_AUTHSTR = "%s username %s password %s events \"position\"\n"
+	FA_AUTHSTR = "%s username %s password %s events \"%s\"\n"
 	FA_VERSION = "version 4.0"
 )
 
@@ -105,7 +105,8 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 		log.Printf("Using username %s", rc.DefUser)
 		log.Printf("Using %s as prefix.", authStr)
 	}
-	conf := fmt.Sprintf(FA_AUTHSTR, authStr, rc.Users[rc.DefUser].User, rc.Users[rc.DefUser].Password)
+	conf := fmt.Sprintf(FA_AUTHSTR, authStr,
+		rc.Users[rc.DefUser].User, rc.Users[rc.DefUser].Password, cl.EventType)
 	_, err := conn.Write([]byte(conf))
 	if err != nil {
 		log.Println("Error configuring feed", err.Error())
