@@ -21,7 +21,8 @@
 
     client.SetEvents(string)
 
- Only one kind is supported for the moment.
+ The string you specify with -e will be checked remotely by FlightAware according to the
+ documentation available at https://fr.flightaware.com/commercial/firehose/firehose_documentation.rvt
 
  The default handler is to display all packets.  You can change the default handler
  with
