@@ -41,10 +41,12 @@ type FArecord struct {
 
 var (
 	fVerbose bool
+	fCount   bool
 	fileStat os.FileInfo
 )
 
 func main() {
+	flag.BoolVar(&fCount, "c", false, "Count records.")
 	flag.BoolVar(&fVerbose, "v", false, "Be verbose")
 	flag.Parse()
 
@@ -66,11 +68,14 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Go forward fast
-	_, err = fh.Seek(fileStat.Size() - BSIZE, 0)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to seek into the file %s at %d\n", fn, fileStat.Size() - BSIZE)
-		os.Exit(1)
+	// Obviously, if we want the number of records, do not seek
+	if !fCount {
+		// Go forward fast
+		_, err = fh.Seek(fileStat.Size() - BSIZE, 0)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Unable to seek into the file %s at %d\n", fn, fileStat.Size() - BSIZE)
+			os.Exit(1)
+		}
 	}
 
 	// Then we go with the usual scanning thingy
@@ -110,6 +115,10 @@ func main() {
 		os.Exit(1)
 	}
 	iClock, err := strconv.ParseInt(lastFA.Clock, 10, 64)
-	fmt.Printf("%s: size %d bytes\n", fn, fileStat.Size())
+	if fCount {
+		fmt.Printf("%s: records %d size %d bytes\n", fn, nbRecords, fileStat.Size())
+	} else {
+		fmt.Printf("%s: size %d bytes\n", fn, fileStat.Size())
+	}
 	fmt.Printf("Last record: %v\n", time.Unix(iClock, 0))
 }
