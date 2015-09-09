@@ -52,6 +52,7 @@ func main() {
 
 	if len(flag.Args()) == 0 {
 		fmt.Fprintf(os.Stderr, "Error: You must specify a file!\n")
+		os.Exit(1)
 	}
 	fn := flag.Arg(0)
 
