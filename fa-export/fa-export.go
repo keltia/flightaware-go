@@ -148,7 +148,8 @@ func checkCommandLine() {
 			tFeedEnd = time.Time{}
 		}
 
-		if tFeedEnd.Before(tFeedBegin) {
+		// Do no invert if using "pitr" as B>E in this case
+		if tFeedEnd.Before(tFeedBegin) && fFeedType != "pitr" {
 			log.Printf("Warning: reversed date range, inverting.")
 			tFeedBegin, tFeedEnd = tFeedEnd, tFeedBegin
 		}
