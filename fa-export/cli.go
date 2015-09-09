@@ -46,8 +46,8 @@ var Usage = func() {
 func init() {
 	// cli
 	flag.StringVar(&fOutput, "o", "", "Specify output FILE.")
-	flag.StringVar(&fEventType, "e", "position", "Events to stream (default position")
-	flag.StringVar(&fFeedType, "f", "live", "Specify which feed we want (default live)")
+	flag.StringVar(&fEventType, "e", "position", "Events to stream")
+	flag.StringVar(&fFeedType, "f", "live", "Specify which feed we want")
 	flag.StringVar(&fFeedBegin, "B", "", "Begin time for -f pitr|range")
 	flag.StringVar(&fFeedEnd, "E", "", "End time for -f range")
 	flag.StringVar(&fsTimeout, "i", "", "Stop after N s/mn/h/days")
