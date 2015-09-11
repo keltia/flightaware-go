@@ -18,7 +18,7 @@ import (
 )
 
 const (
-	BSIZE = 2048
+	BSIZE = 8192
 	VERSION = "1.0"
 )
 
@@ -37,6 +37,32 @@ type FArecord struct {
 	Reg        string
 	Squawk     string
 	UpdateType string
+}
+
+type FApoint struct {
+	Lat float32
+	Lon float32
+}
+
+type FAflightplan struct {
+	Type       string
+	Ident      string
+	AircraftType string
+	Alt          string
+	Atcident     string
+	Dest         string
+	Edt          string
+	Eta          string
+	FacilityHash string
+	FacilityName string
+	Id           string
+	Orig         string
+	Reg          string
+	Route        string
+	Speed        string
+	Status       string
+	Waypoints    []FApoint
+	Ete          string
 }
 
 var (
@@ -109,17 +135,38 @@ func main() {
 		}
 	}
 
-	var lastFA FArecord
+	var (
+		lastFA FArecord
+		lastFP FAflightplan
+	)
 
+	// Check input record
 	if err := json.Unmarshal([]byte(lastRecord), &lastFA); err != nil {
 		fmt.Printf("Unable to decode %v: %v\n", lastRecord, err)
 		os.Exit(1)
 	}
-	iClock, err := strconv.ParseInt(lastFA.Clock, 10, 64)
+
 	if fCount {
 		fmt.Printf("%s: records %d size %d bytes\n", fn, nbRecords, fileStat.Size())
 	} else {
 		fmt.Printf("%s: size %d bytes\n", fn, fileStat.Size())
 	}
-	fmt.Printf("Last record: %v\n", time.Unix(iClock, 0))
+
+	if lastFA.Type != "position" {
+		// Try a flightplan
+		if err := json.Unmarshal([]byte(lastRecord), &lastFP); err != nil {
+			fmt.Printf("Unable to decode %v: %v\n", lastRecord, err)
+			os.Exit(1)
+		}
+		time_edt, _ := strconv.ParseInt(lastFP.Edt, 10, 64)
+		time_eta, _ := strconv.ParseInt(lastFP.Eta, 10, 64)
+		fmt.Printf("Last record is a flightplan for %s (%s):\n",
+			lastFP.Ident, lastFP.AircraftType)
+		fmt.Printf("  From %s (%v) to %s (%v)\n",
+			lastFP.Orig, time.Unix(time_edt, 0),
+			lastFP.Dest, time.Unix(time_eta, 0))
+	} else {
+		iClock, _ := strconv.ParseInt(lastFA.Clock, 10, 64)
+		fmt.Printf("Last record: %v\n", time.Unix(iClock, 0))
+	}
 }
