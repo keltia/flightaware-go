@@ -7,3 +7,5 @@ branches:
   only:
   - develop
   - master
+install:
+  - go get github.com/naoina/toml
