@@ -18,7 +18,7 @@ import (
 )
 
 const (
-	BSIZE = 2048
+	BSIZE = 8192
 	VERSION = "1.0"
 )
 
