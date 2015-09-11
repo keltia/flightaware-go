@@ -3,3 +3,7 @@ go:
 - 1.4
 - 1.5
 - tip
+branches:
+  only:
+  - develop
+  - master
