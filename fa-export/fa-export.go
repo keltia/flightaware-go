@@ -18,9 +18,9 @@ import (
 	"regexp"
 	"strconv"
 	"time"
-	"flightaware-go/config"
-	"flightaware-go/flightaware"
-	"flightaware-go/utils"
+	"../config"
+	"../flightaware"
+	"../utils"
 )
 
 var (
