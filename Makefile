@@ -6,11 +6,10 @@ GOBIN=	${GOPATH}/bin
 
 SRCS=	config.go client.go fa-export.go utils.go cli.go
 
-all:	${DEST}/fa-export ${DEST}/fa-tail
+all:	${DEST}/fa-export
 
 install:
 	go install fa-export/fa-export.go fa-export/cli.go
-	go install fa-tail/fa-tail.go
 
 clean:
 	go clean -v
@@ -18,9 +17,6 @@ clean:
 
 ${DEST}/fa-export:    ${SRCS}
 	go build -v -o $@ fa-export/fa-export.go fa-export/cli.go
-
-${DEST}/fa-tail:   fa-tail/fa-tail.go
-	go build -v -o $@ fa-tail/fa-tail.go
 
 push:
 	git push --all
