@@ -164,7 +164,7 @@ func main() {
 			lastFP.Ident, lastFP.AircraftType)
 		if lastFP.Status == "Z" {
 			running, _ := strconv.ParseInt(lastFP.Ete, 10, 64)
-			fmt.Printf("  At %s (completed, running time: %d s",
+			fmt.Printf("  At %s (completed, running time: %d s\n",
 			lastFP.Dest, running)
 		} else {
 			fmt.Printf("  From %s (%v) to %s (%v)\n",
