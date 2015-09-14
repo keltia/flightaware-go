@@ -1,4 +1,6 @@
 # Main Makefile for fa-export
+#
+# XXX Need to be cleaned up at some point
 
 VPATH=	fa-export:fa-tail:flightaware:config:utils
 DEST=	bin
