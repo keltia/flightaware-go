@@ -56,7 +56,7 @@ import (
 )
 
 const (
-	FA_AUTHSTR = "%s username %s password %s events \"%s\"\n"
+	FA_AUTHSTR = "%s username %s password %s %s\n"
 )
 
 type FAClient struct {
@@ -69,7 +69,6 @@ type FAClient struct {
 	Filter   func([]byte) bool
 	InputFilters []string
 	Verbose  bool
-	EventType string
 	FeedType string
 	// For range event type
 	RangeT   []int64
