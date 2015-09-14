@@ -45,14 +45,14 @@ var Usage = func() {
 // called by flag.Parse()
 func init() {
 	// cli
-	flag.StringVar(&fOutput, "o", "", "Specify output FILE.")
+	flag.StringVar(&fsTimeout, "d", "", "Stop after N s/mn/h/days")
 	flag.StringVar(&fEventType, "e", "position", "Events to stream")
 	flag.StringVar(&fFeedType, "f", "live", "Specify which feed we want")
-	flag.StringVar(&fFeedBegin, "B", "", "Begin time for -f pitr|range")
-	flag.StringVar(&fFeedEnd, "E", "", "End time for -f range")
-	flag.StringVar(&fsTimeout, "d", "", "Stop after N s/mn/h/days")
-	flag.BoolVar(&fAutoRotate, "A", false, "Autorotate output file")
-	flag.StringVar(&fDest, "D", "", "Default destination (NOT IMPL)")
+	flag.StringVar(&fOutput, "o", "", "Specify output FILE.")
 	flag.StringVar(&fUserName, "u", "", "Username to connect with")
 	flag.BoolVar(&fVerbose, "v", false, "Set verbose flag.")
+	flag.BoolVar(&fAutoRotate, "A", false, "Autorotate output file")
+	flag.StringVar(&fFeedBegin, "B", "", "Begin time for -f pitr|range")
+	flag.StringVar(&fDest, "D", "", "Default destination (NOT IMPL)")
+	flag.StringVar(&fFeedEnd, "E", "", "End time for -f range")
 }
