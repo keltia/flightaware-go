@@ -148,9 +148,9 @@ func generateFilter(fType int, str string) string {
 }
 
 // Add an input filter to the list
-func (cl *FAClient) AddInputFilter (str string) {
+func (cl *FAClient) AddInputFilter (fType int, str string) {
 	if str != "" {
-		cl.InputFilters = append(cl.InputFilters, str)
+		cl.InputFilters = append(cl.InputFilters, generateFilter(fType, str))
 	}
 }
 
