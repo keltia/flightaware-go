@@ -245,11 +245,6 @@ func (cl *FAClient) SetTimer(timer int64) {
 	}()
 }
 
-// Specify the type of events we want
-func (cl *FAClient) SetEvents(EvenType string) {
-	cl.EventType = EvenType
-}
-
 // Check if parameters for the event type are consistent
 // Check that -t has also -T and the right parameters
 func (client *FAClient) SetFeed(feedType string, RangeT []time.Time) error {
