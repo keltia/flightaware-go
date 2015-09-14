@@ -52,7 +52,7 @@ func init() {
 	flag.StringVar(&fFeedEnd, "E", "", "End time for -f range")
 	flag.StringVar(&fsTimeout, "i", "", "Stop after N s/mn/h/days")
 	flag.BoolVar(&fAutoRotate, "A", false, "Autorotate output file")
-	flag.StringVar(&fDest, "d", "", "Default destination (NOT IMPL)")
+	flag.StringVar(&fDest, "D", "", "Default destination (NOT IMPL)")
 	flag.StringVar(&fUserName, "u", "", "Username to connect with")
 	flag.BoolVar(&fVerbose, "v", false, "Set verbose flag.")
 }
