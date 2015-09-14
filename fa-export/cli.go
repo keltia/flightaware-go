@@ -32,7 +32,7 @@ var (
 // my usage string
 const (
 	cliUsage = `
-Usage: %s [-o FILE] [-A] [-i N(s|mn|h|d)] [-e type]  [-f live|pitr|range [-B date [-E date]] [-v] [-u user]
+Usage: %s [-o FILE] [-A] [-d N(s|mn|h|d)] [-e type]  [-f live|pitr|range [-B date [-E date]] [-v] [-u user]
 `
 )
 
@@ -50,7 +50,7 @@ func init() {
 	flag.StringVar(&fFeedType, "f", "live", "Specify which feed we want")
 	flag.StringVar(&fFeedBegin, "B", "", "Begin time for -f pitr|range")
 	flag.StringVar(&fFeedEnd, "E", "", "End time for -f range")
-	flag.StringVar(&fsTimeout, "i", "", "Stop after N s/mn/h/days")
+	flag.StringVar(&fsTimeout, "d", "", "Stop after N s/mn/h/days")
 	flag.BoolVar(&fAutoRotate, "A", false, "Autorotate output file")
 	flag.StringVar(&fDest, "D", "", "Default destination (NOT IMPL)")
 	flag.StringVar(&fUserName, "u", "", "Username to connect with")
