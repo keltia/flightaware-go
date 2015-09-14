@@ -36,7 +36,10 @@ var (
 // my usage string
 const (
 	cliUsage = `
-Usage: %s [-o FILE] [-A] [-d N(s|mn|h|d)] [-e type]  [-f live|pitr|range [-B date [-E date]] [-v] [-u user]
+Usage: %s [-o FILE] [-d N(s|mn|h|d)][-f live|pitr|range [-B date [-E date]] [-v] [-u user]
+
+       Filters:
+          [-e type] [-F airline] [-I plane-ident] [-L lat/lon] [-P airport-glob]
 `
 )
 
