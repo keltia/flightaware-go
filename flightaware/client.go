@@ -56,8 +56,22 @@ import (
 )
 
 const (
-	FA_AUTHSTR = "%s username %s password %s events \"%s\"\n"
-	FA_VERSION = "version 4.0"
+	FA_AUTHSTR = "%s username %s password %s %s\n"
+	FILTER_EVENT = iota
+	FILTER_AIRLINE
+	FILTER_IDENT
+	FILTER_LATLONG
+	FILTER_AIRPORT
+)
+
+var (
+	filterTypes = map[int]string{
+		FILTER_EVENT:   "events \"%s\"",
+		FILTER_AIRLINE: "filter \"%s\"",
+		FILTER_IDENT:   "idents \"%s\"",
+		FILTER_LATLONG: "latlong \"%s\"",
+		FILTER_AIRPORT: "airport_filter \"%s\"",
+	}
 )
 
 type FAClient struct {
@@ -68,8 +82,8 @@ type FAClient struct {
 	Conn     *tls.Conn
 	Feed_one func([]byte)
 	Filter   func([]byte) bool
+	InputFilters []string
 	Verbose  bool
-	EventType string
 	FeedType string
 	// For range event type
 	RangeT   []int64
@@ -89,7 +103,7 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 	rc := cl.Host
 	switch cl.FeedType {
 		case "live":
-			authStr = fmt.Sprintf("%s %s", cl.FeedType, FA_VERSION)
+			authStr = fmt.Sprintf("%s", cl.FeedType)
 			if cl.Verbose {
 				log.Println("Live traffic feed")
 			}
@@ -111,15 +125,43 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 	if cl.Verbose {
 		log.Printf("Using username %s", rc.DefUser)
 		log.Printf("Using %s as prefix.", authStr)
+		log.Printf("Adding input filters: %s\n", setInputFilters(cl.InputFilters))
 	}
+
+	// Set connection string including filters if any
 	conf := fmt.Sprintf(FA_AUTHSTR, authStr,
-		rc.Users[rc.DefUser].User, rc.Users[rc.DefUser].Password, cl.EventType)
+		rc.Users[rc.DefUser].User,
+		rc.Users[rc.DefUser].Password,
+		setInputFilters(cl.InputFilters))
+
 	_, err := conn.Write([]byte(conf))
 	if err != nil {
 		log.Println("Error configuring feed", err.Error())
 		return err
 	}
 	return nil
+}
+
+// Generate the proper argument for a given filter
+func generateFilter(fType int, str string) string {
+	return fmt.Sprintf(filterTypes[fType], str)
+}
+
+// Add an input filter to the list
+func (cl *FAClient) AddInputFilter (fType int, str string) {
+	if str != "" {
+		cl.InputFilters = append(cl.InputFilters, generateFilter(fType, str))
+	}
+}
+
+// Generate the filter list for FA
+func setInputFilters (inputFilters []string) string {
+	result := ""
+
+	for _, str := range inputFilters {
+		result = result + " " + str
+	}
+	return result
 }
 
 // consumer part of the FA client
@@ -200,6 +242,7 @@ func NewClient(rc config.Config) *FAClient {
 	cl.Filter = defaultFilter
 	cl.RangeT = make([]int64, 2)
 	cl.Started = false
+	cl.InputFilters = []string{}
 
 	return cl
 }
@@ -220,11 +263,6 @@ func (cl *FAClient) SetTimer(timer int64) {
 		myself, _ := os.FindProcess(os.Getpid())
 		myself.Signal(os.Interrupt)
 	}()
-}
-
-// Specify the type of events we want
-func (cl *FAClient) SetEvents(EvenType string) {
-	cl.EventType = EvenType
 }
 
 // Check if parameters for the event type are consistent

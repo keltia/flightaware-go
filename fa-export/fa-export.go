@@ -211,8 +211,12 @@ func main() {
 		}
 	}
 
-	// Ensure the correct EventType is set
-	client.SetEvents(fEventType)
+	// Check the various possible input filters
+	client.AddInputFilter(flightaware.FILTER_EVENT, fEventType)
+	client.AddInputFilter(flightaware.FILTER_AIRLINE, fAirlineFilter)
+	client.AddInputFilter(flightaware.FILTER_IDENT, fIdentFilter)
+	client.AddInputFilter(flightaware.FILTER_AIRPORT, fAirportFilter)
+	client.AddInputFilter(flightaware.FILTER_LATLONG, fLatLongFilter)
 
 	// Check if we did specify a timeout with -i
 	if fsTimeout != "" {

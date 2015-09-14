@@ -27,32 +27,44 @@ var (
 	fFeedEnd     string
 	fUserName    string
 	fDest        string
+	fAirlineFilter string
+	fIdentFilter string
+	fLatLongFilter string
+	fAirportFilter string
 )
 
 // my usage string
 const (
 	cliUsage = `
-Usage: %s [-o FILE] [-A] [-i N(s|mn|h|d)] [-e type]  [-f live|pitr|range [-B date [-E date]] [-v] [-u user]
+%s version %s
+Usage: %s [-o FILE] [-d N(s|mn|h|d)][-f live|pitr|range [-B date [-E date]] [-v] [-u user]
+
+       Filters (OR is implied if multiple):
+          [-e type] [-F airline] [-I plane-ident] [-L lat/lon] [-P airport-glob]
 `
 )
 
 // Redefine Usage
 var Usage = func() {
-	fmt.Fprintf(os.Stderr, cliUsage, os.Args[0])
+	fmt.Fprintf(os.Stderr, cliUsage, os.Args[0], FA_VERSION, os.Args[0])
 	flag.PrintDefaults()
 }
 
 // called by flag.Parse()
 func init() {
 	// cli
-	flag.StringVar(&fOutput, "o", "", "Specify output FILE.")
-	flag.StringVar(&fEventType, "e", "position", "Events to stream")
+	flag.StringVar(&fsTimeout, "d", "", "Stop after N s/mn/h/days")
+	flag.StringVar(&fEventType, "e", "", "Events to stream")
 	flag.StringVar(&fFeedType, "f", "live", "Specify which feed we want")
-	flag.StringVar(&fFeedBegin, "B", "", "Begin time for -f pitr|range")
-	flag.StringVar(&fFeedEnd, "E", "", "End time for -f range")
-	flag.StringVar(&fsTimeout, "i", "", "Stop after N s/mn/h/days")
-	flag.BoolVar(&fAutoRotate, "A", false, "Autorotate output file")
-	flag.StringVar(&fDest, "d", "", "Default destination (NOT IMPL)")
+	flag.StringVar(&fOutput, "o", "", "Specify output FILE.")
 	flag.StringVar(&fUserName, "u", "", "Username to connect with")
 	flag.BoolVar(&fVerbose, "v", false, "Set verbose flag.")
+	flag.BoolVar(&fAutoRotate, "A", false, "Autorotate output file")
+	flag.StringVar(&fFeedBegin, "B", "", "Begin time for -f pitr|range")
+	flag.StringVar(&fDest, "D", "", "Default destination (NOT IMPL)")
+	flag.StringVar(&fFeedEnd, "E", "", "End time for -f range")
+	flag.StringVar(&fAirlineFilter, "F", "", "Airline filter")
+	flag.StringVar(&fIdentFilter, "I", "", "Aircraft Ident filter")
+	flag.StringVar(&fLatLongFilter, "L", "", "Lat/Long filter")
+	flag.StringVar(&fAirportFilter, "P", "", "Airport filter")
 }
