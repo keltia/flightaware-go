@@ -18,9 +18,9 @@ import (
 	"regexp"
 	"strconv"
 	"time"
-	"flightaware-go/config"
-	"flightaware-go/flightaware"
-	"flightaware-go/utils"
+	"../config"
+	"../flightaware"
+	"../utils"
 )
 
 var (
@@ -148,7 +148,8 @@ func checkCommandLine() {
 			tFeedEnd = time.Time{}
 		}
 
-		if tFeedEnd.Before(tFeedBegin) {
+		// Do no invert if using "pitr" as B>E in this case
+		if tFeedEnd.Before(tFeedBegin) && fFeedType != "pitr" {
 			log.Printf("Warning: reversed date range, inverting.")
 			tFeedBegin, tFeedEnd = tFeedEnd, tFeedBegin
 		}
@@ -210,8 +211,12 @@ func main() {
 		}
 	}
 
-	// Ensure the correct EventType is set
-	client.SetEvents(fEventType)
+	// Check the various possible input filters
+	client.AddInputFilter(flightaware.FILTER_EVENT, fEventType)
+	client.AddInputFilter(flightaware.FILTER_AIRLINE, fAirlineFilter)
+	client.AddInputFilter(flightaware.FILTER_IDENT, fIdentFilter)
+	client.AddInputFilter(flightaware.FILTER_AIRPORT, fAirportFilter)
+	client.AddInputFilter(flightaware.FILTER_LATLONG, fLatLongFilter)
 
 	// Check if we did specify a timeout with -i
 	if fsTimeout != "" {

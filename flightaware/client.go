@@ -45,7 +45,7 @@
 package flightaware
 
 import (
-	"flightaware-go/config"
+	"../config"
 	"bufio"
 	"crypto/tls"
 	"fmt"
@@ -56,26 +56,11 @@ import (
 )
 
 const (
-	FA_AUTHSTR = "%s username %s password %s events \"%s\"\n"
-	FA_VERSION = "version 4.0"
+	FA_AUTHSTR = "%s username %s password %s %s\n"
 )
 
-type FAClient struct {
-	Started  bool
-	Host     config.Config
-	Bytes    int64
-	Pkts     int32
-	Conn     *tls.Conn
-	Feed_one func([]byte)
-	Filter   func([]byte) bool
-	Verbose  bool
-	EventType string
-	FeedType string
-	// For range event type
-	RangeT   []int64
-}
-
 // Private functions
+
 // Default callback
 func defaultFeed(buf []byte) { fmt.Println(string(buf)) }
 
@@ -89,7 +74,7 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 	rc := cl.Host
 	switch cl.FeedType {
 		case "live":
-			authStr = fmt.Sprintf("%s %s", cl.FeedType, FA_VERSION)
+			authStr = fmt.Sprintf("%s", cl.FeedType)
 			if cl.Verbose {
 				log.Println("Live traffic feed")
 			}
@@ -111,9 +96,15 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 	if cl.Verbose {
 		log.Printf("Using username %s", rc.DefUser)
 		log.Printf("Using %s as prefix.", authStr)
+		log.Printf("Adding input filters: %s\n", setInputFilters(cl.InputFilters))
 	}
+
+	// Set connection string including filters if any
 	conf := fmt.Sprintf(FA_AUTHSTR, authStr,
-		rc.Users[rc.DefUser].User, rc.Users[rc.DefUser].Password, cl.EventType)
+		rc.Users[rc.DefUser].User,
+		rc.Users[rc.DefUser].Password,
+		setInputFilters(cl.InputFilters))
+
 	_, err := conn.Write([]byte(conf))
 	if err != nil {
 		log.Println("Error configuring feed", err.Error())
@@ -200,6 +191,7 @@ func NewClient(rc config.Config) *FAClient {
 	cl.Filter = defaultFilter
 	cl.RangeT = make([]int64, 2)
 	cl.Started = false
+	cl.InputFilters = []string{}
 
 	return cl
 }
@@ -220,11 +212,6 @@ func (cl *FAClient) SetTimer(timer int64) {
 		myself, _ := os.FindProcess(os.Getpid())
 		myself.Signal(os.Interrupt)
 	}()
-}
-
-// Specify the type of events we want
-func (cl *FAClient) SetEvents(EvenType string) {
-	cl.EventType = EvenType
 }
 
 // Check if parameters for the event type are consistent
