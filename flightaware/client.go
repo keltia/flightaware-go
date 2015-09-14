@@ -67,6 +67,7 @@ type FAClient struct {
 	Conn     *tls.Conn
 	Feed_one func([]byte)
 	Filter   func([]byte) bool
+	InputFilters []string
 	Verbose  bool
 	EventType string
 	FeedType string
@@ -199,6 +200,7 @@ func NewClient(rc config.Config) *FAClient {
 	cl.Filter = defaultFilter
 	cl.RangeT = make([]int64, 2)
 	cl.Started = false
+	cl.InputFilters = []string{}
 
 	return cl
 }
