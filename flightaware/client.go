@@ -111,9 +111,15 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 	if cl.Verbose {
 		log.Printf("Using username %s", rc.DefUser)
 		log.Printf("Using %s as prefix.", authStr)
+		log.Printf("Adding input filters: %s\n", setInputFilters(cl.InputFilters))
 	}
+
 	conf := fmt.Sprintf(FA_AUTHSTR, authStr,
 		rc.Users[rc.DefUser].User, rc.Users[rc.DefUser].Password, cl.EventType)
+
+	// Add input filter if any
+	conf = conf + setInputFilters(cl.InputFilters)
+
 	_, err := conn.Write([]byte(conf))
 	if err != nil {
 		log.Println("Error configuring feed", err.Error())
