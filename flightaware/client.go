@@ -57,7 +57,6 @@ import (
 
 const (
 	FA_AUTHSTR = "%s username %s password %s events \"%s\"\n"
-	FA_VERSION = "version 4.0"
 )
 
 type FAClient struct {
@@ -89,7 +88,7 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 	rc := cl.Host
 	switch cl.FeedType {
 		case "live":
-			authStr = fmt.Sprintf("%s %s", cl.FeedType, FA_VERSION)
+			authStr = fmt.Sprintf("%s", cl.FeedType)
 			if cl.Verbose {
 				log.Println("Live traffic feed")
 			}
@@ -249,6 +248,7 @@ func (client *FAClient) SetFeed(feedType string, RangeT []time.Time) error {
 	return nil
 }
 
+// Specify the Airline filter
 // This is the main function here:
 // - starts the consumer in the background
 // - reads data from FA and send it to the consumer
