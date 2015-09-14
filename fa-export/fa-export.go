@@ -211,6 +211,12 @@ func main() {
 		}
 	}
 
+	// Check the various possible input filters
+	client.AddInputFilter(fmt.Sprintf("filter \"%s\"", fAirlineFilter))
+	client.AddInputFilter(fmt.Sprintf("idents \"%s\"", fIdentFilter))
+	client.AddInputFilter(fmt.Sprintf("airport_filter \"%s\"", fAirportFilter))
+	client.AddInputFilter(fmt.Sprintf("latlong \"%s\"", fLatLongFilter))
+
 	// Ensure the correct EventType is set
 	client.SetEvents(fEventType)
 
