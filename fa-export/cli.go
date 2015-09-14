@@ -27,7 +27,7 @@ var (
 	fFeedEnd     string
 	fUserName    string
 	fDest        string
-	fAFilter     string
+	fAirlineFilter string
 	fIdentFilter string
 	fLatLongFilter string
 	fAirportFilter string
@@ -62,7 +62,7 @@ func init() {
 	flag.StringVar(&fFeedBegin, "B", "", "Begin time for -f pitr|range")
 	flag.StringVar(&fDest, "D", "", "Default destination (NOT IMPL)")
 	flag.StringVar(&fFeedEnd, "E", "", "End time for -f range")
-	flag.StringVar(&fAFilter, "F", "", "Airline filter")
+	flag.StringVar(&fAirlineFilter, "F", "", "Airline filter")
 	flag.StringVar(&fIdentFilter, "I", "", "Aircraft Ident filter")
 	flag.StringVar(&fLatLongFilter, "L", "", "Lat/Long filter")
 	flag.StringVar(&fAirportFilter, "P", "", "Airport filter")
