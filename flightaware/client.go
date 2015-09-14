@@ -57,39 +57,10 @@ import (
 
 const (
 	FA_AUTHSTR = "%s username %s password %s %s\n"
-	FILTER_EVENT = iota
-	FILTER_AIRLINE
-	FILTER_IDENT
-	FILTER_LATLONG
-	FILTER_AIRPORT
 )
-
-var (
-	filterTypes = map[int]string{
-		FILTER_EVENT:   "events \"%s\"",
-		FILTER_AIRLINE: "filter \"%s\"",
-		FILTER_IDENT:   "idents \"%s\"",
-		FILTER_LATLONG: "latlong \"%s\"",
-		FILTER_AIRPORT: "airport_filter \"%s\"",
-	}
-)
-
-type FAClient struct {
-	Started  bool
-	Host     config.Config
-	Bytes    int64
-	Pkts     int32
-	Conn     *tls.Conn
-	Feed_one func([]byte)
-	Filter   func([]byte) bool
-	InputFilters []string
-	Verbose  bool
-	FeedType string
-	// For range event type
-	RangeT   []int64
-}
 
 // Private functions
+
 // Default callback
 func defaultFeed(buf []byte) { fmt.Println(string(buf)) }
 
@@ -140,28 +111,6 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 		return err
 	}
 	return nil
-}
-
-// Generate the proper argument for a given filter
-func generateFilter(fType int, str string) string {
-	return fmt.Sprintf(filterTypes[fType], str)
-}
-
-// Add an input filter to the list
-func (cl *FAClient) AddInputFilter (fType int, str string) {
-	if str != "" {
-		cl.InputFilters = append(cl.InputFilters, generateFilter(fType, str))
-	}
-}
-
-// Generate the filter list for FA
-func setInputFilters (inputFilters []string) string {
-	result := ""
-
-	for _, str := range inputFilters {
-		result = result + " " + str
-	}
-	return result
 }
 
 // consumer part of the FA client
