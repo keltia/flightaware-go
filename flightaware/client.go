@@ -122,6 +122,23 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 	return nil
 }
 
+// Add an input filter to the list
+func (cl *FAClient) AddInputFilter (str string) {
+	if str != "" {
+		append(cl.InputFilters, str)
+	}
+}
+
+// Generate the filter list for FA
+func setInputFilters (inputFilters []string) {
+	result := " "
+
+	for _, str := range inputFilters {
+		result = result + " " + str
+	}
+	return result
+}
+
 // consumer part of the FA client
 func (cl *FAClient) startWriter() (chan []byte, error) {
 	if cl.Verbose {
