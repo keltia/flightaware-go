@@ -38,7 +38,7 @@ const (
 	cliUsage = `
 Usage: %s [-o FILE] [-d N(s|mn|h|d)][-f live|pitr|range [-B date [-E date]] [-v] [-u user]
 
-       Filters:
+       Filters (OR is implied if multiple):
           [-e type] [-F airline] [-I plane-ident] [-L lat/lon] [-P airport-glob]
 `
 )
