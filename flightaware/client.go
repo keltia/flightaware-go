@@ -136,7 +136,7 @@ func (cl *FAClient) AddInputFilter (str string) {
 }
 
 // Generate the filter list for FA
-func setInputFilters (inputFilters []string) {
+func setInputFilters (inputFilters []string) string {
 	result := " "
 
 	for _, str := range inputFilters {
