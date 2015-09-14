@@ -212,11 +212,11 @@ func main() {
 	}
 
 	// Check the various possible input filters
-	client.AddInputFilter(fmt.Sprintf("events \"%s\"", fEventType))
-	client.AddInputFilter(fmt.Sprintf("filter \"%s\"", fAirlineFilter))
-	client.AddInputFilter(fmt.Sprintf("idents \"%s\"", fIdentFilter))
-	client.AddInputFilter(fmt.Sprintf("airport_filter \"%s\"", fAirportFilter))
-	client.AddInputFilter(fmt.Sprintf("latlong \"%s\"", fLatLongFilter))
+	client.AddInputFilter(flightaware.FILTER_EVENT, fEventType)
+	client.AddInputFilter(flightaware.FILTER_AIRLINE, fAirlineFilter)
+	client.AddInputFilter(flightaware.FILTER_IDENT, fIdentFilter)
+	client.AddInputFilter(flightaware.FILTER_AIRPORT, fAirportFilter)
+	client.AddInputFilter(flightaware.FILTER_LATLONG, fLatLongFilter)
 
 	// Check if we did specify a timeout with -i
 	if fsTimeout != "" {
