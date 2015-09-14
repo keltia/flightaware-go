@@ -54,7 +54,7 @@ var Usage = func() {
 func init() {
 	// cli
 	flag.StringVar(&fsTimeout, "d", "", "Stop after N s/mn/h/days")
-	flag.StringVar(&fEventType, "e", "position", "Events to stream")
+	flag.StringVar(&fEventType, "e", "", "Events to stream")
 	flag.StringVar(&fFeedType, "f", "live", "Specify which feed we want")
 	flag.StringVar(&fOutput, "o", "", "Specify output FILE.")
 	flag.StringVar(&fUserName, "u", "", "Username to connect with")
