@@ -36,6 +36,7 @@ var (
 // my usage string
 const (
 	cliUsage = `
+%s version %s
 Usage: %s [-o FILE] [-d N(s|mn|h|d)][-f live|pitr|range [-B date [-E date]] [-v] [-u user]
 
        Filters (OR is implied if multiple):
@@ -45,7 +46,7 @@ Usage: %s [-o FILE] [-d N(s|mn|h|d)][-f live|pitr|range [-B date [-E date]] [-v]
 
 // Redefine Usage
 var Usage = func() {
-	fmt.Fprintf(os.Stderr, cliUsage, os.Args[0])
+	fmt.Fprintf(os.Stderr, cliUsage, , os.Args[0], FA_VERSION, os.Args[0])
 	flag.PrintDefaults()
 }
 
