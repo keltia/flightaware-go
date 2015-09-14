@@ -131,7 +131,7 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 // Add an input filter to the list
 func (cl *FAClient) AddInputFilter (str string) {
 	if str != "" {
-		append(cl.InputFilters, str)
+		cl.InputFilters = append(cl.InputFilters, str)
 	}
 }
 
