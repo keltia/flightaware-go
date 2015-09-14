@@ -248,7 +248,6 @@ func (client *FAClient) SetFeed(feedType string, RangeT []time.Time) error {
 	return nil
 }
 
-// Specify the Airline filter
 // This is the main function here:
 // - starts the consumer in the background
 // - reads data from FA and send it to the consumer
