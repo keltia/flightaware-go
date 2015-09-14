@@ -57,6 +57,21 @@ import (
 
 const (
 	FA_AUTHSTR = "%s username %s password %s %s\n"
+	FILTER_EVENT = iota
+	FILTER_AIRLINE
+	FILTER_IDENT
+	FILTER_LATLONG
+	FILTER_AIRPORT
+)
+
+var (
+	filterTypes = map[int]string{
+		FILTER_EVENT:   "events \"%s\"",
+		FILTER_AIRLINE: "filter \"%s\"",
+		FILTER_IDENT:   "idents \"%s\"",
+		FILTER_LATLONG: "latlong \"%s\"",
+		FILTER_AIRPORT: "airport_filter \"%s\"",
+	}
 )
 
 type FAClient struct {
@@ -125,6 +140,11 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 		return err
 	}
 	return nil
+}
+
+// Generate the proper argument for a given filter
+func generateFilter(fType int, str string) string {
+	return fmt.Sprintf(filterTypes[fType], str)
 }
 
 // Add an input filter to the list
