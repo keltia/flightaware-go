@@ -19,6 +19,7 @@ import (
 	"os"
 	"os/signal"
 	"time"
+	"runtime/pprof"
 )
 
 var (
@@ -40,6 +41,12 @@ func fileOutput(buf []byte) {
 // Proper shutdown
 func stopEverything() {
 	if client.Started {
+		if fPProf {
+			if fVerbose {
+			log.Printf("Stopping profiling…")
+			}
+			pprof.StopCPUProfile()
+		}
 		if fVerbose {
 			log.Printf("FA client stopped:")
 			log.Printf("  %d pkts %d bytes", client.Pkts, client.Bytes)
@@ -136,6 +143,14 @@ func main() {
 	}()
 
 	flag.Parse()
+
+	if fPProf {
+		pp, err := os.Create("/tmp/fa-export.prof")
+		if err != nil {
+			log.Fatalf("Can't create profiling file: %v\n", err)
+		}
+		pprof.StartCPUProfile(pp)
+	}
 
 	c, err := config.LoadConfig(RcFile)
 	if err != nil {
