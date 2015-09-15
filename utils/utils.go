@@ -13,9 +13,9 @@ package utils
 import (
 	"errors"
 	"fmt"
-	"time"
-	"strconv"
 	"regexp"
+	"strconv"
+	"time"
 )
 
 const (
@@ -34,8 +34,7 @@ var (
 )
 
 type Rotation struct {
-	Type	int
-
+	Type int
 }
 
 // Check the format for the logs to be rotated
@@ -46,12 +45,12 @@ func AnalyzeFormat(sFmt string) (Rotation, error) {
 	}
 
 	switch format[1] {
-		case 'h':
-			return Rotation{RT_HOUR}, nil
-		case 'd':
-			return Rotation{RT_DAY}, nil
-		default:
-			return Rotation{}, errors.New(fmt.Sprintf("Unknown modifier %s\n", string(format[1])))
+	case 'h':
+		return Rotation{RT_HOUR}, nil
+	case 'd':
+		return Rotation{RT_DAY}, nil
+	default:
+		return Rotation{}, errors.New(fmt.Sprintf("Unknown modifier %s\n", string(format[1])))
 	}
 }
 

@@ -2,7 +2,7 @@
 
 /*
   This file implements the various filter-related functions.
- */
+*/
 package flightaware
 
 import (
@@ -35,7 +35,7 @@ func generateFilter(fType int, str string) string {
 }
 
 // Generate the filter list for FA
-func setInputFilters (inputFilters []string) string {
+func setInputFilters(inputFilters []string) string {
 	result := ""
 
 	for _, str := range inputFilters {
@@ -47,7 +47,7 @@ func setInputFilters (inputFilters []string) string {
 // Public functions
 
 // Add an input filter to the list
-func (cl *FAClient) AddInputFilter (fType int, str string) {
+func (cl *FAClient) AddInputFilter(fType int, str string) {
 	if str != "" {
 		cl.InputFilters = append(cl.InputFilters, generateFilter(fType, str))
 	}

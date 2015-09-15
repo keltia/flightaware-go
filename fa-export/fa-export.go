@@ -6,19 +6,19 @@
 
 /*
  Package main implements the fa-export client.
- */
+*/
 package main
 
 import (
+	"../config"
+	"../flightaware"
+	"../utils"
 	"flag"
 	"fmt"
 	"log"
 	"os"
 	"os/signal"
 	"time"
-	"../config"
-	"../flightaware"
-	"../utils"
 )
 
 var (
@@ -26,7 +26,7 @@ var (
 	client    *flightaware.FAClient
 	fOutputFH *os.File
 
-	RangeT       []time.Time
+	RangeT []time.Time
 )
 
 // fOutput callback

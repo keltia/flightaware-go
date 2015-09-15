@@ -2,15 +2,15 @@
 
 /*
  This file contains the authentication & connection functions
- */
+*/
 package flightaware
 
 import (
+	"../config"
 	"crypto/tls"
 	"fmt"
 	"log"
 	"time"
-	"../config"
 )
 
 const (
@@ -23,24 +23,24 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 
 	rc := cl.Host
 	switch cl.FeedType {
-		case "live":
-			authStr = fmt.Sprintf("%s", cl.FeedType)
-			if cl.Verbose {
-				log.Println("Live traffic feed")
-			}
-		case "pitr":
-			authStr = fmt.Sprintf("%s %d", cl.FeedType, cl.RangeT[0])
-			if cl.Verbose {
-				log.Printf("Live traffic replay starting at %v",
-					time.Unix(cl.RangeT[0], 0))
-			}
-		case "range":
-			authStr = fmt.Sprintf("%s %d %d", cl.FeedType, cl.RangeT[0], cl.RangeT[1])
-			if cl.Verbose {
-				log.Printf("Replay traffic from %v to %v\n",
-					time.Unix(cl.RangeT[0], 0),
-					time.Unix(cl.RangeT[1], 0))
-			}
+	case "live":
+		authStr = fmt.Sprintf("%s", cl.FeedType)
+		if cl.Verbose {
+			log.Println("Live traffic feed")
+		}
+	case "pitr":
+		authStr = fmt.Sprintf("%s %d", cl.FeedType, cl.RangeT[0])
+		if cl.Verbose {
+			log.Printf("Live traffic replay starting at %v",
+				time.Unix(cl.RangeT[0], 0))
+		}
+	case "range":
+		authStr = fmt.Sprintf("%s %d %d", cl.FeedType, cl.RangeT[0], cl.RangeT[1])
+		if cl.Verbose {
+			log.Printf("Replay traffic from %v to %v\n",
+				time.Unix(cl.RangeT[0], 0),
+				time.Unix(cl.RangeT[1], 0))
+		}
 	}
 
 	if cl.Verbose {

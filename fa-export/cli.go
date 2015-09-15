@@ -16,19 +16,19 @@ import (
 
 var (
 	// cli
-	fVerbose     bool
-	fOutput      string
-	fEventType   string
-	fFeedType    string
-	fTimeout     int64
-	fsTimeout    string
-	fAutoRotate  bool
-	fFeedBegin   string
-	fFeedEnd     string
-	fUserName    string
-	fDest        string
+	fVerbose       bool
+	fOutput        string
+	fEventType     string
+	fFeedType      string
+	fTimeout       int64
+	fsTimeout      string
+	fAutoRotate    bool
+	fFeedBegin     string
+	fFeedEnd       string
+	fUserName      string
+	fDest          string
 	fAirlineFilter string
-	fIdentFilter string
+	fIdentFilter   string
 	fLatLongFilter string
 	fAirportFilter string
 )

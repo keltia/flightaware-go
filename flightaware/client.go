@@ -50,17 +50,17 @@
  	client.Close()
 
  to properly close the reading channel.
- */
+*/
 package flightaware
 
 import (
 	"../config"
 	"bufio"
+	"errors"
 	"fmt"
 	"log"
 	"os"
 	"time"
-	"errors"
 )
 
 // Private functions
