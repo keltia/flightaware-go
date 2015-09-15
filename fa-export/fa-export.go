@@ -6,21 +6,19 @@
 
 /*
  Package main implements the fa-export client.
- */
+*/
 package main
 
 import (
+	"../config"
+	"../flightaware"
+	"../utils"
 	"flag"
 	"fmt"
 	"log"
 	"os"
 	"os/signal"
-	"regexp"
-	"strconv"
 	"time"
-	"../config"
-	"../flightaware"
-	"../utils"
 )
 
 var (
@@ -28,13 +26,7 @@ var (
 	client    *flightaware.FAClient
 	fOutputFH *os.File
 
-	timeMods = map[string]int64{
-		"mn": 60,
-		"h":  3600,
-		"d":  3600 * 24,
-	}
-
-	RangeT       []time.Time
+	RangeT []time.Time
 )
 
 // fOutput callback
@@ -58,35 +50,6 @@ func stopEverything() {
 		}
 	}
 	os.Exit(0)
-}
-
-// Check for specific modifiers, returns seconds
-//
-//XXX could use time.ParseDuration except it does not support days.
-func checkTimeout(value string) int64 {
-	mod := int64(1)
-	re := regexp.MustCompile(`(?P<time>\d+)(?P<mod>(s|mn|h|d)*)`)
-	match := re.FindStringSubmatch(value)
-	if match == nil {
-		return 0
-	} else {
-		// Get the base time
-		time, err := strconv.ParseInt(match[1], 10, 64)
-		if err != nil {
-			return 0
-		}
-
-		// Look for meaningful modifier
-		if match[2] != "" {
-			mod = timeMods[match[2]]
-			if mod == 0 {
-				mod = 1
-			}
-		}
-
-		// At the worst, mod == 1.
-		return time * mod
-	}
 }
 
 // Check various parameters
@@ -220,7 +183,7 @@ func main() {
 
 	// Check if we did specify a timeout with -i
 	if fsTimeout != "" {
-		fTimeout = checkTimeout(fsTimeout)
+		fTimeout = utils.CheckTimeout(fsTimeout)
 
 		if fVerbose {
 			log.Printf("Run for %ds\n", fTimeout)

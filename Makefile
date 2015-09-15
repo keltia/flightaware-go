@@ -6,7 +6,7 @@ VPATH=	fa-export:fa-tail:flightaware:config:utils
 DEST=	bin
 GOBIN=	${GOPATH}/bin
 
-SRCS=	config.go client.go fa-export.go utils.go cli.go version.go
+SRCS=	config.go client.go fa-export.go utils.go cli.go version.go filters.go types.go
 
 all:	${DEST}/fa-export
 
@@ -21,6 +21,9 @@ ${DEST}/fa-export:    ${SRCS}
 	go build -v -o $@ fa-export/fa-export.go fa-export/cli.go fa-export/version.go
 
 push:
-	git push --all
 	git push --all origin
 	git push --all backup
+	git push --all gitlab
+	git push --tags origin
+	git push --tags backup
+	git push --tags gitlab

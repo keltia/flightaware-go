@@ -2,10 +2,10 @@
 
 # Status
 
-*stable*
-[![Build Status](https://secure.travis-ci.org/keltia/flightaware-go.png)](http://travis-ci.org/keltia/flightaware-go)
+Branch: develop — [![develop|Build Status](https://travis-ci.org/keltia/flightaware-go.svg?branch=develop)](http://travis-ci.org/keltia/flightaware-go/tree/develop)
 
-Quick conversion of a barebone Flightaware client from Ruby to Go.
+Branch: master — [![master|Build Status](https://travis-ci.org/keltia/flightaware-go.svg?branch=master)](http://travis-ci.org/keltia/flightaware-go)
 
-Requires a config.toml configuration file in $HOME/.flightaware/.
+[Flightaware](http://www.flightaware.com/) client in Go.  It just exports the streaming data into JSON, using the FA API.
 
+Requires a `config.toml` configuration file in `$HOME/.flightaware/`.  There is an example located in the `config` subdirectory.

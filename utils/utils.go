@@ -13,6 +13,8 @@ package utils
 import (
 	"errors"
 	"fmt"
+	"regexp"
+	"strconv"
 	"time"
 )
 
@@ -23,9 +25,16 @@ const (
 	TIMEFMT = "2006-01-02 15:04:05"
 )
 
-type Rotation struct {
-	Type	int
+var (
+	timeMods = map[string]int64{
+		"mn": 60,
+		"h":  3600,
+		"d":  3600 * 24,
+	}
+)
 
+type Rotation struct {
+	Type int
 }
 
 // Check the format for the logs to be rotated
@@ -36,12 +45,12 @@ func AnalyzeFormat(sFmt string) (Rotation, error) {
 	}
 
 	switch format[1] {
-		case 'h':
-			return Rotation{RT_HOUR}, nil
-		case 'd':
-			return Rotation{RT_DAY}, nil
-		default:
-			return Rotation{}, errors.New(fmt.Sprintf("Unknown modifier %s\n", string(format[1])))
+	case 'h':
+		return Rotation{RT_HOUR}, nil
+	case 'd':
+		return Rotation{RT_DAY}, nil
+	default:
+		return Rotation{}, errors.New(fmt.Sprintf("Unknown modifier %s\n", string(format[1])))
 	}
 }
 
@@ -52,4 +61,33 @@ func ParseDate(date string) (time.Time, error) {
 		return time.Time{}, err
 	}
 	return tDate, nil
+}
+
+// Check for specific modifiers, returns seconds
+//
+//XXX could use time.ParseDuration except it does not support days.
+func CheckTimeout(value string) int64 {
+	mod := int64(1)
+	re := regexp.MustCompile(`(?P<time>\d+)(?P<mod>(s|mn|h|d)*)`)
+	match := re.FindStringSubmatch(value)
+	if match == nil {
+		return 0
+	} else {
+		// Get the base time
+		time, err := strconv.ParseInt(match[1], 10, 64)
+		if err != nil {
+			return 0
+		}
+
+		// Look for meaningful modifier
+		if match[2] != "" {
+			mod = timeMods[match[2]]
+			if mod == 0 {
+				mod = 1
+			}
+		}
+
+		// At the worst, mod == 1.
+		return time * mod
+	}
 }

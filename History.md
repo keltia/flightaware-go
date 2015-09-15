@@ -1,18 +1,25 @@
-
-1.0.0 / 2015-09-01
+1.3.0 / 2015-09-14
 ==================
 
-  * Merge branch 'feature/multiple-events' into develop
+  * Merge branch 'release/v1_3' into develop
+  * Support all filters as of Flightaware documentation
+
+1.2.0 / 2015-09-11
+==================
+
+  * fa-tail has been moved into its own repo
+  * Travis-CI support
+
+1.1.0 / 2015-09-01
+==================
+
+  * Add support for "flightplan" in addition to "position" events
   * Update documentation.
-  * When allowing multiple events with -e, let FA check value.
-  * Merge branch 'feature/add-flighplan' into develop
-  * Add documentation for the -e / SetEvents() feature.
-  * Insert the event type in the right place.
-  * Use SetEvents().
-  * Add function SetEvents to FAClient interface.
-  * Add EventType.
-  * Check -e value.
-  * Allow specifying event type with -e, default is position.
-  * Revert "Allow specifying event type, default is position."
-  * Allow specifying event type, default is position.
-  * Merge branch 'release/v1_0' into develop
+
+1.0.0 / 2015-08-25
+==================
+
+  * Working version
+  * TOML as configuration file format instead of YAML
+  * Added fa-tail to see where we are in big files
+  * Seek() to near end of file to speed fa-tail up
