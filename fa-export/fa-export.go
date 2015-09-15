@@ -44,9 +44,12 @@ func fileOutput(buf []byte) {
 func stopEverything() {
 	if client.Started {
 		if fPProf {
-			if fVerbose {
 			log.Printf("Stopping profiling…")
-			}
+			log.Printf(`
+Profiling mode was enabled.
+Please use go tool pprof %s %s to read profiling data`,
+			flag.Arg(0),
+			PPROF_PATH)
 			pprof.StopCPUProfile()
 		}
 		if fVerbose {
