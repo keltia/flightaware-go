@@ -27,7 +27,7 @@
      FILTER_AIRLINE
      FILTER_IDENT
      FILTER_AIRPORT
-     FILER_LATLONG
+     FILTER_LATLONG
 
  The filters you specify will be checked remotely by FlightAware according to the
  documentation available at
