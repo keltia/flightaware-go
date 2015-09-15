@@ -19,7 +19,10 @@ import (
 	"os"
 	"os/signal"
 	"time"
+	"runtime/pprof"
 )
+
+const PPROF_PATH = "/tmp/fa-export.prof"
 
 var (
 	RcFile    = "flightaware"
@@ -40,6 +43,15 @@ func fileOutput(buf []byte) {
 // Proper shutdown
 func stopEverything() {
 	if client.Started {
+		if fPProf {
+			log.Printf("Stopping profiling…")
+			log.Printf(`
+Profiling mode was enabled.
+Please use go tool pprof %s %s to read profiling data`,
+			flag.Arg(0),
+			PPROF_PATH)
+			pprof.StopCPUProfile()
+		}
 		if fVerbose {
 			log.Printf("FA client stopped:")
 			log.Printf("  %d pkts %d bytes", client.Pkts, client.Bytes)
@@ -136,6 +148,14 @@ func main() {
 	}()
 
 	flag.Parse()
+
+	if fPProf {
+		pp, err := os.Create(PPROF_PATH)
+		if err != nil {
+			log.Fatalf("Can't create profiling file: %v\n", err)
+		}
+		pprof.StartCPUProfile(pp)
+	}
 
 	c, err := config.LoadConfig(RcFile)
 	if err != nil {

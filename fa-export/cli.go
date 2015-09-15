@@ -31,6 +31,7 @@ var (
 	fIdentFilter   string
 	fLatLongFilter string
 	fAirportFilter string
+	fPProf         bool
 )
 
 // my usage string
@@ -57,6 +58,7 @@ func init() {
 	flag.StringVar(&fEventType, "e", "", "Events to stream")
 	flag.StringVar(&fFeedType, "f", "live", "Specify which feed we want")
 	flag.StringVar(&fOutput, "o", "", "Specify output FILE.")
+	flag.BoolVar(&fPProf, "p", false, "Enable profiling")
 	flag.StringVar(&fUserName, "u", "", "Username to connect with")
 	flag.BoolVar(&fVerbose, "v", false, "Set verbose flag.")
 	flag.BoolVar(&fAutoRotate, "A", false, "Autorotate output file")
