@@ -22,6 +22,8 @@ import (
 	"runtime/pprof"
 )
 
+const PPROF_PATH = "/tmp/fa-export.prof"
+
 var (
 	RcFile    = "flightaware"
 	client    *flightaware.FAClient
@@ -145,7 +147,7 @@ func main() {
 	flag.Parse()
 
 	if fPProf {
-		pp, err := os.Create("/tmp/fa-export.prof")
+		pp, err := os.Create(PPROF_PATH)
 		if err != nil {
 			log.Fatalf("Can't create profiling file: %v\n", err)
 		}
