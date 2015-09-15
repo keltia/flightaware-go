@@ -2,8 +2,11 @@
 
 # Status
 
-*stable*
-[![Build Status](https://secure.travis-ci.org/keltia/flightaware-go.png)](http://travis-ci.org/keltia/flightaware-go)
+*develop*
+[![Build Status](https://travis-ci.org/keltia/flightaware-go.svg?branch=develop)](http://travis-ci.org/keltia/flightaware-go/tree/develop)
+
+*master*
+[![Build Status](https://travis-ci.org/keltia/flightaware-go.svg?branch=master)](http://travis-ci.org/keltia/flightaware-go)
 
 Quick conversion of a barebone Flightaware client from Ruby to Go.
 
