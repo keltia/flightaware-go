@@ -17,12 +17,21 @@
 
  	client.SetTimeout(int64)
 
- You can ask for different events:
+ You can add one or more different input filters:
 
-    client.SetEvents(string)
+    client.AddInputFilter(<type>, <value>)
 
- The string you specify with -e will be checked remotely by FlightAware according to the
- documentation available at https://fr.flightaware.com/commercial/firehose/firehose_documentation.rvt
+ where type can be one of
+
+     FILTER_EVENT
+     FILTER_AIRLINE
+     FILTER_IDENT
+     FILTER_AIRPORT
+     FILER_LATLONG
+
+ The filters you specify will be checked remotely by FlightAware according to the
+ documentation available at
+ https://fr.flightaware.com/commercial/firehose/firehose_documentation.rvt
 
  The default handler is to display all packets.  You can change the default handler
  with
