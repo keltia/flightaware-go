@@ -25,6 +25,7 @@ var (
 	fAutoRotate    bool
 	fFeedBegin     string
 	fFeedEnd       string
+	fOverwrite     bool
 	fUserName      string
 	fDest          string
 	fAirlineFilter string
@@ -58,6 +59,7 @@ func init() {
 	flag.StringVar(&fEventType, "e", "", "Events to stream")
 	flag.StringVar(&fFeedType, "f", "live", "Specify which feed we want")
 	flag.StringVar(&fOutput, "o", "", "Specify output FILE.")
+	flag.BoolVar(&fOverwrite, "O", false, "Overwrite existing file?")
 	flag.BoolVar(&fPProf, "p", false, "Enable profiling")
 	flag.StringVar(&fUserName, "u", "", "Username to connect with")
 	flag.BoolVar(&fVerbose, "v", false, "Set verbose flag.")
