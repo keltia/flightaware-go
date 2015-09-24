@@ -182,7 +182,7 @@ func main() {
 		// XXX FIXME Handle fAutoRotate
 	} else {
 		if fAutoRotate {
-			log.Println("Warning: -A needs -O to work, ignoring")
+			log.Println("Warning: -A needs -o to work, ignoring")
 			fAutoRotate = false
 		}
 	}
