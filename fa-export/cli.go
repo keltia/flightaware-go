@@ -33,13 +33,14 @@ var (
 	fLatLongFilter string
 	fAirportFilter string
 	fPProf         bool
+	fSplitOutput   bool
 )
 
 // my usage string
 const (
 	cliUsage = `
 %s version %s
-Usage: %s [-o FILE] [-d N(s|mn|h|d)][-f live|pitr|range [-B date [-E date]] [-v] [-u user]
+Usage: %s [-S] [-o FILE] [-d N(s|mn|h|d)][-f live|pitr|range [-B date [-E date]] [-v] [-u user]
 
        Filters (OR is implied if multiple):
           [-e type] [-F airline] [-I plane-ident] [-L lat/lon] [-P airport-glob]
@@ -71,4 +72,5 @@ func init() {
 	flag.StringVar(&fIdentFilter, "I", "", "Aircraft Ident filter")
 	flag.StringVar(&fLatLongFilter, "L", "", "Lat/Long filter")
 	flag.StringVar(&fAirportFilter, "P", "", "Airport filter")
+	flag.BoolVar(&fSplitOutput, "S", false, "Split output when needed")
 }
