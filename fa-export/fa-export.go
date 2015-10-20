@@ -13,6 +13,7 @@ import (
 	"../config"
 	"../flightaware"
 	"../utils"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
@@ -30,6 +31,16 @@ var (
 	fOutputFH *os.File
 
 	RangeT []time.Time
+
+	// easier than to find the "index" of a given string
+	events = map[string]int{
+		"all":          0,
+	    "flightplan":   1,
+		"position":     2,
+		"departure":    3,
+        "arrival":      4,
+        "cancellation": 5,
+	}
 )
 
 // fOutput callback
@@ -37,6 +48,29 @@ func fileOutput(buf []byte) {
 	nb, err := fmt.Fprintln(fOutputFH, string(buf))
 	if err != nil {
 		log.Fatalf("Error writing %d bytes: %v", nb, err)
+	}
+}
+
+// fOutput callback for multiple files
+//
+// Bugs:
+// XXX Only JSON is supported
+func multipleFileOutput(buf []byte) {
+	var r flightaware.FArecord
+
+	if err := json.Unmarshal(buf, &r); err != nil {
+		log.Printf("Error: can not decode %v: %v", buf, err)
+	}
+
+	// shortcut
+	indexEvent := events[r.Type]
+
+	// Dispatch data
+	if OutputFH[indexEvent] != nil {
+		nb, err := fmt.Fprintln(OutputFH[indexEvent], string(buf))
+		if err != nil {
+			log.Fatalf("Error writing %d bytes: %v", nb, err)
+		}
 	}
 }
 
