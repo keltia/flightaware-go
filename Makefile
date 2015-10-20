@@ -6,19 +6,20 @@ VPATH=	fa-export:flightaware:config:utils
 DEST=	bin
 GOBIN=	${GOPATH}/bin
 
-SRCS=	config.go client.go fa-export.go utils.go cli.go version.go filters.go types.go
+SRCS=	config.go client.go fa-export.go utils.go cli.go version.go filters.go types.go \
+		output.go
 
 all:	${DEST}/fa-export
 
 install:
-	go install fa-export/fa-export.go fa-export/cli.go fa-export/version.go
+	go install fa-export/fa-export.go fa-export/cli.go fa-export/version.go fa-export/output.go
 
 clean:
 	go clean -v
 	rm -f ${DEST}/fa-export
 
 ${DEST}/fa-export:    ${SRCS}
-	go build -v -o $@ fa-export/fa-export.go fa-export/cli.go fa-export/version.go
+	go build -v -o $@ fa-export/fa-export.go fa-export/cli.go fa-export/version.go fa-export/output.go
 
 push:
 	git push --all origin
