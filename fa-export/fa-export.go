@@ -23,12 +23,20 @@ import (
 	"runtime/pprof"
 )
 
-const PPROF_PATH = "/tmp/fa-export.prof"
+const (
+	PPROF_PATH = "/tmp/fa-export.prof"
+    OPEN_SINGLE   = iota
+    OPEN_MULTIPLE
+)
+
+// Array of IO handles pointers
+type MultipleOutput []*os.File
 
 var (
 	RcFile    = "flightaware"
 	client    *flightaware.FAClient
-	fOutputFH *os.File
+	// single & multiple file output. If single, only [0] is used
+	OutputFH  *MultipleOutput
 
 	RangeT []time.Time
 
@@ -45,7 +53,7 @@ var (
 
 // fOutput callback
 func fileOutput(buf []byte) {
-	nb, err := fmt.Fprintln(fOutputFH, string(buf))
+	nb, err := fmt.Fprintln(OutputFH[0], string(buf))
 	if err != nil {
 		log.Fatalf("Error writing %d bytes: %v", nb, err)
 	}
