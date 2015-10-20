@@ -25,3 +25,9 @@ type FAClient struct {
 	// For range event type
 	RangeT []int64
 }
+
+// Generic type that will allow to partially decode only what I need
+type FArecord struct {
+	Type		string
+	Data		interface{}
+}
