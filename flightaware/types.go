@@ -10,6 +10,7 @@ import (
 	"crypto/tls"
 )
 
+// Our main struct to move state around
 type FAClient struct {
 	Started      bool
 	Host         config.Config
