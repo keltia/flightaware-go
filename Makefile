@@ -2,7 +2,7 @@
 #
 # XXX Need to be cleaned up at some point
 
-VPATH=	fa-export:fa-tail:flightaware:config:utils
+VPATH=	fa-export:flightaware:config:utils
 DEST=	bin
 GOBIN=	${GOPATH}/bin
 
