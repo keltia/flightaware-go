@@ -32,6 +32,7 @@ var (
 	fIdentFilter   string
 	fLatLongFilter string
 	fAirportFilter string
+	fHexid         string
 	fPProf         bool
 )
 
@@ -43,6 +44,8 @@ Usage: %s [-o FILE] [-d N(s|mn|h|d)][-f live|pitr|range [-B date [-E date]] [-v]
 
        Filters (OR is implied if multiple):
           [-e type] [-F airline] [-I plane-ident] [-L lat/lon] [-P airport-glob]
+       Output filter (not on theFA command line)
+          [-X hexid]
 `
 )
 
@@ -71,4 +74,5 @@ func init() {
 	flag.StringVar(&fIdentFilter, "I", "", "Aircraft Ident filter")
 	flag.StringVar(&fLatLongFilter, "L", "", "Lat/Long filter")
 	flag.StringVar(&fAirportFilter, "P", "", "Airport filter")
+	flag.StringVar(&fHexid, "X", "", "Hexid output filter")
 }
