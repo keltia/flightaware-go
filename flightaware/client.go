@@ -70,7 +70,17 @@ import (
 func defaultFeed(buf []byte) { fmt.Println(string(buf)) }
 
 // Default filter
-func defaultFilter(buf []byte) bool { return true }
+func defaultFilter(cl *FAClient, buf []byte) bool {
+	if len(cl.OutputFilters) != 0 {
+		for _, flt := range cl.OutputFilters {
+			// First match so behaviour is OR
+			if flt.Match(buf) {
+				return true
+			}
+		}
+	}
+	return true
+}
 
 // consumer part of the FA client
 func (cl *FAClient) startWriter() (chan []byte, error) {
@@ -90,7 +100,7 @@ func (cl *FAClient) startWriter() (chan []byte, error) {
 			}
 
 			// Insert filter call
-			if ok = (cl.Filter)(buf); ok {
+			if ok = (cl.Filter)(cl, buf); ok {
 				(cl.Feed_one)(buf)
 			}
 
