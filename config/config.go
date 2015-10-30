@@ -6,14 +6,16 @@
 /*
  Package implement my homemade configuration class
 
- Looks into a YAML file for configuration options and returns a config.Config
+ Looks into a TOML file for configuration options and returns a config.Config
  struct.
 
  	import "config"
 
- 	rc := config.LoadConfig("foo.yml")
+ 	rc := config.LoadConfig("foo.toml")
 
- rc will be serialized from YAML.
+ rc will be serialized from TOML.
+
+ TOML: https://github.com/naoina/toml
  */
 package config
 

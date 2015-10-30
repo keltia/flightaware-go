@@ -19,7 +19,10 @@ import (
 	"os"
 	"os/signal"
 	"time"
+	"runtime/pprof"
 )
+
+const PPROF_PATH = "/tmp/fa-export.prof"
 
 var (
 	RcFile    = "flightaware"
@@ -40,6 +43,15 @@ func fileOutput(buf []byte) {
 // Proper shutdown
 func stopEverything() {
 	if client.Started {
+		if fPProf {
+			log.Printf("Stopping profiling…")
+			log.Printf(`
+Profiling mode was enabled.
+Please use go tool pprof %s %s to read profiling data`,
+			flag.Arg(0),
+			PPROF_PATH)
+			pprof.StopCPUProfile()
+		}
 		if fVerbose {
 			log.Printf("FA client stopped:")
 			log.Printf("  %d pkts %d bytes", client.Pkts, client.Bytes)
@@ -75,6 +87,14 @@ func checkCommandLine() {
 	if fFeedType == "range" && (fFeedBegin == "" || fFeedEnd == "") {
 		log.Printf("Error: you MUST use both -B & -E to specify times with -f range\n")
 		os.Exit(1)
+	}
+
+	// Check for output filter
+
+	// Transform the value if present
+	if fHexid != "" {
+		hexid := fmt.Sprintf("hexid: \"%s\"", fHexid)
+		client.AddOutputFilter(hexid)
 	}
 
 	// Replace defaults by anything on the CLI
@@ -137,6 +157,14 @@ func main() {
 
 	flag.Parse()
 
+	if fPProf {
+		pp, err := os.Create(PPROF_PATH)
+		if err != nil {
+			log.Fatalf("Can't create profiling file: %v\n", err)
+		}
+		pprof.StartCPUProfile(pp)
+	}
+
 	c, err := config.LoadConfig(RcFile)
 	if err != nil {
 		log.Fatalf("Error loading %s: %s\n", RcFile, err.Error())
@@ -153,8 +181,27 @@ func main() {
 			log.Printf("Output file is %s\n", fOutput)
 		}
 
+		// Check if the file already exist
+		if fi, err := os.Stat(fOutput); err != nil {
+			if fVerbose {
+				log.Printf("Warning: %s (%v) already exists!", fOutput, fi.ModTime())
+				if fOverwrite {
+					log.Println("… overwriting it.")
+				}
+			}
+			// Default for fOverwrite is false so we save the file
+			if !fOverwrite {
+				newFile := fmt.Sprintf("%s.old", fOutput)
+				os.Rename(fOutput, newFile)
+				if fVerbose {
+					log.Printf("Info: %s renamed into %s\n", fOutput, newFile)
+				}
+			}
+		}
+
+		//Default for Create() is to overwrite if already exist
 		if fOutputFH, err = os.Create(fOutput); err != nil {
-			log.Printf("Error creating %s\n", fOutput)
+			log.Printf("Error: can not create/overwrite %s\n", fOutput)
 			panic(err)
 		}
 
@@ -162,7 +209,7 @@ func main() {
 		// XXX FIXME Handle fAutoRotate
 	} else {
 		if fAutoRotate {
-			log.Println("Warning: -A needs -O to work, ignoring")
+			log.Println("Warning: -A needs -o to work, ignoring")
 			fAutoRotate = false
 		}
 	}

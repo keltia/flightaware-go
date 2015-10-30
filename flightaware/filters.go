@@ -7,6 +7,7 @@ package flightaware
 
 import (
 	"fmt"
+	"regexp"
 )
 
 const (
@@ -44,11 +45,24 @@ func setInputFilters(inputFilters []string) string {
 	return result
 }
 
+// Generate a regex from a simple pattern
+func generateRegex(str string) *regexp.Regexp {
+	return regexp.MustCompile(fmt.Sprintf(".*%s.*", str))
+}
+
 // Public functions
 
 // Add an input filter to the list
 func (cl *FAClient) AddInputFilter(fType int, str string) {
 	if str != "" {
 		cl.InputFilters = append(cl.InputFilters, generateFilter(fType, str))
+	}
+}
+
+// Add an output filter
+func (cl *FAClient) AddOutputFilter(str string) {
+	if str != "" {
+		of := generateRegex(str)
+		cl.OutputFilters = append(cl.OutputFilters, of)
 	}
 }

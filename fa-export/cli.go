@@ -25,12 +25,15 @@ var (
 	fAutoRotate    bool
 	fFeedBegin     string
 	fFeedEnd       string
+	fOverwrite     bool
 	fUserName      string
 	fDest          string
 	fAirlineFilter string
 	fIdentFilter   string
 	fLatLongFilter string
 	fAirportFilter string
+	fHexid         string
+	fPProf         bool
 )
 
 // my usage string
@@ -41,6 +44,8 @@ Usage: %s [-o FILE] [-d N(s|mn|h|d)][-f live|pitr|range [-B date [-E date]] [-v]
 
        Filters (OR is implied if multiple):
           [-e type] [-F airline] [-I plane-ident] [-L lat/lon] [-P airport-glob]
+       Output filter (not on theFA command line)
+          [-X hexid]
 `
 )
 
@@ -57,6 +62,8 @@ func init() {
 	flag.StringVar(&fEventType, "e", "", "Events to stream")
 	flag.StringVar(&fFeedType, "f", "live", "Specify which feed we want")
 	flag.StringVar(&fOutput, "o", "", "Specify output FILE.")
+	flag.BoolVar(&fOverwrite, "O", false, "Overwrite existing file?")
+	flag.BoolVar(&fPProf, "p", false, "Enable profiling")
 	flag.StringVar(&fUserName, "u", "", "Username to connect with")
 	flag.BoolVar(&fVerbose, "v", false, "Set verbose flag.")
 	flag.BoolVar(&fAutoRotate, "A", false, "Autorotate output file")
@@ -67,4 +74,5 @@ func init() {
 	flag.StringVar(&fIdentFilter, "I", "", "Aircraft Ident filter")
 	flag.StringVar(&fLatLongFilter, "L", "", "Lat/Long filter")
 	flag.StringVar(&fAirportFilter, "P", "", "Airport filter")
+	flag.StringVar(&fHexid, "X", "", "Hexid output filter")
 }
