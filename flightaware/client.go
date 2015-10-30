@@ -33,6 +33,8 @@
  documentation available at
  https://fr.flightaware.com/commercial/firehose/firehose_documentation.rvt
 
+ You can specify output filters with using client.AddOutputFilter(string)
+
  The default handler is to display all packets.  You can change the default handler
  with
 
