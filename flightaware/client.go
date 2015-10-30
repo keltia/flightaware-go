@@ -61,6 +61,7 @@ import (
 	"log"
 	"os"
 	"time"
+	"regexp"
 )
 
 // Private functions
@@ -111,6 +112,7 @@ func NewClient(rc config.Config) *FAClient {
 	cl.RangeT = make([]int64, 2)
 	cl.Started = false
 	cl.InputFilters = []string{}
+	cl.OutputFilters = []*regexp.Regexp{}
 
 	return cl
 }
