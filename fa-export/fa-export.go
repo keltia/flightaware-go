@@ -89,6 +89,14 @@ func checkCommandLine() {
 		os.Exit(1)
 	}
 
+	// Check for output filter
+
+	// Transform the value if present
+	if fHexid != "" {
+		hexid := fmt.Sprintf("hexid: \"%s\"", fHexid)
+		client.AddOutputFilter(hexid)
+	}
+
 	// Replace defaults by anything on the CLI
 	if fUserName != "" {
 		client.Host.DefUser = fUserName
