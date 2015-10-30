@@ -93,7 +93,7 @@ func checkCommandLine() {
 
 	// Transform the value if present
 	if fHexid != "" {
-		hexid := fmt.Sprintf("hexid: \"%s\"", fHexid)
+		hexid := fmt.Sprintf("hexid:\"%s\"", fHexid)
 		client.AddOutputFilter(hexid)
 	}
 
