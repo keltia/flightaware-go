@@ -8,6 +8,7 @@ package flightaware
 import (
 	"../config"
 	"crypto/tls"
+	"regexp"
 )
 
 type FAClient struct {
@@ -17,8 +18,9 @@ type FAClient struct {
 	Pkts         int32
 	Conn         *tls.Conn
 	Feed_one     func([]byte)
-	Filter       func([]byte) bool
+	Filter       func(*FAClient, []byte) bool
 	InputFilters []string
+	OutputFilters []*regexp.Regexp
 	Verbose      bool
 	FeedType     string
 	// For range event type
