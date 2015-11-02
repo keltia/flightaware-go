@@ -77,9 +77,14 @@ func defaultFilter(cl *FAClient, buf []byte) bool {
 		for _, flt := range cl.OutputFilters {
 			// First match so behaviour is OR
 			if flt.Match(buf) {
+				if cl.Verbose {
+					log.Printf("Output filtering is on")
+				}
 				return true
 			}
 		}
+		// If no match from any of the filters, no cigar
+		return false
 	}
 	return true
 }
