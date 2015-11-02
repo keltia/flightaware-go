@@ -1,3 +1,17 @@
+
+1.4.1 / 2015-11-02
+==================
+
+  * Merge branch 'release/v1_4_1' into develop
+  * Fixed output filters.
+
+1.4.0 / 2015-10-30
+==================
+
+  * Merge branch 'release/v1_4' into develop
+  * Introduce output filters to deal with filters not implemented at FA
+    level (like hexid and other fields).
+
 1.3.0 / 2015-09-14
 ==================
 
