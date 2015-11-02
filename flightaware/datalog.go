@@ -15,17 +15,17 @@ import (
 )
 
 
-type payload struct {
+type Payload struct {
 	Clock string
 	Rest  interface{}
 }
 
 // clone of log.Printf() with data-specific time
-func DataLog(payload []byte, str string) {
-	var data payload
+func DataLog(buf []byte, str string) {
+	var data Payload
 
 	// Parse json payload
-	if err := json.Unmarshal(payload, &data); err != nil {
+	if err := json.Unmarshal(buf, &data); err != nil {
 		log.Printf("Error: decoding %v: %v\n", data, err)
 	}
 
