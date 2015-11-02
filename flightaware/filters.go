@@ -47,7 +47,7 @@ func setInputFilters(inputFilters []string) string {
 
 // Generate a regex from a simple pattern
 func generateRegex(str string) *regexp.Regexp {
-	return regexp.MustCompile(fmt.Sprintf(".*%s.*", str))
+	return regexp.MustCompile(fmt.Sprintf("^.*%s.*$", str))
 }
 
 // Public functions
