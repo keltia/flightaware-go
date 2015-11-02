@@ -57,6 +57,7 @@ package flightaware
 
 import (
 	"../config"
+	"../utils"
 	"bufio"
 	"errors"
 	"fmt"
@@ -103,7 +104,7 @@ func (cl *FAClient) startWriter() (chan []byte, error) {
 			}
 			// Do something
 			if cl.Verbose {
-				log.Printf("Read %d bytes\n", len(buf))
+				utils.DataLog(buf, fmt.Sprintf("Read %d bytes\n", len(buf)))
 			}
 
 			// Insert filter call
@@ -206,7 +207,7 @@ func (cl *FAClient) Start() error {
 
 			if nb := len(buf); nb != 0 {
 				if cl.Verbose {
-					log.Printf("Sending %d bytes\n", nb)
+					utils.DataLog([]byte(buf), fmt.Sprintf("Sending %d bytes\n", nb))
 				}
 				ch <- []byte(buf)
 			}
