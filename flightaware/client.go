@@ -77,9 +77,14 @@ func defaultFilter(cl *FAClient, buf []byte) bool {
 		for _, flt := range cl.OutputFilters {
 			// First match so behaviour is OR
 			if flt.Match(buf) {
+				if cl.Verbose {
+					log.Printf("Output filtering is on")
+				}
 				return true
 			}
 		}
+		// If no match from any of the filters, no cigar
+		return false
 	}
 	return true
 }
@@ -98,7 +103,7 @@ func (cl *FAClient) startWriter() (chan []byte, error) {
 			}
 			// Do something
 			if cl.Verbose {
-				log.Printf("Read %d bytes\n", len(buf))
+				DataLog(buf, fmt.Sprintf("Read %d bytes\n", len(buf)))
 			}
 
 			// Insert filter call
@@ -201,7 +206,7 @@ func (cl *FAClient) Start() error {
 
 			if nb := len(buf); nb != 0 {
 				if cl.Verbose {
-					log.Printf("Sending %d bytes\n", nb)
+					DataLog([]byte(buf), fmt.Sprintf("Sending %d bytes\n", nb))
 				}
 				ch <- []byte(buf)
 			}
