@@ -8,6 +8,7 @@ package flightaware
 import (
 	"fmt"
 	"regexp"
+	"log"
 )
 
 const (
@@ -55,6 +56,9 @@ func generateRegex(str string) *regexp.Regexp {
 // Add an input filter to the list
 func (cl *FAClient) AddInputFilter(fType int, str string) {
 	if str != "" {
+		if cl.Verbose {
+			log.Printf("Adding input filter type %d on %s\n", fType, str)
+		}
 		cl.InputFilters = append(cl.InputFilters, generateFilter(fType, str))
 	}
 }
@@ -63,6 +67,9 @@ func (cl *FAClient) AddInputFilter(fType int, str string) {
 func (cl *FAClient) AddOutputFilter(str string) {
 	if str != "" {
 		of := generateRegex(str)
+		if cl.Verbose {
+			log.Printf("Adding output filter on %s: %v\n", str, of)
+		}
 		cl.OutputFilters = append(cl.OutputFilters, of)
 	}
 }
