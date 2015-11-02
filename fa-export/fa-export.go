@@ -182,7 +182,7 @@ func main() {
 		}
 
 		// Check if the file already exist
-		if fi, err := os.Stat(fOutput); err != nil {
+		if fi, err := os.Stat(fOutput); err == nil {
 			if fVerbose {
 				log.Printf("Warning: %s (%v) already exists!", fOutput, fi.ModTime())
 				if fOverwrite {
