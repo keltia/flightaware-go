@@ -6,7 +6,9 @@ VPATH=	fa-export:fa-tail:flightaware:config:utils
 DEST=	bin
 GOBIN=	${GOPATH}/bin
 
-SRCS=	config.go client.go fa-export.go utils.go cli.go version.go filters.go types.go
+SRCS=	config.go client.go fa-export.go utils.go cli.go version.go filters.go types.go \
+	auth.go client.go datalog.go decode.go filters.go types.go \
+	utils.go
 
 all:	${DEST}/fa-export
 
