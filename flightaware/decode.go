@@ -12,7 +12,7 @@ import (
 	"errors"
 )
 
-func getType (record []byte) (string, error) {
+func GetType (record []byte) (string, error) {
 	var generic FAgeneric
 
 	// Check input record
