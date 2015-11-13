@@ -1,4 +1,18 @@
 
+1.5.0 / 2015-11-13
+==================
+
+  * Merge branch 'feature/decoding-records' into develop
+  *  Go REAL full path for packages. XXX messy.
+  *  Go full path for packages again.
+  * Handle Waypoints/FDWaypoints correctly now.
+  * Got to be interface{} for seamless unmarshaling.
+  * Export GetType().
+  * Complete record decoding (v5 ATM, hopefully compatible).
+  * Add other source files to dependency.
+  * Try to be smart in decoding frames.
+  * Add new types for decoding.
+
 1.4.1 / 2015-11-02
 ==================
 
