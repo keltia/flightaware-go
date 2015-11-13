@@ -10,8 +10,6 @@
 package main
 
 import (
-	"../config"
-	"../flightaware"
 	"../utils"
 	"flag"
 	"fmt"
@@ -20,6 +18,8 @@ import (
 	"os/signal"
 	"time"
 	"runtime/pprof"
+	"flightaware-go/flightaware"
+	"github.com/keltia/flightaware-go/config"
 )
 
 const PPROF_PATH = "/tmp/fa-export.prof"
