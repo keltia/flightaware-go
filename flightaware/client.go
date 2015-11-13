@@ -56,7 +56,6 @@
 package flightaware
 
 import (
-	"../config"
 	"bufio"
 	"errors"
 	"fmt"
@@ -64,6 +63,7 @@ import (
 	"os"
 	"time"
 	"regexp"
+	"flightaware-go/config"
 )
 
 // Private functions

@@ -6,7 +6,7 @@
 package flightaware
 
 import (
-	"../config"
+	"flightaware-go/config"
 	"crypto/tls"
 	"regexp"
 )
