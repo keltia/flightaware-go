@@ -63,7 +63,7 @@ import (
 	"os"
 	"time"
 	"regexp"
-	"flightaware-go/config"
+	"github.com/keltia/flightaware-go/config"
 )
 
 // Private functions

@@ -18,8 +18,8 @@ import (
 	"os/signal"
 	"time"
 	"runtime/pprof"
-	"flightaware-go/config"
 	"flightaware-go/flightaware"
+	"github.com/keltia/flightaware-go/config"
 )
 
 const PPROF_PATH = "/tmp/fa-export.prof"
