@@ -71,8 +71,8 @@ type FAflightplan struct {
 	FacilityName string
 	// optional
     Prefix       string
-	Waypoints    []FApoint
-	FDWaypoints  []FApoint
+	Waypoints    []interface{}
+	FDWaypoints  []interface{}
 	Route        string
 	Atcident     string
 }
