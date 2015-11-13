@@ -1,7 +1,16 @@
 
+2.0.0 / 2015-11-13
+==================
+
+  * Merge branch 'feature/library-only' into develop
+  * v2.0 will be only library stuff.
+  * Sync README.
+  * Remove fa-export & stuff.
+
 1.5.0 / 2015-11-13
 ==================
 
+  * Merge branch 'release/v1_5' into develop
   * Merge branch 'feature/decoding-records' into develop
   *  Go REAL full path for packages. XXX messy.
   *  Go full path for packages again.
