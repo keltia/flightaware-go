@@ -1,3 +1,31 @@
+
+1.5.0 / 2015-11-13
+==================
+
+  * Merge branch 'feature/decoding-records' into develop
+  *  Go REAL full path for packages. XXX messy.
+  *  Go full path for packages again.
+  * Handle Waypoints/FDWaypoints correctly now.
+  * Got to be interface{} for seamless unmarshaling.
+  * Export GetType().
+  * Complete record decoding (v5 ATM, hopefully compatible).
+  * Add other source files to dependency.
+  * Try to be smart in decoding frames.
+  * Add new types for decoding.
+
+1.4.1 / 2015-11-02
+==================
+
+  * Merge branch 'release/v1_4_1' into develop
+  * Fixed output filters.
+
+1.4.0 / 2015-10-30
+==================
+
+  * Merge branch 'release/v1_4' into develop
+  * Introduce output filters to deal with filters not implemented at FA
+    level (like hexid and other fields).
+
 1.3.0 / 2015-09-14
 ==================
 

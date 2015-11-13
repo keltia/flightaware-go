@@ -6,7 +6,7 @@
 package flightaware
 
 import (
-	"../config"
+	"github.com/keltia/flightaware-go/config"
 	"crypto/tls"
 	"fmt"
 	"log"
