@@ -5,4 +5,4 @@
  */
 package main
 
-const FA_VERSION = "1.5"
+const FA_VERSION = "2.0"
