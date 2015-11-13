@@ -73,8 +73,14 @@ func decodeFlightplan(record map[string]interface{}) (FAflightplan, error) {
 		case "facility_name": generic.FacilityName = v.(string)
 		// optional
 		case "prefix": generic.Prefix = v.(string)
-		case "waypoints": generic.Waypoints = v.([]FApoint)
-		case "FDwaypoints": generic.FDWaypoints = v.([]FApoint)
+		case "waypoints":
+			for _, vv := range v.([]interface{}) {
+					generic.Waypoints = append(generic.Waypoints, vv)
+				}
+		case "FDwaypoints":
+			for _, vv := range v.([]interface{}) {
+					generic.FDWaypoints = append(generic.FDWaypoints, vv)
+				}
 		case "route": generic.Route = v.(string)
 		case "atcident": generic.Atcident = v.(string)
 		}
