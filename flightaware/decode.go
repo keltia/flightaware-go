@@ -22,7 +22,7 @@ func GetType (record []byte) (string, error) {
 	return generic.Type, nil
 }
 
-func decodeRecord(record []byte) (interface{}, error) {
+func DecodeRecord(record []byte) (interface{}, error) {
 	var generic interface{}
 
 	// Check input record
