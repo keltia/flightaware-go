@@ -82,6 +82,9 @@ func defaultFilter(cl *FAClient, buf []byte) bool {
 				}
 				return true
 			}
+			if cl.Verbose {
+				log.Print(".")
+			}
 		}
 		// If no match from any of the filters, no cigar
 		return false
