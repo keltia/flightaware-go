@@ -6,11 +6,11 @@
 package flightaware
 
 import (
-	"github.com/keltia/flightaware-go/config"
 	"crypto/tls"
 	"fmt"
 	"log"
 	"time"
+	"github.com/keltia/flightaware-go/config"
 )
 
 const (

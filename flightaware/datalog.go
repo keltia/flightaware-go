@@ -2,7 +2,7 @@
 
 /*
   This package implements the DataLog(), a payload-specific version of log.Printf().
- */
+*/
 package flightaware
 
 import (
@@ -13,7 +13,6 @@ import (
 	"strconv"
 	"time"
 )
-
 
 type Payload struct {
 	Clock string

@@ -7,8 +7,8 @@ package flightaware
 
 import (
 	"fmt"
-	"regexp"
 	"log"
+	"regexp"
 )
 
 const (
