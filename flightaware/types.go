@@ -6,23 +6,23 @@
 package flightaware
 
 import (
-	"github.com/keltia/flightaware-go/config"
 	"crypto/tls"
 	"regexp"
+	"github.com/keltia/flightaware-go/config"
 )
 
 type FAClient struct {
-	Started      bool
-	Host         config.Config
-	Bytes        int64
-	Pkts         int32
-	Conn         *tls.Conn
-	Feed_one     func([]byte)
-	Filter       func(*FAClient, []byte) bool
-	InputFilters []string
+	Started       bool
+	Host          config.Config
+	Bytes         int64
+	Pkts          int32
+	Conn          *tls.Conn
+	Feed_one      func([]byte)
+	Filter        func(*FAClient, []byte) bool
+	InputFilters  []string
 	OutputFilters []*regexp.Regexp
-	Verbose      bool
-	FeedType     string
+	Verbose       bool
+	FeedType      string
 	// For range event type
 	RangeT []int64
 }
@@ -45,22 +45,22 @@ type FApoint struct {
 	Name  string
 	Alt   string
 	// optional
-	Gs    string
+	Gs           string
 	AirspeedKts  string
 	AirspeedMach string
 }
 
 type FAflightplan struct {
 	// mandatory
-	Type         string
-	Ident        string
-	Status       string
-	Orig         string
-	Dest         string
-	Edt          string
-	Eta          string
-	Ete          string
-	Id           string
+	Type   string
+	Ident  string
+	Status string
+	Orig   string
+	Dest   string
+	Edt    string
+	Eta    string
+	Ete    string
+	Id     string
 	// common
 	AircraftType string
 	Suffix       string
@@ -70,60 +70,60 @@ type FAflightplan struct {
 	FacilityHash string
 	FacilityName string
 	// optional
-    Prefix       string
-	Waypoints    []interface{}
-	FDWaypoints  []interface{}
-	Route        string
-	Atcident     string
+	Prefix      string
+	Waypoints   []interface{}
+	FDWaypoints []interface{}
+	Route       string
+	Atcident    string
 }
 
 type FAdeparture struct {
 	// mandatory
-	Type         string
-	Ident        string
-	Orig         string
-	Dest         string
-	Adt          string
-	Eta          string
-	Id           string
+	Type  string
+	Ident string
+	Orig  string
+	Dest  string
+	Adt   string
+	Eta   string
+	Id    string
 	// common
 	AircraftType string
 	FacilityHash string
 	FacilityName string
 	// optional
-	Synthetic    string
-	Atcident     string
+	Synthetic string
+	Atcident  string
 }
 
 type FAarrival struct {
 	// mandatory
-	Type         string
-	Ident        string
-	Orig         string
-	Dest         string
-	Aat          string
-	timeType     string
-	Id           string
+	Type     string
+	Ident    string
+	Orig     string
+	Dest     string
+	Aat      string
+	timeType string
+	Id       string
 	// common
 	FacilityHash string
 	FacilityName string
 	// optional
-	Synthetic    string
-	Atcident     string
+	Synthetic string
+	Atcident  string
 }
 
 type FAcancellation struct {
 	// mandatory
-	Type         string
-	Ident        string
-	Orig         string
-	Dest         string
-	Id           string
+	Type  string
+	Ident string
+	Orig  string
+	Dest  string
+	Id    string
 	// common
 	FacilityHash string
 	FacilityName string
 	// optional
-	Atcident     string
+	Atcident string
 }
 
 type FAposition struct {
@@ -139,15 +139,15 @@ type FAposition struct {
 	FacilityHash string
 	FacilityName string
 	// common
-	Alt          string
-	Gs           string
-	Heading      string
-	Rp1Lat       string
-	Rp1Lon       string
-	Rp1Alt       string
-	Rp1Clock     string
-	Squawk     string
-	Hexid        string
+	Alt      string
+	Gs       string
+	Heading  string
+	Rp1Lat   string
+	Rp1Lon   string
+	Rp1Alt   string
+	Rp1Clock string
+	Squawk   string
+	Hexid    string
 	// optional
 	Fob          string
 	Oat          string
@@ -159,6 +159,6 @@ type FAposition struct {
 	GpsAlt       string
 	Atcident     string
 	// unknown
-	AltChange  string
-	Reg        string
+	AltChange string
+	Reg       string
 }

@@ -61,8 +61,8 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"time"
 	"regexp"
+	"time"
 	"github.com/keltia/flightaware-go/config"
 )
 
