@@ -16,7 +16,7 @@
  rc will be serialized from TOML.
 
  TOML: https://github.com/naoina/toml
- */
+*/
 package config
 
 import (
@@ -42,12 +42,12 @@ type User struct {
 }
 
 type Config struct {
-	Site     string
-	Port     int
-	DefUser  string
-	DefDest  string
-	Users    map[string]User
-	Dests    map[string]Dest
+	Site    string
+	Port    int
+	DefUser string
+	DefDest string
+	Users   map[string]User
+	Dests   map[string]Dest
 }
 
 // Basic Stringer for Dest
