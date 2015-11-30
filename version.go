@@ -3,6 +3,6 @@
 /*
  Just for the version number.
  */
-package main
+package flightaware
 
 const FA_VERSION = "2.0"
