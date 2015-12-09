@@ -5,4 +5,4 @@
  */
 package flightaware
 
-const FA_VERSION = "2.0.1"
+const FA_VERSION = "2.0.1-P1"
