@@ -1,4 +1,4 @@
-# flightaware-go [![GoDoc](https://godoc.org/github.com/keltia/flightaware-go?status.svg)]
+# flightaware-go [![GoDoc](https://godoc.org/github.com/keltia/flightaware-go?status.svg)](http://godoc.org/github.com/keltia/flightaware-go)
 
 ## Description
 
