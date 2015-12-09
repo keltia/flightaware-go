@@ -7,6 +7,9 @@ VPATH=	flightaware:config
 SRCS=	config.go client.go filters.go types.go \
 	auth.go client.go datalog.go decode.go filters.go types.go
 
+all:
+	go build -v ./...
+
 clean:
 	go clean -v
 
