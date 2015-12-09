@@ -1,11 +1,12 @@
 language: go
 go:
 - 1.4
-- 1.5
-- tip
+- 1.5.2
 branches:
   only:
   - develop
   - master
 install:
   - go get github.com/naoina/toml
+script:
+  - go build -v ./...

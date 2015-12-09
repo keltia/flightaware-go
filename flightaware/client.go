@@ -61,8 +61,8 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"time"
 	"regexp"
+	"time"
 	"github.com/keltia/flightaware-go/config"
 )
 
@@ -74,13 +74,16 @@ func defaultFeed(buf []byte) { fmt.Println(string(buf)) }
 // Default filter
 func defaultFilter(cl *FAClient, buf []byte) bool {
 	if len(cl.OutputFilters) != 0 {
-		for _, flt := range cl.OutputFilters {
+		for index, flt := range cl.OutputFilters {
 			// First match so behaviour is OR
 			if flt.Match(buf) {
 				if cl.Verbose {
-					log.Printf("Output filtering is on")
+					log.Printf("%d", index)
 				}
 				return true
+			}
+			if cl.Verbose {
+				log.Print(".")
 			}
 		}
 		// If no match from any of the filters, no cigar
