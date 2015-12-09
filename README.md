@@ -11,5 +11,3 @@ Used by [FA Export](https://github.com/keltia/fa-export) and [FA Tail](https://g
 Branch: develop — [![develop|Build Status](https://travis-ci.org/keltia/flightaware-go.svg?branch=develop)](http://travis-ci.org/keltia/flightaware-go/tree/develop)
 
 Branch: master — [![master|Build Status](https://travis-ci.org/keltia/flightaware-go.svg?branch=master)](http://travis-ci.org/keltia/flightaware-go)
-
-
