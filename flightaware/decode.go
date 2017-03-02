@@ -43,8 +43,8 @@ func DecodeRecord(record []byte) (interface{}, error) {
 	case "cancellation":
 		return decodeCancellation(payload)
 	default:
-		return nil, errors.New(fmt.Sprintf("Unknown record type %s", payload["type"]))
 	}
+	return nil, fmt.Errorf("Unknown record type %s", payload["type"])
 }
 
 func decodeFlightplan(record map[string]interface{}) (FAflightplan, error) {
