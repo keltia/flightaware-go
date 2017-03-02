@@ -1,33 +1,34 @@
 // decode.go
 
 /*
-  This package implements functions to decode the various different types
-  of data sent by Flightaware.
+Package flightaware this package implements functions to decode the various different types
+of data sent by Flightaware.
 */
 package flightaware
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 )
 
+// GetType returns the type of packet
 func GetType(record []byte) (string, error) {
 	var generic FAgeneric
 
 	// Check input record
 	if err := json.Unmarshal(record, &generic); err != nil {
-		return "", errors.New(fmt.Sprintf("Unable to decode %v: %v\n", record, err))
+		return "", fmt.Errorf("unable to decode %v: %v", record, err)
 	}
 	return generic.Type, nil
 }
 
+// DecodeRecord is the main decoding function, based on GetType return
 func DecodeRecord(record []byte) (interface{}, error) {
 	var generic interface{}
 
 	// Check input record
 	if err := json.Unmarshal(record, &generic); err != nil {
-		return nil, errors.New(fmt.Sprintf("Unable to decode %v: %v\n", record, err))
+		return nil, fmt.Errorf("unable to decode %v: %v", record, err)
 	}
 
 	payload := generic.(map[string]interface{})
@@ -44,7 +45,7 @@ func DecodeRecord(record []byte) (interface{}, error) {
 		return decodeCancellation(payload)
 	default:
 	}
-	return nil, fmt.Errorf("Unknown record type %s", payload["type"])
+	return nil, fmt.Errorf("unknown record type %s", payload["type"])
 }
 
 func decodeFlightplan(record map[string]interface{}) (FAflightplan, error) {
@@ -70,7 +71,7 @@ func decodeFlightplan(record map[string]interface{}) (FAflightplan, error) {
 		case "ete":
 			generic.Ete = v.(string)
 		case "id":
-			generic.Id = v.(string)
+			generic.ID = v.(string)
 		// common
 		case "aircrafttype":
 			generic.AircraftType = v.(string)
@@ -122,7 +123,7 @@ func decodePosition(record map[string]interface{}) (FAposition, error) {
 		case "clock":
 			generic.Clock = v.(string)
 		case "id":
-			generic.Id = v.(string)
+			generic.ID = v.(string)
 		case "updateType":
 			generic.UpdateType = v.(string)
 		case "air_ground":
@@ -191,7 +192,7 @@ func decodeDeparture(record map[string]interface{}) (FAdeparture, error) {
 		case "eta":
 			generic.Eta = v.(string)
 		case "id":
-			generic.Id = v.(string)
+			generic.ID = v.(string)
 		// common fields
 		case "aircrafttype":
 			generic.AircraftType = v.(string)
@@ -228,7 +229,7 @@ func decodeArrival(record map[string]interface{}) (FAarrival, error) {
 		case "timeType":
 			generic.timeType = v.(string)
 		case "id":
-			generic.Id = v.(string)
+			generic.ID = v.(string)
 		// common
 		case "facility_hash":
 			generic.FacilityHash = v.(string)
@@ -259,7 +260,7 @@ func decodeCancellation(record map[string]interface{}) (FAcancellation, error) {
 		case "dest":
 			generic.Dest = v.(string)
 		case "id":
-			generic.Id = v.(string)
+			generic.ID = v.(string)
 		// common
 		case "facility_hash":
 			generic.FacilityHash = v.(string)
