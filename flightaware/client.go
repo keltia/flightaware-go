@@ -176,7 +176,7 @@ func (cl *FAClient) SetFeed(feedType string, RangeT []time.Time) error {
 }
 
 // Start run tha who thing.
-func (cl *FAClient) Start() error {
+func (cl *FAClient) Start() (err error) {
 	var rc = cl.Host
 
 	// This is the main function here:
@@ -214,11 +214,12 @@ func (cl *FAClient) Start() error {
 				ch <- []byte(buf)
 			}
 		}
-		if err := sc.Err(); err != nil {
+		if err = sc.Err(); err != nil {
 			log.Println("Error reading:", err)
 
 			// Reconnect
 			conn, err = cl.connectFA(str, false)
+			cl.Conn = conn
 			sc = bufio.NewScanner(cl.Conn)
 		} else {
 			// Got EOF
