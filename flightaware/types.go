@@ -7,8 +7,8 @@ package flightaware
 
 import (
 	"crypto/tls"
-	"regexp"
 	"github.com/keltia/flightaware-go/config"
+	"regexp"
 )
 
 type FAClient struct {

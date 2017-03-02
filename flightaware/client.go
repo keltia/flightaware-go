@@ -59,11 +59,11 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
+	"github.com/keltia/flightaware-go/config"
 	"log"
 	"os"
 	"regexp"
 	"time"
-	"github.com/keltia/flightaware-go/config"
 )
 
 // Private functions
