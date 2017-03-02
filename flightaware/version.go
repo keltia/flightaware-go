@@ -1,8 +1,10 @@
 // version.go
 
-/*
- Just for the version number.
- */
 package flightaware
 
-const FA_VERSION = "2.0.1-P1"
+/*
+Just for the version number.
+*/
+
+// FAVersion is the current version of the package
+const FAVersion = "2.0.2"

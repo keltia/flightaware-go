@@ -1,23 +1,25 @@
 // types.go
 
+package flightaware
+
 /*
   This file implements the types for the flightaware package
 */
-package flightaware
 
 import (
 	"crypto/tls"
-	"regexp"
 	"github.com/keltia/flightaware-go/config"
+	"regexp"
 )
 
+// FAClient holds most data & configuration for a given client
 type FAClient struct {
 	Started       bool
 	Host          config.Config
 	Bytes         int64
 	Pkts          int32
 	Conn          *tls.Conn
-	Feed_one      func([]byte)
+	FeedOne       func([]byte)
 	Filter        func(*FAClient, []byte) bool
 	InputFilters  []string
 	OutputFilters []*regexp.Regexp
@@ -31,11 +33,13 @@ type FAClient struct {
 //
 // https://fr.flightaware.com/commercial/firehose/firehose_documentation.rvt
 
+// FAgeneric is just for finding the type
 type FAgeneric struct {
 	Type    string
 	Payload []byte
 }
 
+// FApoint is used for holding points
 type FApoint struct {
 	// mandatory
 	Lat float32
@@ -50,6 +54,7 @@ type FApoint struct {
 	AirspeedMach string
 }
 
+// FAflightplan is a flight plan
 type FAflightplan struct {
 	// mandatory
 	Type   string
@@ -60,7 +65,7 @@ type FAflightplan struct {
 	Edt    string
 	Eta    string
 	Ete    string
-	Id     string
+	ID     string
 	// common
 	AircraftType string
 	Suffix       string
@@ -77,6 +82,7 @@ type FAflightplan struct {
 	Atcident    string
 }
 
+// FAdeparture is for departure events
 type FAdeparture struct {
 	// mandatory
 	Type  string
@@ -85,7 +91,7 @@ type FAdeparture struct {
 	Dest  string
 	Adt   string
 	Eta   string
-	Id    string
+	ID    string
 	// common
 	AircraftType string
 	FacilityHash string
@@ -95,6 +101,7 @@ type FAdeparture struct {
 	Atcident  string
 }
 
+// FAarrival is the corresponding type for arrivals
 type FAarrival struct {
 	// mandatory
 	Type     string
@@ -103,7 +110,7 @@ type FAarrival struct {
 	Dest     string
 	Aat      string
 	timeType string
-	Id       string
+	ID       string
 	// common
 	FacilityHash string
 	FacilityName string
@@ -112,13 +119,14 @@ type FAarrival struct {
 	Atcident  string
 }
 
+// FAcancellation is for cancelled flights
 type FAcancellation struct {
 	// mandatory
 	Type  string
 	Ident string
 	Orig  string
 	Dest  string
-	Id    string
+	ID    string
 	// common
 	FacilityHash string
 	FacilityName string
@@ -126,6 +134,7 @@ type FAcancellation struct {
 	Atcident string
 }
 
+// FAposition is an ADS-B position
 type FAposition struct {
 	// mandatory
 	Type         string
@@ -133,7 +142,7 @@ type FAposition struct {
 	Lat          string
 	Lon          string
 	Clock        string
-	Id           string
+	ID           string
 	UpdateType   string
 	AirGround    string
 	FacilityHash string

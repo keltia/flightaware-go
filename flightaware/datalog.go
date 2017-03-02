@@ -1,9 +1,10 @@
 // datalog.go
 
-/*
-  This package implements the DataLog(), a payload-specific version of log.Printf().
-*/
 package flightaware
+
+/*
+Implements the DataLog(), a payload-specific version of log.Printf().
+*/
 
 import (
 	"encoding/json"
@@ -14,12 +15,13 @@ import (
 	"time"
 )
 
+// Payload is our main object
 type Payload struct {
 	Clock string
 	Rest  interface{}
 }
 
-// clone of log.Printf() with data-specific time
+// DataLog is a clone of log.Printf() with data-specific time
 func DataLog(buf []byte, str string) {
 	var data Payload
 

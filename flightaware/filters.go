@@ -1,9 +1,10 @@
 // filters.go
 
-/*
-  This file implements the various filter-related functions.
-*/
 package flightaware
+
+/*
+This file implements the various filter-related functions.
+*/
 
 import (
 	"fmt"
@@ -53,7 +54,7 @@ func generateRegex(str string) *regexp.Regexp {
 
 // Public functions
 
-// Add an input filter to the list
+// AddInputFilter adds an input filter to the list
 func (cl *FAClient) AddInputFilter(fType int, str string) {
 	if str != "" {
 		if cl.Verbose {
@@ -63,7 +64,7 @@ func (cl *FAClient) AddInputFilter(fType int, str string) {
 	}
 }
 
-// Add an output filter
+// AddOutputFilter adds an output filter
 func (cl *FAClient) AddOutputFilter(str string) {
 	if str != "" {
 		of := generateRegex(str)

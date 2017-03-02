@@ -1,7 +1,7 @@
 // auth.go
 
 /*
- This file contains the authentication & connection functions
+Package flightaware This file contains the authentication & connection functions
 */
 package flightaware
 
@@ -10,16 +10,15 @@ import (
 	"fmt"
 	"log"
 	"time"
-	"github.com/keltia/flightaware-go/config"
 )
 
 const (
-	FA_AUTHSTR = "%s username %s password %s %s\n"
+	faAuthStr = "%s username %s password %s %s\n"
 )
 
 // Send banner to FA
 func (cl *FAClient) authClient(conn *tls.Conn) error {
-	var authStr string = ""
+	var authStr string
 
 	rc := cl.Host
 	switch cl.FeedType {
@@ -50,7 +49,7 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 	}
 
 	// Set connection string including filters if any
-	conf := fmt.Sprintf(FA_AUTHSTR, authStr,
+	conf := fmt.Sprintf(faAuthStr, authStr,
 		rc.Users[rc.DefUser].User,
 		rc.Users[rc.DefUser].Password,
 		setInputFilters(cl.InputFilters))
@@ -65,7 +64,7 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 
 // Connection handling, manage both initial and reconnections
 func (cl *FAClient) connectFA(str string, initial bool) (*tls.Conn, error) {
-	var rc config.Config = cl.Host
+	var rc = cl.Host
 
 	if initial {
 		if cl.Verbose {
