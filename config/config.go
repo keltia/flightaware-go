@@ -4,18 +4,18 @@
 //
 
 /*
- Package implement my homemade configuration class
+Package config implement my homemade configuration class
 
- Looks into a TOML file for configuration options and returns a config.Config
- struct.
+Looks into a TOML file for configuration options and returns a config.Config
+struct.
 
- 	import "config"
+	import "config"
 
- 	rc := config.LoadConfig("foo.toml")
+	rc := config.LoadConfig("foo.toml")
 
- rc will be serialized from TOML.
+rc will be serialized from TOML.
 
- TOML: https://github.com/naoina/toml
+TOML: https://github.com/naoina/toml
 */
 package config
 
@@ -30,17 +30,20 @@ import (
 	"github.com/naoina/toml"
 )
 
+// Dest is a output
 type Dest struct {
 	Broker string
 	Name   string
 	Type   string
 }
 
+// User holds credentials
 type User struct {
 	User     string
 	Password string
 }
 
+// Config is the main object
 type Config struct {
 	Site    string
 	Port    int
@@ -50,12 +53,12 @@ type Config struct {
 	Dests   map[string]Dest
 }
 
-// Basic Stringer for Dest
+// String is a basic Stringer for Dest
 func (dest *Dest) String() string {
 	return fmt.Sprintf("%v: %v", dest.Broker, dest.Name)
 }
 
-// Load a file as a YAML document and return the structure
+// LoadConfig loads a file as a YAML document and return the structure
 func LoadConfig(file string) (*Config, error) {
 	var sFile string
 
