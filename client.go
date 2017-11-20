@@ -123,15 +123,15 @@ func (cl *FAClient) startWriter() (chan []byte, error) {
 
 // NewClient creates new instance of the cl
 func NewClient(rc Config) *FAClient {
-	cl := new(FAClient)
-	cl.Host = rc
-	cl.FeedOne = defaultFeed
-	cl.Filter = defaultFilter
-	cl.RangeT = make([]int64, 2)
-	cl.Started = false
-	cl.InputFilters = []string{}
-	cl.OutputFilters = []*regexp.Regexp{}
-
+	cl := &FAClient{
+		Host:          rc,
+		FeedOne:       defaultFeed,
+		Filter:        defaultFilter,
+		RangeT:        make([]int64, 2),
+		Started:       false,
+		InputFilters:  []string{},
+		OutputFilters: []*regexp.Regexp{},
+	}
 	return cl
 }
 
