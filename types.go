@@ -8,14 +8,21 @@ package flightaware
 
 import (
 	"crypto/tls"
-	"github.com/keltia/flightaware-go/config"
 	"regexp"
 )
+
+type Config struct {
+	Site     string
+	Port     int
+	User     string
+	Password string
+	FeedType string
+}
 
 // FAClient holds most data & configuration for a given client
 type FAClient struct {
 	Started       bool
-	Host          config.Config
+	Host          Config
 	Bytes         int64
 	Pkts          int32
 	Conn          *tls.Conn
