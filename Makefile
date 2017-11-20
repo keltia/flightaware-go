@@ -2,18 +2,34 @@
 #
 # XXX Need to be cleaned up at some point
 
-VPATH=	flightaware:config
+OPTS=	-ldflags="-s -w" -v
 
-SRCS=	config.go client.go filters.go types.go \
-	auth.go client.go datalog.go decode.go filters.go types.go
+SRCS=	client.go config.go filters.go types.go \
+	auth.go client.go datalog.go decode.go filters.go types.go \
+
+ESRC=	cmd/fa-export/cli.go cmd/fa-export/fa-export.go \
+	cmd/fa-export/utils.go cmd/fa-export/version.go
+
+TSRC=	cmd/fa-tail/fa-tail.go cmd/fa-tail/version.go
+
+EBIN=	fa-export
+TBIN=	fa-tail
+
+all: ${EBIN} ${TBIN}
+	go build ${OPTS} ./cmd/...
+
+${EBIN}:	${ESRC}
+
+${TBIN}:	${TSRC}
+
+install:	${EBIN} ${TBIN}
+	go install ./cmd/...
 
 clean:
-	go clean -v
+	go clean -v ./cmd/...
 
 push:
 	git push --all origin
 	git push --all backup
-	git push --all gitlab
 	git push --tags origin
 	git push --tags backup
-	git push --tags gitlab
