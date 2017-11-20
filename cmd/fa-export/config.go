@@ -17,7 +17,7 @@
 
  TOML: https://github.com/naoina/toml
 */
-package config
+package main
 
 import (
 	"errors"
