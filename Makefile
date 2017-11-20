@@ -25,9 +25,6 @@ ${TBIN}:	${TSRC}
 install:	${EBIN} ${TBIN}
 	go install ./cmd/...
 
-all:
-	go build -v ./...
-
 clean:
 	go clean -v ./cmd/...
 
