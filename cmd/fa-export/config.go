@@ -17,7 +17,7 @@ rc will be serialized from TOML.
 
 TOML: https://github.com/naoina/toml
 */
-package config
+package main
 
 import (
 	"errors"

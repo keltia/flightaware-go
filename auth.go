@@ -43,15 +43,15 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 	}
 
 	if cl.Verbose {
-		log.Printf("Using username %s", rc.DefUser)
+		log.Printf("Using username %s", rc.User)
 		log.Printf("Using %s as prefix.", authStr)
 		log.Printf("Adding input filters: %s\n", setInputFilters(cl.InputFilters))
 	}
 
 	// Set connection string including filters if any
 	conf := fmt.Sprintf(faAuthStr, authStr,
-		rc.Users[rc.DefUser].User,
-		rc.Users[rc.DefUser].Password,
+		rc.User,
+		rc.Password,
 		setInputFilters(cl.InputFilters))
 
 	_, err := conn.Write([]byte(conf))
@@ -90,7 +90,7 @@ func (cl *FAClient) connectFA(str string, initial bool) (*tls.Conn, error) {
 	}
 
 	if err := cl.authClient(conn); err != nil {
-		log.Printf("Error: auth error for %s\n", rc.Users[rc.DefUser].User)
+		log.Printf("Error: auth error for %s\n", rc.User)
 		return &tls.Conn{}, err
 	}
 
