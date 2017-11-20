@@ -12,13 +12,12 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/keltia/flightaware-go"
 	"log"
 	"os"
 	"os/signal"
-	"time"
 	"runtime/pprof"
-	"github.com/keltia/flightaware-go"
-	"github.com/keltia/flightaware-go/config"
+	"time"
 )
 
 const PPROF_PATH = "/tmp/fa-export.prof"
@@ -29,6 +28,8 @@ var (
 	fOutputFH *os.File
 
 	RangeT []time.Time
+
+	cnf Config
 )
 
 // fOutput callback
@@ -47,8 +48,8 @@ func stopEverything() {
 			log.Printf(`
 Profiling mode was enabled.
 Please use go tool pprof %s %s to read profiling data`,
-			flag.Arg(0),
-			PPROF_PATH)
+				flag.Arg(0),
+				PPROF_PATH)
 			pprof.StopCPUProfile()
 		}
 		if fVerbose {
@@ -98,10 +99,10 @@ func checkCommandLine() {
 
 	// Replace defaults by anything on the CLI
 	if fUserName != "" {
-		client.Host.DefUser = fUserName
+		cnf.DefUser = fUserName
 	}
 	if fDest != "" {
-		client.Host.DefDest = fDest
+		cnf.DefDest = fDest
 	}
 
 	// Now parse them
@@ -164,15 +165,20 @@ func main() {
 		pprof.StartCPUProfile(pp)
 	}
 
-	c, err := config.LoadConfig(RcFile)
+	cnf, err := LoadConfig(RcFile)
 	if err != nil {
 		log.Fatalf("Error loading %s: %s\n", RcFile, err.Error())
 	}
 
-	client = flightaware.NewClient(*c)
-	client.FeedType = fFeedType
-
 	checkCommandLine()
+
+	client = flightaware.NewClient(flightaware.Config{
+		Site:     cnf.Site,
+		Port:     cnf.Port,
+		User:     cnf.Users[cnf.DefUser].User,
+		Password: cnf.Users[cnf.DefUser].Password,
+		FeedType: fFeedType,
+	})
 
 	// Open output file
 	if fOutput != "" {
