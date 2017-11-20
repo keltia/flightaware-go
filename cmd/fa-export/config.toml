@@ -1,0 +1,38 @@
+# Example config.toml
+#
+# For a UNIX system, it must be in $HOME/.flightaware/
+
+# These are important
+
+site = "firehose.flightaware.com"
+port = 1501
+def_user = "Alice"
+def_dest = "queue"
+
+[users]
+
+[users.Alice]
+
+user = "Alice"
+password = "<something-that-looks-like-an-sha256-string-1>"
+ 
+[users.Bob]
+
+user = "Bob"
+password = "<something-that-looks-like-an-sha256-string-2>"
+
+# This is not enabled yet, for future AMQP related work
+
+[dests]
+
+[dests.queue]
+
+broker = "queue.example.com"
+name = "flightaware-raw"
+type = "queue"
+
+[dests.topic]
+
+broker = "topic.example.com"
+name = "flightaware-raw"
+type = "topic"
