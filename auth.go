@@ -86,7 +86,7 @@ func (cl *FAClient) connectFA(str string, initial bool) (*tls.Conn, error) {
 	}
 
 	if cl.Verbose {
-		log.Println("TLS negociation done.")
+		log.Println("TLS negotiation done.")
 	}
 
 	if err := cl.authClient(conn); err != nil {
