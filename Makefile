@@ -25,6 +25,9 @@ ${TBIN}:	${TSRC}
 install:	${EBIN} ${TBIN}
 	go install ./cmd/...
 
+lint:
+	gometalinter
+
 clean:
 	go clean -v ./cmd/...
 
