@@ -18,6 +18,7 @@ import (
 	"os/signal"
 	"runtime/pprof"
 	"time"
+	"path/filepath"
 )
 
 const PPROF_PATH = "/tmp/fa-export.prof"
@@ -26,6 +27,9 @@ var (
 	RcFile    = "flightaware"
 	client    *flightaware.FAClient
 	fOutputFH *os.File
+
+	// Us
+	MyName = filepath.Base(os.Args[0])
 
 	RangeT []time.Time
 
@@ -69,6 +73,8 @@ func checkCommandLine() {
 	// Propagate this to the Client struct
 	if fVerbose {
 		client.Verbose = true
+		fmt.Printf("%s version %s API version: %s\n",
+			MyName, FA_VERSION, flightaware.FAVersion)
 	}
 
 	// Default is "live", incompatible with -B/-E

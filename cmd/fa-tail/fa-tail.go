@@ -38,7 +38,8 @@ func main() {
 
 	// Shortcut
 	if fVersion {
-		fmt.Printf("%s version %s\n", MyName, FT_VERSION)
+		fmt.Printf("%s version %s API version %s\n",
+			MyName, FT_VERSION, flightaware.FAVersion)
 		os.Exit(0)
 	}
 
