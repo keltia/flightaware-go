@@ -16,9 +16,9 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"runtime/pprof"
 	"time"
-	"path/filepath"
 )
 
 const PPROF_PATH = "/tmp/fa-export.prof"
@@ -30,6 +30,9 @@ var (
 
 	// Us
 	MyName = filepath.Base(os.Args[0])
+
+	// Our version
+	FAversion = "1.5"
 
 	RangeT []time.Time
 
@@ -74,7 +77,7 @@ func checkCommandLine() {
 	if fVerbose {
 		client.Verbose = true
 		fmt.Printf("%s version %s API version: %s\n",
-			MyName, FA_VERSION, flightaware.FAVersion)
+			MyName, FAversion, flightaware.FAVersion)
 	}
 
 	// Default is "live", incompatible with -B/-E
