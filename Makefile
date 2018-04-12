@@ -8,7 +8,7 @@ SRCS=	client.go config.go filters.go types.go \
 	auth.go client.go datalog.go decode.go filters.go types.go \
 
 ESRC=	cmd/fa-export/cli.go cmd/fa-export/fa-export.go \
-	cmd/fa-export/utils.go cmd/fa-export/version.go
+	cmd/fa-export/utils.go
 
 TSRC=	cmd/fa-tail/fa-tail.go cmd/fa-tail/cli.go
 
