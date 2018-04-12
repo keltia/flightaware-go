@@ -32,7 +32,7 @@ var (
 	MyName = filepath.Base(os.Args[0])
 
 	// Our version
-	FAversion = "1.5"
+	FAversion = "1.5.1"
 
 	RangeT []time.Time
 
