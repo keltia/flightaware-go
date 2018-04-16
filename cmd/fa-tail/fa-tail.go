@@ -11,15 +11,19 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
+	"github.com/keltia/flightaware-go"
 	"os"
+	"path/filepath"
 	"strconv"
 	"time"
-	"github.com/keltia/flightaware-go"
-	"path/filepath"
 )
 
 const (
+	// buffering
 	BSIZE = 8192
+
+	// Semantic versioning
+	FTversion = "1.1.0"
 )
 
 var (
@@ -30,16 +34,11 @@ var (
 	MyName = filepath.Base(os.Args[0])
 )
 
-func main() {
-	flag.BoolVar(&fVersion, "version,V", false, "Display version & quit.")
-	flag.BoolVar(&fCount, "c", false, "Count records.")
-	flag.BoolVar(&fVerbose, "v", false, "Be verbose")
-	flag.Parse()
-
+func checkFlags() {
 	// Shortcut
 	if fVersion {
 		fmt.Printf("%s version %s API version %s\n",
-			MyName, FT_VERSION, flightaware.FAVersion)
+			MyName, FTversion, flightaware.FAVersion)
 		os.Exit(0)
 	}
 
@@ -48,8 +47,47 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error: You must specify a file!\n")
 		os.Exit(1)
 	}
-	fn := flag.Arg(0)
+}
 
+func handleRecord(lastRecord []byte) error {
+
+	recType, _ := flightaware.GetType([]byte(lastRecord))
+
+	lastOne, err := flightaware.DecodeRecord([]byte(lastRecord))
+	if err != nil {
+		return err
+	}
+
+	switch recType {
+	case "flightplan":
+		lastPS := lastOne.(flightaware.FAflightplan)
+		fmt.Printf("Last record is a flightplan for %s (%s):\n",
+			lastPS.Ident, lastPS.AircraftType)
+
+		if lastPS.Status == "Z" {
+			running, _ := strconv.ParseInt(lastPS.Ete, 10, 64)
+			fmt.Printf("  At %s (completed, running time: %d s\n",
+				lastPS.Dest, running)
+		} else {
+			time_edt, _ := strconv.ParseInt(lastPS.Edt, 10, 64)
+			time_eta, _ := strconv.ParseInt(lastPS.Eta, 10, 64)
+			fmt.Printf("  From %s (%v) to %s (%v)\n",
+				lastPS.Orig, time.Unix(time_edt, 0),
+				lastPS.Dest, time.Unix(time_eta, 0))
+		}
+	case "position":
+		lastPS := lastOne.(flightaware.FAposition)
+		time_clock, _ := strconv.ParseInt(lastPS.Clock, 10, 64)
+		fmt.Printf("%v: Last record is a position for %s heading %s at alt %s\n",
+			time.Unix(time_clock, 0), lastPS.Ident, lastPS.Heading, lastPS.Alt)
+
+	default:
+		fmt.Printf("Last record: %v\n", lastRecord)
+	}
+	return nil
+}
+
+func handleFile(fn string) (err error) {
 	// Get the size to seek near the end
 	fileStat, err := os.Stat(fn)
 	if err != nil {
@@ -66,9 +104,9 @@ func main() {
 	// Obviously, if we want the number of records, do not seek
 	if !fCount {
 		// Go forward fast
-		_, err = fh.Seek(fileStat.Size() - BSIZE, 0)
+		_, err = fh.Seek(fileStat.Size()-BSIZE, 0)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Unable to seek into the file %s at %d\n", fn, fileStat.Size() - BSIZE)
+			fmt.Fprintf(os.Stderr, "Unable to seek into the file %s at %d\n", fn, fileStat.Size()-BSIZE)
 			os.Exit(1)
 		}
 	}
@@ -103,39 +141,24 @@ func main() {
 		}
 	}
 
-	recType, _ := flightaware.GetType([]byte(lastRecord))
-
 	if fCount {
 		fmt.Printf("%s: records %d size %d bytes\n", fn, nbRecords, fileStat.Size())
 	} else {
 		fmt.Printf("%s: size %d bytes\n", fn, fileStat.Size())
 	}
 
-	lastOne, err := flightaware.DecodeRecord([]byte(lastRecord))
-	switch recType {
-	case "flightplan":
-		lastPS := lastOne.(flightaware.FAflightplan)
-		fmt.Printf("Last record is a flightplan for %s (%s):\n",
-			lastPS.Ident, lastPS.AircraftType)
+	err = handleRecord([]byte(lastRecord))
 
-		if lastPS.Status == "Z" {
-			running, _ := strconv.ParseInt(lastPS.Ete, 10, 64)
-			fmt.Printf("  At %s (completed, running time: %d s\n",
-				lastPS.Dest, running)
-		} else {
-			time_edt, _ := strconv.ParseInt(lastPS.Edt, 10, 64)
-			time_eta, _ := strconv.ParseInt(lastPS.Eta, 10, 64)
-			fmt.Printf("  From %s (%v) to %s (%v)\n",
-				lastPS.Orig, time.Unix(time_edt, 0),
-				lastPS.Dest, time.Unix(time_eta, 0))
-		}
-	case "position":
-		lastPS := lastOne.(flightaware.FAposition)
-		time_clock, _ := strconv.ParseInt(lastPS.Clock, 10, 64)
-		fmt.Printf("%v: Last record is a position for %s heading %s at alt %s\n",
-			time.Unix(time_clock, 0), lastPS.Ident, lastPS.Heading, lastPS.Alt)
+	return
+}
 
-	default:
-		fmt.Printf("Last record: %v\n", lastRecord)
+func main() {
+	flag.Parse()
+	checkFlags()
+
+	fn := flag.Arg(0)
+
+	if err := handleFile(fn); err != nil {
+		fmt.Fprintf(os.Stderr, "error: %v", err)
 	}
 }
