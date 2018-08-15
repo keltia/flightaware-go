@@ -1,6 +1,6 @@
 language: go
 go:
-- 1.10.1
+- 1.10.x
 - master
 branches:
   only:
@@ -10,6 +10,6 @@ matrix:
   allow_failures:
   - go: master
 install:
-  - go get github.com/naoina/toml
+  - env GO111MODULE=on go get github.com/naoina/toml
 script:
-  - go build -v ./...
+  - env GO111MODULE=on go build -v ./...
