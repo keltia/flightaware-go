@@ -2,6 +2,7 @@
 #
 # XXX Need to be cleaned up at some point
 
+GO=		go
 OPTS=	-ldflags="-s -w" -v
 
 SRCS=	client.go config.go filters.go types.go \
@@ -16,20 +17,20 @@ EBIN=	fa-export
 TBIN=	fa-tail
 
 all: ${EBIN} ${TBIN}
-	go build ${OPTS} ./cmd/...
+	${GO} build ${OPTS} ./cmd/...
 
 ${EBIN}:	${ESRC}
 
 ${TBIN}:	${TSRC}
 
 install:	${EBIN} ${TBIN}
-	go install ./cmd/...
+	${GO} install ./cmd/...
 
 lint:
 	gometalinter ./...
 
 clean:
-	go clean -v ./cmd/...
+	${GO} clean -v ./cmd/...
 
 push:
 	git push --all origin
