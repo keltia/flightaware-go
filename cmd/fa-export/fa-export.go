@@ -63,13 +63,10 @@ Please use go tool pprof %s %s to read profiling data`,
 				pprofPath)
 			pprof.StopCPUProfile()
 		}
-		if fVerbose {
-			log.Printf("FA client stopped:")
-			log.Printf("  %d pkts %d bytes", client.Pkts, client.Bytes)
-		}
+		verbose("FA client stopped:")
+		verbose("  %d pkts %d bytes", client.Pkts, client.Bytes)
 		if err := client.Close(); err != nil {
-			log.Println("Error closing connection:", err)
-			os.Exit(1)
+			log.Fatal("Error closing connection:", err)
 		}
 	}
 	os.Exit(0)
@@ -86,19 +83,17 @@ func checkCommandLine() {
 
 	// Default is "live", incompatible with -B/-E
 	if fFeedType == "live" && (fFeedBegin != "" || fFeedEnd != "") {
-		log.Printf("Error: -B & -E are incompatible with -f live (the default)\n")
-		os.Exit(1)
+		log.Fatalf("Error: -B & -E are incompatible with -f live (the default)\n")
 	}
 
 	// When using -f pitr, we need -B starttime
 	if fFeedType == "pitr" && fFeedBegin == "" {
-		log.Printf("Error: you MUST use -B to specify starting time with -f pitr\n")
-		os.Exit(1)
+		log.Fatalf("Error: you MUST use -B to specify starting time with -f pitr\n")
 	}
 
 	// When using -f range, we need -B starttime & -E endtime
 	if fFeedType == "range" && (fFeedBegin == "" || fFeedEnd == "") {
-		log.Printf("Error: you MUST use both -B & -E to specify times with -f range\n")
+		log.Fatalf("Error: you MUST use both -B & -E to specify times with -f range\n")
 		os.Exit(1)
 	}
 
@@ -129,16 +124,14 @@ func checkCommandLine() {
 		if fFeedBegin != "" {
 			tFeedBegin, err = ParseDate(fFeedBegin)
 			if err != nil {
-				log.Printf("Error: bad date format %v\n", fFeedBegin)
-				os.Exit(1)
+				log.Fatalf("Error: bad date format %v\n", fFeedBegin)
 			}
 		}
 
 		if fFeedEnd != "" {
 			tFeedEnd, err = ParseDate(fFeedEnd)
 			if err != nil {
-				log.Printf("Error: bad date format %v\n", fFeedEnd)
-				os.Exit(1)
+				log.Fatalf("Error: bad date format %v\n", fFeedEnd)
 			}
 		} else {
 			tFeedEnd = time.Time{}
@@ -151,9 +144,7 @@ func checkCommandLine() {
 		}
 		RangeT[0] = tFeedBegin
 		RangeT[1] = tFeedEnd
-		if fVerbose {
-			log.Printf("tFeedBegin: %v - tFeedEnd: %v\n", tFeedBegin, tFeedEnd)
-		}
+		verbose("tFeedBegin: %v - tFeedEnd: %v\n", tFeedBegin, tFeedEnd)
 	}
 }
 
@@ -201,9 +192,7 @@ func main() {
 
 	// Open output file
 	if fOutput != "" {
-		if fVerbose {
-			log.Printf("Output file is %s\n", fOutput)
-		}
+		verbose("Output file is %s\n", fOutput)
 
 		// Check if the file already exist
 		if fi, err := os.Stat(fOutput); err == nil {
@@ -217,16 +206,13 @@ func main() {
 			if !fOverwrite {
 				newFile := fmt.Sprintf("%s.old", fOutput)
 				os.Rename(fOutput, newFile)
-				if fVerbose {
-					log.Printf("Info: %s renamed into %s\n", fOutput, newFile)
-				}
+				verbose("Info: %s renamed into %s\n", fOutput, newFile)
 			}
 		}
 
 		//Default for Create() is to overwrite if already exist
 		if fOutputFH, err = os.Create(fOutput); err != nil {
-			log.Printf("Error: can not create/overwrite %s\n", fOutput)
-			panic(err)
+			log.Fatalf("can not create/overwrite %s: %v\n", fOutput, err)
 		}
 
 		client.AddHandler(fileOutput)
@@ -241,7 +227,7 @@ func main() {
 	// Check if we want a live stream or a more specialized one
 	if fFeedType != "" {
 		if err := client.SetFeed(fFeedType, RangeT); err != nil {
-			log.Printf("%s", err.Error())
+			log.Printf("%v", err)
 		}
 	}
 
@@ -256,9 +242,7 @@ func main() {
 	if fsTimeout != "" {
 		fTimeout = CheckTimeout(fsTimeout)
 
-		if fVerbose {
-			log.Printf("Run for %ds\n", fTimeout)
-		}
+		verbose("Run for %ds\n", fTimeout)
 		client.SetTimer(fTimeout)
 	}
 
