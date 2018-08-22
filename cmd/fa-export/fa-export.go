@@ -21,7 +21,9 @@ import (
 	"time"
 )
 
-const PPROF_PATH = "/tmp/fa-export.prof"
+const (
+	pprofPath = "/tmp/fa-export.prof"
+)
 
 var (
 	RcFile    = "flightaware"
@@ -30,6 +32,8 @@ var (
 
 	// Us
 	MyName = filepath.Base(os.Args[0])
+
+	configName = "config.toml"
 
 	// Our version
 	FAversion = "1.6.0"
@@ -56,7 +60,7 @@ func stopEverything() {
 Profiling mode was enabled.
 Please use go tool pprof %s %s to read profiling data`,
 				flag.Arg(0),
-				PPROF_PATH)
+				pprofPath)
 			pprof.StopCPUProfile()
 		}
 		if fVerbose {
@@ -155,6 +159,11 @@ func checkCommandLine() {
 
 // Starts here.
 func main() {
+	var (
+		cnf *Config
+		err error
+	)
+
 	// Handle SIGINT
 	go func() {
 		sigint := make(chan os.Signal, 3)
@@ -168,16 +177,16 @@ func main() {
 	flag.Parse()
 
 	if fPProf {
-		pp, err := os.Create(PPROF_PATH)
+		pp, err := os.Create(pprofPath)
 		if err != nil {
 			log.Fatalf("Can't create profiling file: %v\n", err)
 		}
 		pprof.StartCPUProfile(pp)
 	}
 
-	cnf, err := LoadConfig(RcFile)
+	cnf, err = LoadConfig(fConfig)
 	if err != nil {
-		log.Fatalf("Error loading %s: %s\n", RcFile, err.Error())
+		log.Fatalf("Error loading %s: %v\n", baseDir, err)
 	}
 
 	checkCommandLine()
