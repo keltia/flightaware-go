@@ -16,6 +16,8 @@ import (
 
 var (
 	// cli
+	fConfig        string
+	fDebug         bool
 	fVerbose       bool
 	fOutput        string
 	fEventType     string
@@ -46,6 +48,7 @@ Usage: %s [-o FILE] [-d N(s|mn|h|d)][-f live|pitr|range [-B date [-E date]] [-v]
           [-e type] [-F airline] [-I plane-ident] [-L lat/lon] [-P airport-glob]
        Output filter (not on theFA command line)
           [-X hexid]
+	   Config file can be specified with -c
 `
 )
 
@@ -58,6 +61,7 @@ var Usage = func() {
 // called by flag.Parse()
 func init() {
 	// cli
+	flag.StringVar(&fConfig, "c", "", "Use this config file")
 	flag.StringVar(&fsTimeout, "d", "", "Stop after N s/mn/h/days")
 	flag.StringVar(&fEventType, "e", "", "Events to stream")
 	flag.StringVar(&fFeedType, "f", "live", "Specify which feed we want")
@@ -65,6 +69,7 @@ func init() {
 	flag.BoolVar(&fOverwrite, "O", false, "Overwrite existing file?")
 	flag.BoolVar(&fPProf, "p", false, "Enable profiling")
 	flag.StringVar(&fUserName, "u", "", "Username to connect with")
+	flag.BoolVar(&fDebug, "D", false, "Set debug mode.")
 	flag.BoolVar(&fVerbose, "v", false, "Set verbose flag.")
 	flag.BoolVar(&fAutoRotate, "A", false, "Autorotate output file")
 	flag.StringVar(&fFeedBegin, "B", "", "Begin time for -f pitr|range")
