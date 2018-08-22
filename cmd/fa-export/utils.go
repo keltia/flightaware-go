@@ -13,6 +13,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"log"
 	"regexp"
 	"strconv"
 	"time"
@@ -89,5 +90,19 @@ func CheckTimeout(value string) int64 {
 
 		// At the worst, mod == 1.
 		return tm * mod
+	}
+}
+
+// debug displays only if fDebug is set
+func debug(str string, a ...interface{}) {
+	if fDebug {
+		log.Printf(str, a...)
+	}
+}
+
+// verbose displays only if fVerbose is set
+func verbose(str string, a ...interface{}) {
+	if fVerbose {
+		log.Printf(str, a...)
 	}
 }
