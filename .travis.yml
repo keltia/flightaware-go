@@ -11,5 +11,6 @@ matrix:
   - go: master
 install:
   - env GO111MODULE=on go get github.com/naoina/toml
+  - env GO111MODULE=on go get github.com/pkg/errors
 script:
   - env GO111MODULE=on go build -v ./...
