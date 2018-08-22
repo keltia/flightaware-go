@@ -32,7 +32,7 @@ var (
 	MyName = filepath.Base(os.Args[0])
 
 	// Our version
-	FAversion = "1.5.1"
+	FAversion = "1.6.0"
 
 	RangeT []time.Time
 
@@ -164,6 +164,7 @@ func main() {
 		stopEverything()
 	}()
 
+	flag.Usage = Usage
 	flag.Parse()
 
 	if fPProf {
