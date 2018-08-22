@@ -29,7 +29,7 @@ Branch: master — [![master|Build Status](https://travis-ci.org/keltia/flightaw
 
 Like many Go utilities & libraries, it is very easy to install:
 
-    go install github.com/keltia/flightaware-go/cmd/...
+    go get ithub.com/keltia/flightaware-go/cmd/...
 
 that way, you get both the library and its two bundled utilities.
 
