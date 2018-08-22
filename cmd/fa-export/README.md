@@ -8,4 +8,4 @@ Branch: master — [![master|Build Status](https://travis-ci.org/keltia/flightaw
 
 [Flightaware](http://www.flightaware.com/) client in Go.  It just exports the streaming data into JSON, using the FA API.
 
-Requires a `config.toml` configuration file in `$HOME/.flightaware/`.  There is an example located in the `config` subdirectory.
+Requires a `config.toml` configuration file in `$HOME/.config/flightaware/`.  There is a `config.toml` example bundled.
