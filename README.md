@@ -148,6 +148,10 @@ XXX `fa-tail` does not implement most of `tail(1)`options, especially not `-f`.
 
 The [BSD 2-Clause license](https://github.com/keltia/flightaware-go/LICENSE.md).
 
+# TODO
+
+- proxy (with and without authentication).
+
 # Contributing
 
 This project is an open Open Source project, please read `CONTRIBUTING.md`.
