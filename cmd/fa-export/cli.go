@@ -16,6 +16,7 @@ import (
 
 var (
 	// cli
+	fDebug         bool
 	fVerbose       bool
 	fOutput        string
 	fEventType     string
@@ -65,6 +66,7 @@ func init() {
 	flag.BoolVar(&fOverwrite, "O", false, "Overwrite existing file?")
 	flag.BoolVar(&fPProf, "p", false, "Enable profiling")
 	flag.StringVar(&fUserName, "u", "", "Username to connect with")
+	flag.BoolVar(&fDebug, "D", false, "Set debug mode.")
 	flag.BoolVar(&fVerbose, "v", false, "Set verbose flag.")
 	flag.BoolVar(&fAutoRotate, "A", false, "Autorotate output file")
 	flag.StringVar(&fFeedBegin, "B", "", "Begin time for -f pitr|range")
