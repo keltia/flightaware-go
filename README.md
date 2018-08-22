@@ -8,13 +8,13 @@ Used by [FA Export](https://github.com/keltia/fa-export) and [FA Tail](https://g
 
 ## Build status
 
-[![GitHub release](https://img.shields.io/github/release/keltia/cryptcheck.svg)](https://github.com/keltia/cryptcheck/releases)
-[![GitHub issues](https://img.shields.io/github/issues/keltia/cryptcheck.svg)](https://github.com/keltia/cryptcheck/issues)
+[![GitHub release](https://img.shields.io/github/release/keltia/flightaware-go.svg)](https://github.com/keltia/flightaware-go/releases)
+[![GitHub issues](https://img.shields.io/github/issues/keltia/flightaware-go.svg)](https://github.com/keltia/flightaware-go/issues)
 [![Go Version](https://img.shields.io/badge/go-1.10-blue.svg)](https://golang.org/dl/)
 [![GoDoc](https://godoc.org/github.com/keltia/flightaware-go?status.svg)](http://godoc.org/github.com/keltia/flightaware-go)
 [![SemVer](http://img.shields.io/SemVer/2.0.0.png)](https://semver.org/spec/v2.0.0.html)
 [![License](https://img.shields.io/pypi/l/Django.svg)](https://opensource.org/licenses/BSD-2-Clause)
-[![Go Report Card](https://goreportcard.com/badge/github.com/keltia/cryptcheck)](https://goreportcard.com/report/github.com/keltia/cryptcheck)
+[![Go Report Card](https://goreportcard.com/badge/github.com/keltia/flightaware-go)](https://goreportcard.com/report/github.com/keltia/flightaware-go)
 
 Branch: develop — [![develop|Build Status](https://travis-ci.org/keltia/flightaware-go.svg?branch=develop)](http://travis-ci.org/keltia/flightaware-go/tree/develop)
 Branch: master — [![master|Build Status](https://travis-ci.org/keltia/flightaware-go.svg?branch=master)](http://travis-ci.org/keltia/flightaware-go)
@@ -146,7 +146,7 @@ XXX `fa-tail` does not implement most of `tail(1)`options, especially not `-f`.
 
 ## License
 
-The [BSD 2-Clause license](https://github.com/keltia/cryptcheck/LICENSE.md).
+The [BSD 2-Clause license](https://github.com/keltia/flightaware-go/LICENSE.md).
 
 # Contributing
 
