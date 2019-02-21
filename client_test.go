@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"log"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -72,6 +73,55 @@ func TestFAClient_Close(t *testing.T) {
 	require.NotNil(t, c)
 
 	require.Error(t, c.Close())
+}
+
+func TestFAClient_SetTimer(t *testing.T) {
+	c := NewClient(rc)
+	require.NotNil(t, c)
+
+	c1 := c.SetTimer(int64(3600))
+	require.Equal(t, c, c1)
+}
+
+func TestFAClient_SetFeed(t *testing.T) {
+	c := NewClient(rc)
+	require.NotNil(t, c)
+
+	err := c.SetFeed("", []time.Time{})
+	require.NoError(t, err)
+}
+
+func TestFAClient_SetFeed2(t *testing.T) {
+	c := NewClient(rc)
+	require.NotNil(t, c)
+
+	futur := time.Now().Add(10 *time.Minute)
+	err := c.SetFeed("pitr", []time.Time{futur})
+	require.Error(t, err)
+}
+
+func TestFAClient_SetFeed3(t *testing.T) {
+	c := NewClient(rc)
+	require.NotNil(t, c)
+
+	past := time.Now().Add(-10 * time.Minute)
+	err := c.SetFeed("pitr", []time.Time{past})
+	require.NoError(t, err)
+	assert.Equal(t, past.Unix(), c.RangeT[0])
+}
+
+func TestFAClient_SetFeed4(t *testing.T) {
+	c := NewClient(rc)
+	require.NotNil(t, c)
+
+	beg := time.Now().Add(-10 * time.Minute)
+	end := time.Now().Add(-5 * time.Minute)
+
+	err := c.SetFeed("range", []time.Time{beg, end})
+	require.NoError(t, err)
+	assert.Equal(t, beg.Unix(), c.RangeT[0])
+	assert.Equal(t, end.Unix(), c.RangeT[1])
+
 }
 
 func TestFAClient_Version(t *testing.T) {
