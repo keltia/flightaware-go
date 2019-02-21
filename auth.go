@@ -8,7 +8,6 @@ package flightaware
 import (
 	"crypto/tls"
 	"fmt"
-	"log"
 	"time"
 )
 
@@ -24,29 +23,21 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 	switch cl.FeedType {
 	case "live":
 		authStr = fmt.Sprintf("%s", cl.FeedType)
-		if cl.Verbose {
-			log.Println("Live traffic feed")
-		}
+		cl.verbose("Live traffic feed")
 	case "pitr":
 		authStr = fmt.Sprintf("%s %d", cl.FeedType, cl.RangeT[0])
-		if cl.Verbose {
-			log.Printf("Live traffic replay starting at %v",
-				time.Unix(cl.RangeT[0], 0))
-		}
+		cl.verbose("Live traffic replay starting at %v",
+			time.Unix(cl.RangeT[0], 0))
 	case "range":
 		authStr = fmt.Sprintf("%s %d %d", cl.FeedType, cl.RangeT[0], cl.RangeT[1])
-		if cl.Verbose {
-			log.Printf("Replay traffic from %v to %v\n",
-				time.Unix(cl.RangeT[0], 0),
-				time.Unix(cl.RangeT[1], 0))
-		}
+		cl.verbose("Replay traffic from %v to %v\n",
+			time.Unix(cl.RangeT[0], 0),
+			time.Unix(cl.RangeT[1], 0))
 	}
 
-	if cl.Verbose {
-		log.Printf("Using username %s", rc.User)
-		log.Printf("Using %s as prefix.", authStr)
-		log.Printf("Adding input filters: %s\n", setInputFilters(cl.InputFilters))
-	}
+	cl.verbose("Using username %s", rc.User)
+	cl.verbose("Using %s as prefix.", authStr)
+	cl.verbose("Adding input filters: %s\n", setInputFilters(cl.InputFilters))
 
 	// Set connection string including filters if any
 	conf := fmt.Sprintf(faAuthStr, authStr,
@@ -67,15 +58,12 @@ func (cl *FAClient) connectFA(str string, initial bool) (*tls.Conn, error) {
 	var rc = cl.Host
 
 	if initial {
-		if cl.Verbose {
-			log.Printf("Connecting to %s with TLS\n", str)
-		}
+		cl.verbose("Connecting to %s with TLS\n", str)
 	} else {
-		if cl.Verbose {
-			log.Printf("Reconnecting to %s...\n", str)
-		}
+		cl.verbose("Reconnecting to %s...\n", str)
 	}
 
+	// XXX
 	conn, err := tls.Dial("tcp", str, &tls.Config{
 		RootCAs:            nil,
 		InsecureSkipVerify: true,
@@ -85,17 +73,13 @@ func (cl *FAClient) connectFA(str string, initial bool) (*tls.Conn, error) {
 		return &tls.Conn{}, err
 	}
 
-	if cl.Verbose {
-		log.Println("TLS negotiation done.")
-	}
+	cl.verbose("TLS negotiation done.")
 
 	if err := cl.authClient(conn); err != nil {
 		log.Printf("Error: auth error for %s\n", rc.User)
 		return &tls.Conn{}, err
 	}
 
-	if cl.Verbose {
-		log.Println("Flightaware init done.")
-	}
+	cl.verbose("Flightaware init done.")
 	return conn, nil
 }

@@ -38,8 +38,7 @@ type FAClient struct {
 	RangeT []int64
 
 	// Logging stuff
-	Log     *log.Logger
-	Verbose bool
+	Log *log.Logger
 
 	level   int
 	bufsize int
