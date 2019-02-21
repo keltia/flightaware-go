@@ -23,10 +23,15 @@ type Config struct {
 
 // FAClient holds most data & configuration for a given client
 type FAClient struct {
-	Started       bool
-	Host          Config
-	Bytes         int64
-	Pkts          int32
+	Started bool
+
+	// XXX misnamed, rename?
+	Host Config
+
+	// Stats
+	Bytes int64
+	Pkts  int32
+
 	Conn          *tls.Conn
 	FeedOne       func([]byte)
 	Filter        func(*FAClient, []byte) bool
@@ -34,12 +39,14 @@ type FAClient struct {
 	OutputFilters []*regexp.Regexp
 
 	FeedType string
+
 	// For range event type
 	RangeT []int64
 
 	// Logging stuff
 	Log *log.Logger
 
+	// Internal stuff
 	level   int
 	bufsize int
 }
