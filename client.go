@@ -62,6 +62,8 @@ import (
 	"os"
 	"regexp"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 // Public functions
@@ -81,12 +83,19 @@ func NewClient(rc Config) *FAClient {
 }
 
 // AddHandler changes default callback
-func (cl *FAClient) AddHandler(fn func([]byte)) {
+func (cl *FAClient) AddHandler(fn func([]byte)) *FAClient {
 	cl.FeedOne = fn
+	return cl
+}
+
+// SetLog to change the default logger
+func (cl *FAClient) SetLog(log *log.Logger) *FAClient {
+	cl.Log = log
+	return cl
 }
 
 // SetTimer allows run of specified duration
-func (cl *FAClient) SetTimer(timer int64) {
+func (cl *FAClient) SetTimer(timer int64) *FAClient {
 	// Sleep for fTimeout seconds then sends Interrupt
 	go func() {
 		time.Sleep(time.Duration(timer) * time.Second)
@@ -96,6 +105,7 @@ func (cl *FAClient) SetTimer(timer int64) {
 		myself, _ := os.FindProcess(os.Getpid())
 		myself.Signal(os.Interrupt)
 	}()
+	return cl
 }
 
 // SetFeed adds a given feed
@@ -184,4 +194,15 @@ func (cl *FAClient) Close() error {
 		log.Println("Flightaware cl shutdown.")
 	}
 	return err
+}
+
+// SetLevel enable verbose/debug logging
+func (cl *FAClient) SetLevel(level int) *FAClient {
+	cl.level = level
+	return cl
+}
+
+// Version return current API version
+func (cl *FAClient) Version() string {
+	return FAVersion
 }
