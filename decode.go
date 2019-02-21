@@ -29,7 +29,7 @@ func DecodeRecord(record []byte) (interface{}, error) {
 
 	// Check input record
 	if err := json.Unmarshal(record, &generic); err != nil {
-		return nil, errors.Wrapf(err, "decode %v: %v", record)
+		return nil, errors.Wrapf(err, "decode %v", record)
 	}
 
 	payload := generic.(map[string]interface{})
