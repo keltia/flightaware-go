@@ -9,6 +9,8 @@ import (
 	"crypto/tls"
 	"fmt"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 const (
@@ -47,8 +49,7 @@ func (cl *FAClient) authClient(conn *tls.Conn) error {
 
 	_, err := conn.Write([]byte(conf))
 	if err != nil {
-		log.Println("Error configuring feed", err.Error())
-		return err
+		return errors.Wrap(err, "auth/feed")
 	}
 	return nil
 }
@@ -69,15 +70,13 @@ func (cl *FAClient) connectFA(str string, initial bool) (*tls.Conn, error) {
 		InsecureSkipVerify: true,
 	})
 	if err != nil {
-		log.Println("failed to connect: " + err.Error())
-		return &tls.Conn{}, err
+		return &tls.Conn{}, errors.Wrap(err, "connectFA")
 	}
 
 	cl.verbose("TLS negotiation done.")
 
 	if err := cl.authClient(conn); err != nil {
-		log.Printf("Error: auth error for %s\n", rc.User)
-		return &tls.Conn{}, err
+		return &tls.Conn{}, errors.Wrapf(err, "connectFA/%s", rc.User)
 	}
 
 	cl.verbose("Flightaware init done.")
