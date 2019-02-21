@@ -12,13 +12,14 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/keltia/flightaware-go"
 	"log"
 	"os"
 	"os/signal"
 	"path/filepath"
 	"runtime/pprof"
 	"time"
+
+	"github.com/keltia/flightaware-go"
 )
 
 const (
@@ -76,7 +77,7 @@ Please use go tool pprof %s %s to read profiling data`,
 func checkCommandLine() {
 	// Propagate this to the Client struct
 	if fVerbose {
-		client.Verbose = true
+		client.SetLevel(1)
 		fmt.Printf("%s version %s API version: %s\n",
 			MyName, FAversion, flightaware.FAVersion)
 	}
