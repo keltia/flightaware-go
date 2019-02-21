@@ -99,9 +99,7 @@ func (cl *FAClient) SetTimer(timer int64) *FAClient {
 	// Sleep for fTimeout seconds then sends Interrupt
 	go func() {
 		time.Sleep(time.Duration(timer) * time.Second)
-		if cl.Verbose {
-			log.Println("Timer off, time to kill")
-		}
+		cl.verbose("Timer off, time to kill")
 		myself, _ := os.FindProcess(os.Getpid())
 		myself.Signal(os.Interrupt)
 	}()
@@ -162,7 +160,7 @@ func (cl *FAClient) Start() (err error) {
 			buf := sc.Text()
 
 			if nb := len(buf); nb != 0 {
-				if cl.Verbose {
+				if cl.level >= 1 {
 					DataLog([]byte(buf), fmt.Sprintf("Sending %d bytes\n", nb))
 				}
 				ch <- []byte(buf)
@@ -190,10 +188,8 @@ func (cl *FAClient) Close() error {
 	if err = cl.Conn.Close(); err != nil {
 		log.Println("Error closing connection " + err.Error())
 	}
-	if cl.Verbose {
-		log.Println("Flightaware cl shutdown.")
-	}
-	return err
+	cl.verbose("Flightaware cl shutdown.")
+	return nil
 }
 
 // SetLevel enable verbose/debug logging
