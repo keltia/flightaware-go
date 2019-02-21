@@ -6,7 +6,7 @@ GO=		go
 OPTS=	-ldflags="-s -w" -v
 
 SRCS=	client.go client_subr.go config.go filters.go types.go \
-	auth.go datalog.go decode.go utils.go \
+	auth.go decode.go utils.go \
 
 ESRC=	cmd/fa-export/cli.go cmd/fa-export/fa-export.go \
 	cmd/fa-export/utils.go

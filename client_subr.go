@@ -1,7 +1,10 @@
 package flightaware
 
 import (
+	"encoding/json"
 	"fmt"
+	"strconv"
+	"time"
 
 	"github.com/pkg/errors"
 )
@@ -42,9 +45,7 @@ func (cl *FAClient) startWriter() (chan []byte, error) {
 				return
 			}
 			// Do something
-			if cl.Verbose {
-				DataLog(buf, fmt.Sprintf("Read %d bytes\n", len(buf)))
-			}
+			cl.dataLog(buf, fmt.Sprintf("Read %d bytes\n", len(buf)))
 
 			// Insert filter call
 			if ok = (cl.Filter)(cl, buf); ok {
@@ -56,4 +57,34 @@ func (cl *FAClient) startWriter() (chan []byte, error) {
 		}
 	}()
 	return ch, err
+}
+
+// Payload is our main object
+type Payload struct {
+	Clock string
+	Rest  interface{}
+}
+
+// dataLog is a clone of log.Printf() with data-specific time
+func (cl *FAClient) dataLog(buf []byte, str string) {
+	// Only if verbose or more
+	if cl.level >= 1 {
+		var data Payload
+
+		// Parse json payload
+		if err := json.Unmarshal(buf, &data); err != nil {
+			cl.Log.Printf("Error: decoding %v: %v\n", data, err)
+		}
+
+		// string -> []byte
+		datePkt, err := strconv.ParseInt(data.Clock, 10, 64)
+		if err != nil {
+			cl.Log.Printf("Error: parsing %v: %v\n", data.Clock, err)
+		}
+
+		// Now log
+		pktTime := time.Unix(datePkt, 0)
+		strTime := pktTime.Format("2006/01/02 15:04:05")
+		cl.Log.Printf("%s %s", strTime, str)
+	}
 }

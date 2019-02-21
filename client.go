@@ -162,9 +162,7 @@ func (cl *FAClient) Start() (err error) {
 			buf := sc.Text()
 
 			if nb := len(buf); nb != 0 {
-				if cl.level >= 1 {
-					DataLog([]byte(buf), fmt.Sprintf("Sending %d bytes\n", nb))
-				}
+				cl.dataLog([]byte(buf), fmt.Sprintf("Sending %d bytes\n", nb))
 				ch <- []byte(buf)
 			}
 		}
@@ -206,3 +204,4 @@ func (cl *FAClient) SetLevel(level int) *FAClient {
 func (cl *FAClient) Version() string {
 	return FAVersion
 }
+
