@@ -68,6 +68,8 @@ import (
 	"github.com/pkg/errors"
 )
 
+const maxBufsize = 64 * 1024
+
 // Public functions
 
 // NewClient creates new instance of the cl
@@ -81,6 +83,9 @@ func NewClient(rc Config) *FAClient {
 		InputFilters:  []string{},
 		OutputFilters: []*regexp.Regexp{},
 		Log:           log.New(os.Stderr, "", log.LstdFlags),
+	}
+	if rc.Bufsize >= 0 && rc.Bufsize <= maxBufsize {
+		cl.bufsize = rc.Bufsize
 	}
 	return cl
 }
@@ -204,4 +209,3 @@ func (cl *FAClient) SetLevel(level int) *FAClient {
 func (cl *FAClient) Version() string {
 	return FAVersion
 }
-

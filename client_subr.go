@@ -36,7 +36,7 @@ func (cl *FAClient) startWriter() (chan []byte, error) {
 	var err error
 
 	cl.verbose("Waiting for data…")
-	ch := make(chan []byte, 1000)
+	ch := make(chan []byte, cl.bufsize)
 	go func() {
 		for {
 			buf, ok := <-ch

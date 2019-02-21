@@ -18,6 +18,7 @@ type Config struct {
 	User     string
 	Password string
 	FeedType string
+	Bufsize  int
 }
 
 // FAClient holds most data & configuration for a given client
@@ -40,7 +41,8 @@ type FAClient struct {
 	Log     *log.Logger
 	Verbose bool
 
-	level int
+	level   int
+	bufsize int
 }
 
 // FA records types
