@@ -185,7 +185,9 @@ func (cl *FAClient) Start() (err error) {
 
 // Close properly close the TLS connection
 func (cl *FAClient) Close() error {
-	var err error
+	if cl.Conn == nil {
+		return errors.Errorf("Conn is nil")
+	}
 
 	if err := cl.Conn.Close(); err != nil {
 		return errors.Wrap(err, "Error closing connection ")
