@@ -116,7 +116,7 @@ func (cl *FAClient) SetFeed(feedType string, RangeT []time.Time) error {
 		// Check value
 		restart := RangeT[0]
 		if restart.After(time.Now()) {
-			return fmt.Errorf("Error: -B %v is in the future", restart)
+			return errors.Errorf("-B %v is in the future", restart)
 		}
 		// Store out final value
 		cl.RangeT[0] = restart.Unix()
@@ -144,15 +144,14 @@ func (cl *FAClient) Start() (err error) {
 	// Do the actual connection
 	conn, err := cl.connectFA(str, true)
 	if err != nil {
-		log.Fatalf("Error: can not connect with %s: %v", str, err)
+		return errors.Wrapf(err, "can not connect %s", str)
 	}
 	cl.Conn = conn
 
 	// Starting here everything is flowing from that connection
 	ch, err := cl.startWriter()
 	if err != nil {
-		log.Printf("Error: starting writer - %s\n", err.Error())
-		return err
+		return errors.Wrap(err, "starting writer")
 	}
 
 	cl.Started = true
@@ -188,8 +187,8 @@ func (cl *FAClient) Start() (err error) {
 func (cl *FAClient) Close() error {
 	var err error
 
-	if err = cl.Conn.Close(); err != nil {
-		log.Println("Error closing connection " + err.Error())
+	if err := cl.Conn.Close(); err != nil {
+		return errors.Wrap(err, "Error closing connection ")
 	}
 	cl.verbose("Flightaware cl shutdown.")
 	return nil
