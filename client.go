@@ -78,11 +78,13 @@ func NewClient(rc Config) *FAClient {
 		Host:          rc,
 		FeedOne:       defaultFeed,
 		Filter:        defaultFilter,
+		FeedType:      rc.FeedType,
 		RangeT:        make([]int64, 2),
 		Started:       false,
 		InputFilters:  []string{},
 		OutputFilters: []*regexp.Regexp{},
 		Log:           log.New(os.Stderr, "", log.LstdFlags),
+		bufsize:       1024,
 	}
 	if rc.Bufsize >= 0 && rc.Bufsize <= maxBufsize {
 		cl.bufsize = rc.Bufsize
