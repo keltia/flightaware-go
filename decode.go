@@ -8,7 +8,8 @@ package flightaware
 
 import (
 	"encoding/json"
-	"fmt"
+
+	"github.com/pkg/errors"
 )
 
 // GetType returns the type of packet
@@ -17,7 +18,7 @@ func GetType(record []byte) (string, error) {
 
 	// Check input record
 	if err := json.Unmarshal(record, &generic); err != nil {
-		return "", fmt.Errorf("unable to decode %v: %v", record, err)
+		return "", errors.Wrapf(err, "decode %v", record)
 	}
 	return generic.Type, nil
 }
@@ -28,7 +29,7 @@ func DecodeRecord(record []byte) (interface{}, error) {
 
 	// Check input record
 	if err := json.Unmarshal(record, &generic); err != nil {
-		return nil, fmt.Errorf("unable to decode %v: %v", record, err)
+		return nil, errors.Wrapf(err, "decode %v: %v", record)
 	}
 
 	payload := generic.(map[string]interface{})
@@ -45,7 +46,7 @@ func DecodeRecord(record []byte) (interface{}, error) {
 		return decodeCancellation(payload)
 	default:
 	}
-	return nil, fmt.Errorf("unknown record type %s", payload["type"])
+	return nil, errors.Errorf("unknown record type %s", payload["type"])
 }
 
 func decodeFlightplan(record map[string]interface{}) (FAflightplan, error) {
