@@ -8,6 +8,7 @@ package flightaware
 
 import (
 	"crypto/tls"
+	"log"
 	"regexp"
 )
 
@@ -30,10 +31,16 @@ type FAClient struct {
 	Filter        func(*FAClient, []byte) bool
 	InputFilters  []string
 	OutputFilters []*regexp.Regexp
-	Verbose       bool
-	FeedType      string
+
+	FeedType string
 	// For range event type
 	RangeT []int64
+
+	// Logging stuff
+	Log     *log.Logger
+	Verbose bool
+
+	level int
 }
 
 // FA records types
