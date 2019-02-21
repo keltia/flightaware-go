@@ -35,6 +35,8 @@ Package flightaware implements the cl part to the FA API
 
  You can specify output filters with using cl.AddOutputFilter(string)
 
+ The default logger can be changed with SetLog() & the level with SetLevel().
+
  The default handler is to display all packets.  You can change the default handler
  with
 
@@ -78,6 +80,7 @@ func NewClient(rc Config) *FAClient {
 		Started:       false,
 		InputFilters:  []string{},
 		OutputFilters: []*regexp.Regexp{},
+		Log:           log.New(os.Stderr, "", log.LstdFlags),
 	}
 	return cl
 }
