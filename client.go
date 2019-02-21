@@ -232,7 +232,7 @@ func (cl *FAClient) Start() (err error) {
 func (cl *FAClient) Close() error {
 	var err error
 
-	if err := cl.Conn.Close(); err != nil {
+	if err = cl.Conn.Close(); err != nil {
 		log.Println("Error closing connection " + err.Error())
 	}
 	if cl.Verbose {
